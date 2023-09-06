@@ -1,16 +1,8 @@
+from enum import Enum
 from typing import Literal
 
 
-class STAGE:
+class DEPLOY_STAGE(Enum):
     PROD = "prod"
     BETA = "beta"
     DEV = "dev"
-    TYPE = Literal["prod", "beta", "dev"]
-
-
-class LOGGER_LEVEL:
-    ERROR = "ERROR"
-    WARNING = "WARNING"
-    DEBUG = "DEBUG"
-    INFO = "INFO"
-    TYPE = Literal["ERROR", "WARNING", "DEBUG", "INFO"]

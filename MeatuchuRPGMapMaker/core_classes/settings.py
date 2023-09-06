@@ -1,8 +1,7 @@
 # Global app settings
 from ..exceptions.stage_exceptions import InvalidStageException
+from ..constants import DEPLOY_STAGE
 from typing import Any
-
-STAGE_VALUES = ["prod", "beta", "dev"]
 
 __settings_values__ = {
     "default": {"window": {"width": 1920, "height": 1080, "fullscreen_mode": 2}},
@@ -19,10 +18,8 @@ class SettingsManager:
     session_settings = {}
 
     def __init__(self, stage: str = "prod") -> None:
-        if stage in STAGE_VALUES:
-            self.stage = stage
-        else:
-            raise InvalidStageException(stage)
+        DEPLOY_STAGE(stage)
+        self.stage = stage
 
     def get_setting(self, group: str, key: str) -> Any:
         stage_config = __settings_values__.get(self.stage, {})
