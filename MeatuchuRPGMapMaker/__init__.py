@@ -2,4 +2,12 @@ import sys
 
 arguments = sys.argv[1:]
 
-STAGE = arguments[0] or "prod"
+
+def set_stage():
+    try:
+        return arguments[0]
+    except:
+        return "prod"
+
+
+STAGE = set_stage()
