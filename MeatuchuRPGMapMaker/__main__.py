@@ -1,4 +1,3 @@
-from typing import Literal
 from . import STAGE
 from .core_classes.settings import SettingsManager
 from .core_classes.window_manager import WindowManager

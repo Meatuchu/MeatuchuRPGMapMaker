@@ -3,7 +3,7 @@ import sys
 arguments = sys.argv[1:]
 
 
-def set_stage():
+def set_stage() -> str:
     try:
         return arguments[0]
     except:
