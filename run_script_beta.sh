@@ -1,1 +1,1 @@
-python3 -m MeatuchuRPGMapMaker beta
+python3 -m MeatuchuRPGMapMaker --stage beta

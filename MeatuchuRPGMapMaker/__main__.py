@@ -3,7 +3,7 @@ from .core_classes.settings_manager import SettingsManager
 from .core_classes.window_manager import WindowManager
 
 window_manager = WindowManager()
-settings = SettingsManager(STAGE)
+settings = SettingsManager()
 
 
 window_manager.set_window_size(

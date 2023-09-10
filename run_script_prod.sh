@@ -1,1 +1,1 @@
-python3 -m MeatuchuRPGMapMaker prod
+python3 -m MeatuchuRPGMapMaker --stage prod

@@ -9,6 +9,7 @@ class EntityManager(FeatureManager):
 
     def __init__(self) -> None:
         self.storage = {}
+        super().__init__()
         pass
 
     def insert_entity(self, ent: BaseEntity) -> None:

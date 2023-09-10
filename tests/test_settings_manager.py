@@ -10,5 +10,5 @@ mock_settings = {"default": {"window": {"width": 123, "height": 456}}}
     mock_settings,
 )
 def test_settings_manager_defaults_correctly() -> None:
-    settings_instance = SettingsManager("prod")
+    settings_instance = SettingsManager()
     assert settings_instance.get_setting("window", "width") == 123

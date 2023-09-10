@@ -1,6 +1,7 @@
 from enum import Enum
 from typing import Literal
 from .constants import DEPLOY_STAGE
+from . import STAGE
 
 
 class _MSG_LEVEL(Enum):
@@ -13,7 +14,7 @@ class _MSG_LEVEL(Enum):
 class Logger:
     stage: DEPLOY_STAGE
 
-    def __init__(self, stage: str) -> None:
+    def __init__(self, stage: str = STAGE) -> None:
         self.stage = DEPLOY_STAGE(stage)
 
     def log(

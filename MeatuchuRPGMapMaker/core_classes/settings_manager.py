@@ -1,6 +1,5 @@
 # Global app settings
 from . import FeatureManager
-from ..constants import DEPLOY_STAGE
 from typing import Any
 
 __settings_values__ = {
@@ -14,12 +13,10 @@ settings_instance = 0
 
 
 class SettingsManager(FeatureManager):
-    stage = "prod"
     session_settings = {}
 
-    def __init__(self, stage: str = "prod") -> None:
-        DEPLOY_STAGE(stage)
-        self.stage = stage
+    def __init__(self) -> None:
+        super().__init__()
 
     def get_setting(self, group: str, key: str) -> Any:
         stage_config = __settings_values__.get(self.stage, {})

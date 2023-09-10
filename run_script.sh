@@ -3,4 +3,4 @@ if test -z "$stage"
 then
   stage="dev"
 fi
-python3 -m MeatuchuRPGMapMaker "$stage"
+python3 -m MeatuchuRPGMapMaker --arg "$stage"
