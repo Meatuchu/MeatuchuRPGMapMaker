@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Literal
-from ..constants import DEPLOY_STAGE
+from .constants import DEPLOY_STAGE
 
 
 class _MSG_LEVEL(Enum):

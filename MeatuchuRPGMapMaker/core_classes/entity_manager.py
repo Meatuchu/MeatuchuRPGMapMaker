@@ -1,9 +1,10 @@
 from uuid import uuid4
 from ..entities import BaseEntity
 from typing import Dict
+from . import FeatureManager
 
 
-class EntityManager:
+class EntityManager(FeatureManager):
     storage: Dict[str, BaseEntity]
 
     def __init__(self) -> None:

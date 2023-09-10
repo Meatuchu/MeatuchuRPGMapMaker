@@ -1,8 +1,9 @@
 import tkinter as tk
 from typing import Literal
+from . import FeatureManager
 
 
-class WindowManager:
+class WindowManager(FeatureManager):
     def __init__(self) -> None:
         self.window = tk.Tk()
 

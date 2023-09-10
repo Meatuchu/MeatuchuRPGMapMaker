@@ -1,5 +1,5 @@
 from typing import List
-from ..entities import WallTile, FloorTile
+from . import WallTile, FloorTile
 
 
 class Board:

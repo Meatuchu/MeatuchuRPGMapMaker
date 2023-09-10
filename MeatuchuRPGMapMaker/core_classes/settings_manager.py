@@ -1,4 +1,5 @@
 # Global app settings
+from . import FeatureManager
 from ..constants import DEPLOY_STAGE
 from typing import Any
 
@@ -12,7 +13,7 @@ __settings_values__ = {
 settings_instance = 0
 
 
-class SettingsManager:
+class SettingsManager(FeatureManager):
     stage = "prod"
     session_settings = {}
 

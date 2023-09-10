@@ -1,6 +1,6 @@
 # pyright: reportPrivateUsage=false
 from pytest import raises
-from MeatuchuRPGMapMaker.core_classes.logger import Logger, _MSG_LEVEL
+from MeatuchuRPGMapMaker.logger import Logger, _MSG_LEVEL
 from MeatuchuRPGMapMaker.constants import DEPLOY_STAGE
 
 
