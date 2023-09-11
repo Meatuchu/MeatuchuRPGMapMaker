@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Literal
+from typing import Literal, Optional
 from .constants import DEPLOY_STAGE
 from . import STAGE
 
@@ -36,3 +36,11 @@ class Logger:
         if msg_level == _MSG_LEVEL.DEBUG:
             return self.stage in [DEPLOY_STAGE.DEV]
         return False
+
+
+def _logger_retriever():
+    inst = Logger()
+    return lambda: inst
+
+
+logger_factory = _logger_retriever()

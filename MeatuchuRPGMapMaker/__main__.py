@@ -1,8 +1,9 @@
-from . import STAGE
 from .core_classes.settings_manager import SettingsManager
 from .core_classes.entity_manager import EntityManager
 from .core_classes.window_manager import WindowManager
+from .logger import logger_factory
 
+logger = logger_factory()
 window_manager = WindowManager()
 entity_manager = EntityManager()
 settings = SettingsManager()

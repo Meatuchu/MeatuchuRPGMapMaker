@@ -1,6 +1,6 @@
 # pyright: reportPrivateUsage=false
 from pytest import raises
-from MeatuchuRPGMapMaker.logger import Logger, _MSG_LEVEL
+from MeatuchuRPGMapMaker.logger import Logger, _MSG_LEVEL, logger_factory
 from MeatuchuRPGMapMaker.constants import DEPLOY_STAGE
 
 
@@ -44,3 +44,10 @@ def test_logger_log_negatice() -> None:
     logger = Logger("prod")
     with raises(ValueError):
         logger.log("invalid value", "test")  # type: ignore
+
+
+def test_logger_factory_returns_same_instance():
+    l1 = logger_factory()
+    l2 = logger_factory()
+
+    assert l1 == l2
