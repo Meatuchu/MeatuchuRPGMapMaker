@@ -1,5 +1,6 @@
 from typing import List
-from . import WallTile, FloorTile
+from .wall_tile import WallTile
+from .floor_tile import FloorTile
 
 
 class RPGMapLayer:
@@ -10,8 +11,8 @@ class RPGMapLayer:
     wall_tiles: List[List[WallTile]] = [[]]
 
     def __init__(self, width: int = 40, height: int = 40) -> None:
-        self.width = 40
-        self.height = 40
+        self.width = width
+        self.height = height
 
 
 class RPGMapBoard:

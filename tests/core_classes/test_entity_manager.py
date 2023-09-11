@@ -1,5 +1,7 @@
 from MeatuchuRPGMapMaker.core_classes.entity_manager import EntityManager
-from MeatuchuRPGMapMaker.entities import BaseEntity, WallTile, FloorTile
+from MeatuchuRPGMapMaker.entities.base_entity import BaseEntity
+from MeatuchuRPGMapMaker.entities.wall_tile import WallTile
+from MeatuchuRPGMapMaker.entities.floor_tile import FloorTile
 
 
 def test_insert_and_retrieve_entity() -> None:

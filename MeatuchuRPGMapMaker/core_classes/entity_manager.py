@@ -1,5 +1,5 @@
 from uuid import uuid4
-from ..entities import BaseEntity
+from ..entities.base_entity import BaseEntity
 from typing import Dict
 from . import FeatureManager
 

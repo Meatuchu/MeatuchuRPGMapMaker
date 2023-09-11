@@ -1,6 +1,5 @@
-from MeatuchuRPGMapMaker.entities import WallTile
+from MeatuchuRPGMapMaker.entities.wall_tile import WallTile
 
 
 def test_wall_tile_can_be_constructed():
-    t = WallTile()
-    assert t
+    assert WallTile()
