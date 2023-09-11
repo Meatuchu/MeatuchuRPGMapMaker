@@ -5,6 +5,10 @@ from MeatuchuRPGMapMaker.core_classes.settings_manager import SettingsManager
 mock_settings = {"default": {"window": {"width": 123, "height": 456}}}
 
 
+def test_construction() -> None:
+    assert SettingsManager()
+
+
 @patch(
     "MeatuchuRPGMapMaker.core_classes.settings_manager.__settings_values__",
     mock_settings,
