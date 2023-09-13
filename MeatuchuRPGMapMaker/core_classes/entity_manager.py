@@ -13,12 +13,16 @@ class EntityManager(FeatureManager):
         pass
 
     def insert_entity(self, ent: BaseEntity) -> None:
-        ent.set_id(self._get_id())
+        id = self._get_id()
+        ent.set_id(id)
         self.storage[ent.id] = ent
+        self.logger.log("DEBUG", f"Inserted {ent.id_name} into storage with id {id}")
         return
 
     def _get_id(self) -> str:
-        return str(uuid4())
+        id = str(uuid4())
+        self.logger.log("DEBUG", f"Generated ID {id}")
+        return id
 
     def get_entity_by_id(self, id: str) -> BaseEntity:
         return self.storage[id]

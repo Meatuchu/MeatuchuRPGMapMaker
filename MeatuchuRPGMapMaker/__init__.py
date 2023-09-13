@@ -1,12 +1,13 @@
 import sys
 from typing import List, Optional
+import os
 
 arguments: List[str] = sys.argv[1:]
 
 parsed_args = {}
 
 
-def process_args():
+def process_args() -> None:
     val_name: Optional[str] = None
     for arg in arguments:
         if arg == "--":
@@ -27,5 +28,5 @@ def process_args():
 
 
 process_args()
-print(parsed_args)
 STAGE: str = parsed_args.get("--stage", "prod")  # type: ignore
+ROOTDIR: str = os.path.dirname(__file__)

@@ -21,4 +21,10 @@ class SettingsManager(FeatureManager):
     def get_setting(self, group: str, key: str) -> Any:
         stage_config = __settings_values__.get(self.stage, {})
         default = __settings_values__["default"]
-        return stage_config.get(group, default[group]).get(key, default[group][key])
+        v = stage_config.get(group, default[group]).get(key, default[group][key])
+        self.logger.log(
+            "INFO",
+            f'Retrieved value "{v}" from setting "{key}" in group "{group}" for stage "{self.stage}"',
+            self.name,
+        )
+        return v
