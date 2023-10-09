@@ -11,3 +11,12 @@ class BaseEntity:
         if not id:
             raise ValueError(f"invalid Id {id} provided to {self.__class__}")
         self.id = id
+
+    def pre_render(self, frame_number: int) -> None:
+        pass
+
+    def render(self, frame_number: int) -> None:
+        pass
+
+    def post_render(self, frame_number: int) -> None:
+        pass

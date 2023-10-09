@@ -1,5 +1,8 @@
 # pyright: reportPrivateUsage=false
+from unittest.mock import MagicMock, call, patch
 from pytest import raises
+from datetime import datetime
+
 from MeatuchuRPGMapMaker.logger import Logger, _MSG_LEVEL, logger_factory
 from MeatuchuRPGMapMaker.constants import DEPLOY_STAGE
 
@@ -37,17 +40,60 @@ def test_logger_log() -> None:
 
 def test_logger_invalid_stage() -> None:
     with raises(ValueError):
-        Logger("invalid value")
+        Logger("invalid value")  # type: ignore
 
 
-def test_logger_log_negatice() -> None:
+def test_logger_log_negative() -> None:
     logger = Logger("prod")
     with raises(ValueError):
         logger.log("invalid value", "test")  # type: ignore
 
 
-def test_logger_factory_returns_same_instance():
+def test_logger_factory_returns_same_instance() -> None:
     l1 = logger_factory()
     l2 = logger_factory()
 
     assert l1 == l2
+
+
+def test_logger_toggle_should_print_color() -> None:
+    a = Logger("prod")
+    init = a.should_print_color
+    a.toggle_colored_print()
+    assert a.should_print_color is not init
+
+
+def test_logger_handle_error_preprod() -> None:
+    a = Logger("dev")
+    a.log = MagicMock()
+    a.toggle_colored_print()
+    try:
+        raise Exception("test")
+    except Exception as e:
+        a.handle_exception(e)
+    a.log.assert_has_calls(
+        calls=[call("ERROR", "An unhandled Exception has occurred with message: test")]
+    )
+
+
+def test_logger_handle_error_prod() -> None:
+    a = Logger("prod")
+    a.log = MagicMock()
+    a.toggle_colored_print()
+    try:
+        raise Exception("test")
+    except Exception as e:
+        a.handle_exception(e)
+    a.log.assert_has_calls(calls=[call("ERROR", "Critical error has occurred...")])
+
+
+@patch(
+    "MeatuchuRPGMapMaker.logger.get_cur_time",
+    MagicMock(return_value=datetime(2077, 1, 1, 1, 1, 1, 1)),
+)
+@patch("MeatuchuRPGMapMaker.logger.print")
+def test_logger_logs(mock_print: MagicMock) -> None:
+    a = Logger("prod")
+    a.should_print_color = False
+    a.log("ERROR", "test")
+    mock_print.assert_has_calls([call("[2077-01-01 01:01:01.000001] ERROR: test")])

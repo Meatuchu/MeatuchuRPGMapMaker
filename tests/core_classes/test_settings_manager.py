@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 from MeatuchuRPGMapMaker.core_classes.settings_manager import SettingsManager
 
 
@@ -16,3 +16,13 @@ def test_construction() -> None:
 def test_settings_manager_defaults_correctly() -> None:
     settings_instance = SettingsManager()
     assert settings_instance.get_setting("window", "width") == 123
+
+
+def test_register_event_manager() -> None:
+    m = SettingsManager()
+    event_mgr = MagicMock()
+    o = m.subscribe_to_events
+    m.subscribe_to_events = MagicMock(side_effect=o)
+    m.register_event_mgr(event_mgr)
+    m.event_mgr = event_mgr
+    m.subscribe_to_events.assert_called_once()

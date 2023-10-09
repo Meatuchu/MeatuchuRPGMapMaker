@@ -2,7 +2,7 @@ from . import FeatureManager
 from .event_manager import EventManager
 
 
-class ExportManager(FeatureManager):
+class RenderingManager(FeatureManager):
     event_mgr: EventManager
 
     def __init__(self) -> None:
