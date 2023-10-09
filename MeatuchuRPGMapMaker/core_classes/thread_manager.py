@@ -32,7 +32,7 @@ class ThreadManager(FeatureManager):
         self.log("DEBUG", f"Recieved request to create thread {thread_name}")
 
         if self._threads.get(thread_name):
-            raise ValueError(f"thread {thread_name} already exists!")
+            raise RuntimeError(f"thread {thread_name} already exists!")
 
         new_thread = threading.Thread(target=thread_target)
         new_thread.daemon = True
