@@ -7,6 +7,7 @@ from ..constants import DEPLOY_STAGE
 class FeatureManager:
     stage: DEPLOY_STAGE
     id: str
+    event_mgr = None
 
     def __init__(self) -> None:
         self.id = str(uuid4())

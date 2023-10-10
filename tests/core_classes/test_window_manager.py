@@ -1,9 +1,10 @@
 # pyright: reportPrivateUsage=false
-from typing import Any
+from typing import Any, Set
 from unittest.mock import MagicMock, call, patch
 from pytest import raises
 from MeatuchuRPGMapMaker.core_classes.window_manager import WindowManager, DEFAULT_WINDOW_NAME
 from MeatuchuRPGMapMaker.core_classes.event_manager import EventManager
+from MeatuchuRPGMapMaker.core_classes.events import Event, NewThreadRequestEvent
 
 
 # helper mock
@@ -82,3 +83,64 @@ def test_register_event_manager() -> None:
     m.register_event_mgr(event_mgr)
     m.event_mgr = event_mgr
     m.subscribe_to_events.assert_called_once()
+
+
+def test_create_window_requires_event_mgr() -> None:
+    m = WindowManager()
+    with raises(ValueError):
+        m.create_window("pog")
+
+
+def test_set_window_size_not_exist() -> None:
+    m = WindowManager()
+    with raises(KeyError):
+        m.set_window_size(1, 2, "buckle my shoe")
+
+
+@patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
+def test_create_window_thread_target(mock_tk: MagicMock) -> None:
+    m = WindowManager()
+
+    mock_event_mgr = MagicMock()
+    event_types: Set[str] = set()
+
+    def mock_queue_event(event: Event) -> None:
+        nonlocal event_types
+        event_types.add(event.name)
+        if event.name == NewThreadRequestEvent.name:
+            event.kwargs.get("thread_target")()
+
+    mock_event_mgr.queue_event = MagicMock(side_effect=mock_queue_event)
+
+    m.register_event_mgr(mock_event_mgr)
+    m.create_window("test")
+
+    mock_event_mgr.queue_event.assert_called()
+    assert NewThreadRequestEvent.name in event_types
+
+
+@patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
+def test_set_fullscreen_mode(mock_tk: MagicMock) -> None:
+    m = WindowManager()
+
+    mock_event_mgr = MagicMock()
+
+    def mock_queue_event(event: Event) -> None:
+        if event.name == NewThreadRequestEvent.name:
+            event.kwargs.get("thread_target")()
+
+    mock_event_mgr.queue_event = MagicMock(side_effect=mock_queue_event)
+
+    m.register_event_mgr(mock_event_mgr)
+    m.create_window("test")
+
+    mock_event_mgr.queue_event.assert_called()
+    m.set_fullscreen_mode(0, "test")
+    m.set_fullscreen_mode(1, "test")
+
+
+@patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
+def test_set_fullscreen_mode_not_exist(mock_tk: MagicMock) -> None:
+    m = WindowManager()
+    with raises(KeyError):
+        m.set_fullscreen_mode(0, "test")

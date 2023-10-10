@@ -71,7 +71,7 @@ class WindowManager(FeatureManager):
         mode: Literal[0, 1, 2],
         window_name: str = DEFAULT_WINDOW_NAME,
     ) -> None:
-        target_window = self._windows[window_name]
+        target_window = self._windows.get(window_name)
         if not target_window:
             raise KeyError(f"Cannot set fullscreen mode for {window_name} window, it doesn't exist!")
         if mode >= 1:
