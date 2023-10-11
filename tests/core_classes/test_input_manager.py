@@ -119,8 +119,17 @@ def test_handle_keyrelease_no_key() -> None:
 
 
 def test_handle_mouse_move() -> None:
-    e = InputManager()
-    e.handle_mouse_move(0, 1)
+    m = InputManager()
+    e = MagicMock()
+    event_types: Set[str] = set()
+
+    def mock_queue_event(event: Event) -> None:
+        nonlocal event_types
+        event_types.add(event.name)
+
+    e.queue_event = MagicMock(side_effect=mock_queue_event)
+    m.register_event_mgr(e)
+    m.handle_mouse_move(0, 1)
 
 
 def test_handle_mouse_click() -> None:

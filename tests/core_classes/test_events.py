@@ -44,7 +44,7 @@ def test_key_release_event() -> None:
 
 def test_mouse_move_event() -> None:
     assert events.MouseMoveEvent
-    assert events.MouseMoveEvent()
+    assert events.MouseMoveEvent(0, 1)
 
 
 def test_app_shutdown_event() -> None:

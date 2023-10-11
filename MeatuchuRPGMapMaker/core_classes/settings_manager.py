@@ -6,11 +6,7 @@ from .event_manager import EventManager
 
 __settings_values__ = {
     "default": {
-        "window": {
-            "width": 1920,
-            "height": 1080,
-            "fullscreen_mode": 2,
-        },
+        "window": {"width": 1920, "height": 1080, "fullscreen_mode": 2, "name": "test"},
         "app": {
             "tickrate": 60,
         },
@@ -50,7 +46,7 @@ class SettingsManager(FeatureManager):
         v = stage_config.get(group, default[group]).get(key, default[group][key])
         self.log(
             "INFO",
-            f'Retrieved value "{v}" from setting "{key}" in group "{group}" for stage "{self.stage}"',
+            f'Retrieved value {f"{v}" if type(v) is str else v} from setting "{key}" in group "{group}" for stage "{self.stage}"',
         )
         return v
 

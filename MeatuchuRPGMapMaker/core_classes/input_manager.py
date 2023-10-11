@@ -4,7 +4,7 @@ import time
 
 from . import FeatureManager
 from .event_manager import EventManager
-from .events import KeyPressEvent, KeyReleaseEvent
+from .events import KeyPressEvent, KeyReleaseEvent, MouseMoveEvent
 from ..helpers import debounce
 
 
@@ -86,6 +86,7 @@ class InputManager(FeatureManager):
 
     def handle_mouse_move(self, x: int, y: int) -> None:
         self._mouse_move_log(x, y)
+        self.event_mgr.queue_event(MouseMoveEvent(x=x, y=y))
         pass
 
     def handle_mouse_click(

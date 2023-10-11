@@ -1,4 +1,4 @@
-from typing import Any, Callable, Optional
+from typing import Any, Callable, Literal, Optional
 
 
 class Event:
@@ -99,8 +99,23 @@ class MouseMoveEvent(Event):
     # Fired when the mouse is moved
     name: str = "MouseMoveEvent"
 
-    def __init__(self, *args: Any, **kwargs: Any) -> None:
-        super().__init__(*args, **kwargs)
+    def __init__(self, x: int, y: int) -> None:
+        super().__init__(x=x, y=y)
+
+
+class WindowResizeRequestEvent(Event):
+    name: str = "WindowResizeRequestEvent"
+
+    def __init__(self, width: int, height: int, window_name: Optional[str] = None) -> None:
+        super().__init__(width=width, height=height, window_name=window_name)
+        pass
+
+
+class WindowFullscreenModeEditRequestEvent(Event):
+    name: str = "WindowFullscreenModeEditRequestEvent"
+
+    def __init__(self, mode: Literal[0, 1, 2], window_name: Optional[str] = None) -> None:
+        super().__init__(mode=mode, window_name=window_name)
 
 
 class AppShutDownEvent(Event):

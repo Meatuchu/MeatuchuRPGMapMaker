@@ -1,22 +1,28 @@
 import tkinter as tk
-from typing import Literal, Dict, Callable
+from typing import Literal, Dict, Callable, Optional, cast
+from datetime import datetime
 
 from . import FeatureManager
 from .event_manager import EventManager
-from .events import CloseWindowEvent, NewThreadRequestEvent, DestroyThreadRequestEvent
+from .events import (
+    CloseWindowEvent,
+    NewThreadRequestEvent,
+    DestroyThreadRequestEvent,
+    WindowResizeRequestEvent,
+    WindowFullscreenModeEditRequestEvent,
+)
 
 DEFAULT_WINDOW_NAME = "main"
 
 
 class WindowManager(FeatureManager):
     event_mgr: EventManager
-    _windows: Dict[str, tk.Tk]
+    _windows: Dict[str, Optional[tk.Tk]]
     _canvases: Dict[str, tk.Canvas]
 
     def __init__(self) -> None:
         self._windows = {}
         self._canvases = {}
-        self._window_threads = {}
         super().__init__()
 
     def _get_window_thread(self, window_name: str = DEFAULT_WINDOW_NAME) -> Callable[[], None]:
@@ -30,13 +36,15 @@ class WindowManager(FeatureManager):
             self.log("INFO", f"Activating window {window_name}")
 
             window_obj.mainloop()
-
+            del self._windows[window_name]
+            del self._canvases[window_name]
             self.event_mgr.queue_event(CloseWindowEvent(window_name))
             self.event_mgr.queue_event(DestroyThreadRequestEvent(f"{window_name}_window_thread", self.id))
 
         return _ret
 
     def create_window(self, window_name: str = DEFAULT_WINDOW_NAME) -> None:
+        self._windows[window_name] = None  # Marks the window as being queued for creation
         if not self.event_mgr:
             raise ValueError("Cannot create window before we have an event manager!")
 
@@ -55,8 +63,15 @@ class WindowManager(FeatureManager):
         height: int = 600,
         window_name: str = DEFAULT_WINDOW_NAME,
     ) -> None:
+        window_name = window_name or DEFAULT_WINDOW_NAME
+        t = datetime.now().timestamp()
         try:
-            self._windows[window_name].geometry(f"{width}x{height}")
+            while not self._windows[window_name]:  # Wait until window is created, if the key exists but is none.
+                if datetime.now().timestamp() - t > 1:
+                    raise RuntimeError(
+                        "Took too long to wait for window creation while resizing! Is there something wrong with the window create thread?"
+                    )
+            cast(tk.Tk, self._windows[window_name]).geometry(f"{width}x{height}")
             self._canvases[window_name].config(width=width, height=height)
             self._canvases[window_name].pack()
             self.log(
@@ -71,21 +86,27 @@ class WindowManager(FeatureManager):
         mode: Literal[0, 1, 2],
         window_name: str = DEFAULT_WINDOW_NAME,
     ) -> None:
-        target_window = self._windows.get(window_name)
-        if not target_window:
+        window_name = window_name or DEFAULT_WINDOW_NAME
+        t = datetime.now().timestamp()
+        try:
+            while not self._windows[window_name]:  # Wait until window is created, if the key exists but is none.
+                if datetime.now().timestamp() - t > 1:
+                    raise RuntimeError(
+                        "Took too long to wait for window creation while resizing! Is there something wrong with the window create thread?"
+                    )
+            cast(tk.Tk, self._windows[window_name]).attributes("-fullscreen", mode >= 1)
+            self.log(
+                "DEBUG",
+                f"set {window_name} fullscreen mode to {mode}",
+            )
+        except KeyError:
             raise KeyError(f"Cannot set fullscreen mode for {window_name} window, it doesn't exist!")
-        if mode >= 1:
-            target_window.attributes("-fullscreen", True)
-        elif mode == 0:
-            target_window.attributes("-fullscreen", False)
-        self.log(
-            "DEBUG",
-            f"set {window_name} fullscreen mode to {mode}",
-        )
 
     def register_event_mgr(self, event_mgr: EventManager) -> None:
         self.event_mgr = event_mgr
         self.subscribe_to_events()
 
     def subscribe_to_events(self) -> None:
+        self.event_mgr.register_subscription(WindowResizeRequestEvent, self.set_window_size)
+        self.event_mgr.register_subscription(WindowFullscreenModeEditRequestEvent, self.set_fullscreen_mode)
         pass

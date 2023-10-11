@@ -120,23 +120,60 @@ def test_create_window_thread_target(mock_tk: MagicMock) -> None:
 
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
-def test_set_fullscreen_mode(mock_tk: MagicMock) -> None:
-    m = WindowManager()
+def test_set_fullscreen_mode_0(mock_Tk: MagicMock) -> None:
+    mock_Tk.return_value = mock_tk_def()
+    w = WindowManager()
 
-    mock_event_mgr = MagicMock()
+    def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
+        w._windows[window_name] = mock_Tk()
+        w._canvases[window_name] = mock_Tk()
 
-    def mock_queue_event(event: Event) -> None:
-        if event.name == NewThreadRequestEvent.name:
-            event.kwargs.get("thread_target")()
+    w.create_window = _new_window_thread_mock
+    event_mgr = EventManager()
+    w.register_event_mgr(event_mgr)
+    w.create_window("side")
+    w.create_window()
+    w.set_fullscreen_mode(0, "side")
+    w.set_fullscreen_mode(0)
+    mock_Tk.return_value.attributes.assert_has_calls([call("-fullscreen", False), call("-fullscreen", False)])
 
-    mock_event_mgr.queue_event = MagicMock(side_effect=mock_queue_event)
 
-    m.register_event_mgr(mock_event_mgr)
-    m.create_window("test")
+@patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
+def test_set_fullscreen_mode_1(mock_Tk: MagicMock) -> None:
+    mock_Tk.return_value = mock_tk_def()
+    w = WindowManager()
 
-    mock_event_mgr.queue_event.assert_called()
-    m.set_fullscreen_mode(0, "test")
-    m.set_fullscreen_mode(1, "test")
+    def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
+        w._windows[window_name] = mock_Tk()
+        w._canvases[window_name] = mock_Tk()
+
+    w.create_window = _new_window_thread_mock
+    event_mgr = EventManager()
+    w.register_event_mgr(event_mgr)
+    w.create_window("side")
+    w.create_window()
+    w.set_fullscreen_mode(1, "side")
+    w.set_fullscreen_mode(1)
+    mock_Tk.return_value.attributes.assert_has_calls([call("-fullscreen", True), call("-fullscreen", True)])
+
+
+@patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
+def test_set_fullscreen_mode_2(mock_Tk: MagicMock) -> None:
+    mock_Tk.return_value = mock_tk_def()
+    w = WindowManager()
+
+    def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
+        w._windows[window_name] = mock_Tk()
+        w._canvases[window_name] = mock_Tk()
+
+    w.create_window = _new_window_thread_mock
+    event_mgr = EventManager()
+    w.register_event_mgr(event_mgr)
+    w.create_window("side")
+    w.create_window()
+    w.set_fullscreen_mode(2, "side")
+    w.set_fullscreen_mode(2)
+    mock_Tk.return_value.attributes.assert_has_calls([call("-fullscreen", True), call("-fullscreen", True)])
 
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")

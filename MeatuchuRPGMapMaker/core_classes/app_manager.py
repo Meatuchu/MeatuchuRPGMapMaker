@@ -12,7 +12,13 @@ from .texture_manager import TextureManager
 from .thread_manager import ThreadManager
 from .window_manager import WindowManager
 from .event_manager import EventManager
-from .events import Event, AllThreadsDestroyedEvent, AppShutDownEvent
+from .events import (
+    Event,
+    AllThreadsDestroyedEvent,
+    AppShutDownEvent,
+    WindowResizeRequestEvent,
+    WindowFullscreenModeEditRequestEvent,
+)
 from ..constants import DEPLOY_STAGE
 from ..entities.board import RPGMapBoard
 
@@ -126,6 +132,15 @@ class AppManager(FeatureManager):
     def activate_app(self) -> None:
         self.state.app_active = True
         self.window_mgr.create_window()
+        self.event_mgr.queue_event(
+            WindowResizeRequestEvent(
+                self.settings_mgr.get_setting("window", "width"),
+                self.settings_mgr.get_setting("window", "height"),
+            )
+        )
+        self.event_mgr.queue_event(
+            WindowFullscreenModeEditRequestEvent(self.settings_mgr.get_setting("window", "fullscreen_mode"))
+        )
         while True:
             while self.state.app_active:
                 self.app_frame_process()
