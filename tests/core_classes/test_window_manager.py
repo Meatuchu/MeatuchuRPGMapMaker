@@ -1,23 +1,11 @@
 # pyright: reportPrivateUsage=false
-from typing import Any, Set
+from typing import Set
 from unittest.mock import MagicMock, call, patch
 from pytest import raises
 from MeatuchuRPGMapMaker.core_classes.window_manager import WindowManager, DEFAULT_WINDOW_NAME
 from MeatuchuRPGMapMaker.core_classes.event_manager import EventManager
 from MeatuchuRPGMapMaker.core_classes.events import Event, NewThreadRequestEvent
-
-
-# helper mock
-class mock_tk_def:
-    def __getattribute__(self, __name: str) -> Any:
-        try:
-            return super().__getattribute__(__name)
-        except:
-            super().__setattr__(__name, MagicMock())
-            return super().__getattribute__(__name)
-
-    def __init__(self) -> None:
-        pass
+from tests import VeryMagicMock
 
 
 # tests
@@ -27,7 +15,7 @@ def test_construction() -> None:
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
 def test_window_already_exists(mock_Tk: MagicMock) -> None:
-    mock_Tk.return_value = mock_tk_def()
+    mock_Tk.return_value = VeryMagicMock()
     w = WindowManager()
     o = w.create_window
 
@@ -58,7 +46,7 @@ def test_window_activate(thread_request_event_def: MagicMock) -> None:
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
 def test_window_set_size(mock_Tk: MagicMock) -> None:
-    mock_Tk.return_value = mock_tk_def()
+    mock_Tk.return_value = VeryMagicMock()
     w = WindowManager()
 
     def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
@@ -121,7 +109,7 @@ def test_create_window_thread_target(mock_tk: MagicMock) -> None:
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
 def test_set_fullscreen_mode_0(mock_Tk: MagicMock) -> None:
-    mock_Tk.return_value = mock_tk_def()
+    mock_Tk.return_value = VeryMagicMock()
     w = WindowManager()
 
     def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
@@ -140,7 +128,7 @@ def test_set_fullscreen_mode_0(mock_Tk: MagicMock) -> None:
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
 def test_set_fullscreen_mode_1(mock_Tk: MagicMock) -> None:
-    mock_Tk.return_value = mock_tk_def()
+    mock_Tk.return_value = VeryMagicMock()
     w = WindowManager()
 
     def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
@@ -159,7 +147,7 @@ def test_set_fullscreen_mode_1(mock_Tk: MagicMock) -> None:
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
 def test_set_fullscreen_mode_2(mock_Tk: MagicMock) -> None:
-    mock_Tk.return_value = mock_tk_def()
+    mock_Tk.return_value = VeryMagicMock()
     w = WindowManager()
 
     def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
