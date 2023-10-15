@@ -5,7 +5,6 @@ from pytest import raises
 from MeatuchuRPGMapMaker.core_classes.window_manager import WindowManager, DEFAULT_WINDOW_NAME
 from MeatuchuRPGMapMaker.core_classes.event_manager import EventManager
 from MeatuchuRPGMapMaker.core_classes.events import Event, NewThreadRequestEvent
-from tests import VeryMagicMock
 
 
 # tests
@@ -15,7 +14,7 @@ def test_construction() -> None:
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
 def test_window_already_exists(mock_Tk: MagicMock) -> None:
-    mock_Tk.return_value = VeryMagicMock()
+    mock_Tk.return_value = MagicMock()
     w = WindowManager()
     o = w.create_window
 
@@ -46,7 +45,7 @@ def test_window_activate(thread_request_event_def: MagicMock) -> None:
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
 def test_window_set_size(mock_Tk: MagicMock) -> None:
-    mock_Tk.return_value = VeryMagicMock()
+    mock_Tk.return_value = MagicMock()
     w = WindowManager()
 
     def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
@@ -109,7 +108,7 @@ def test_create_window_thread_target(mock_tk: MagicMock) -> None:
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
 def test_set_fullscreen_mode_0(mock_Tk: MagicMock) -> None:
-    mock_Tk.return_value = VeryMagicMock()
+    mock_Tk.return_value = MagicMock()
     w = WindowManager()
 
     def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
@@ -128,7 +127,7 @@ def test_set_fullscreen_mode_0(mock_Tk: MagicMock) -> None:
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
 def test_set_fullscreen_mode_1(mock_Tk: MagicMock) -> None:
-    mock_Tk.return_value = VeryMagicMock()
+    mock_Tk.return_value = MagicMock()
     w = WindowManager()
 
     def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
@@ -147,7 +146,7 @@ def test_set_fullscreen_mode_1(mock_Tk: MagicMock) -> None:
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
 def test_set_fullscreen_mode_2(mock_Tk: MagicMock) -> None:
-    mock_Tk.return_value = VeryMagicMock()
+    mock_Tk.return_value = MagicMock()
     w = WindowManager()
 
     def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
