@@ -35,11 +35,14 @@ def test_process_all_events() -> None:
     e = EventManager()
     trigger_func = MagicMock()
     e.register_subscription(MockEvent, trigger_func)
-    e.queue_event(MockEvent())
-    e.queue_event(MockEvent())
-    e.queue_event(MockEvent())
+    e1 = MockEvent()
+    e2 = MockEvent()
+    e3 = MockEvent()
+    e.queue_event(e1)
+    e.queue_event(e2)
+    e.queue_event(e3)
     e.process_all_events()
-    trigger_func.assert_has_calls(calls=[call(), call(), call()])
+    trigger_func.assert_has_calls(calls=[call(e1), call(e2), call(e3)])
 
 
 def test_process_all_events_empty_queue() -> None:

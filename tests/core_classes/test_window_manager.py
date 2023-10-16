@@ -52,13 +52,17 @@ def test_window_set_size(mock_Tk: MagicMock) -> None:
         w._windows[window_name] = mock_Tk()
         w._canvases[window_name] = mock_Tk()
 
+    set_size_event_1 = MagicMock()
+    set_size_event_1.kwargs = {"width": 200, "height": 200}
+    set_size_event_2 = MagicMock()
+    set_size_event_2.kwargs = {"width": 300, "height": 300, "window_name": "side"}
     w.create_window = _new_window_thread_mock
     event_mgr = EventManager()
     w.register_event_mgr(event_mgr)
     w.create_window("side")
     w.create_window()
-    w.set_window_size(200, 200)
-    w.set_window_size(300, 300, "side")
+    w.set_window_size(set_size_event_1)
+    w.set_window_size(set_size_event_2)
     mock_Tk.return_value.geometry.assert_has_calls([call("200x200"), call("300x300")])
 
 
@@ -80,8 +84,10 @@ def test_create_window_requires_event_mgr() -> None:
 
 def test_set_window_size_not_exist() -> None:
     m = WindowManager()
+    set_size_event = MagicMock()
+    set_size_event.kwargs = {"width": 1, "height": 2, "window_name": "buckle_my_shoe"}
     with raises(KeyError):
-        m.set_window_size(1, 2, "buckle my shoe")
+        m.set_window_size(set_size_event)
 
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.tk.Tk")
@@ -120,8 +126,9 @@ def test_set_fullscreen_mode_0(mock_Tk: MagicMock) -> None:
     w.register_event_mgr(event_mgr)
     w.create_window("side")
     w.create_window()
-    w.set_fullscreen_mode(0, "side")
-    w.set_fullscreen_mode(0)
+    mode = 0
+    w.set_fullscreen_mode(MagicMock(kwargs={"mode": mode, "window_name": "side"}))
+    w.set_fullscreen_mode(MagicMock(kwargs={"mode": mode, "window_name": None}))
     mock_Tk.return_value.attributes.assert_has_calls([call("-fullscreen", False), call("-fullscreen", False)])
 
 
@@ -139,8 +146,9 @@ def test_set_fullscreen_mode_1(mock_Tk: MagicMock) -> None:
     w.register_event_mgr(event_mgr)
     w.create_window("side")
     w.create_window()
-    w.set_fullscreen_mode(1, "side")
-    w.set_fullscreen_mode(1)
+    mode = 1
+    w.set_fullscreen_mode(MagicMock(kwargs={"mode": mode, "window_name": "side"}))
+    w.set_fullscreen_mode(MagicMock(kwargs={"mode": mode, "window_name": None}))
     mock_Tk.return_value.attributes.assert_has_calls([call("-fullscreen", True), call("-fullscreen", True)])
 
 
@@ -158,8 +166,9 @@ def test_set_fullscreen_mode_2(mock_Tk: MagicMock) -> None:
     w.register_event_mgr(event_mgr)
     w.create_window("side")
     w.create_window()
-    w.set_fullscreen_mode(2, "side")
-    w.set_fullscreen_mode(2)
+    mode = 2
+    w.set_fullscreen_mode(MagicMock(kwargs={"mode": mode, "window_name": "side"}))
+    w.set_fullscreen_mode(MagicMock(kwargs={"mode": mode, "window_name": None}))
     mock_Tk.return_value.attributes.assert_has_calls([call("-fullscreen", True), call("-fullscreen", True)])
 
 
@@ -167,4 +176,4 @@ def test_set_fullscreen_mode_2(mock_Tk: MagicMock) -> None:
 def test_set_fullscreen_mode_not_exist(mock_tk: MagicMock) -> None:
     m = WindowManager()
     with raises(KeyError):
-        m.set_fullscreen_mode(0, "test")
+        m.set_fullscreen_mode(MagicMock(kwargs={"mode": 0, "window_name": None}))

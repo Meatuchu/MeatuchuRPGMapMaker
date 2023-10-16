@@ -57,13 +57,10 @@ class WindowManager(FeatureManager):
 
         self.log("DEBUG", f"Requested thread for {window_name} window")
 
-    def set_window_size(
-        self,
-        width: int = 800,
-        height: int = 600,
-        window_name: str = DEFAULT_WINDOW_NAME,
-    ) -> None:
-        window_name = window_name or DEFAULT_WINDOW_NAME
+    def set_window_size(self, event: WindowResizeRequestEvent) -> None:
+        width = event.kwargs.get("width", 800)
+        height = event.kwargs.get("height", 600)
+        window_name = event.kwargs.get("window_name", DEFAULT_WINDOW_NAME) or DEFAULT_WINDOW_NAME
         t = datetime.now().timestamp()
         try:
             while not self._windows[window_name]:  # Wait until window is created, if the key exists but is none.
@@ -81,12 +78,9 @@ class WindowManager(FeatureManager):
         except KeyError:
             raise KeyError(f"Cannot set window size, {window_name} window does not exist")
 
-    def set_fullscreen_mode(
-        self,
-        mode: Literal[0, 1, 2],
-        window_name: str = DEFAULT_WINDOW_NAME,
-    ) -> None:
-        window_name = window_name or DEFAULT_WINDOW_NAME
+    def set_fullscreen_mode(self, event: WindowFullscreenModeEditRequestEvent) -> None:
+        mode = event.kwargs.get("mode")
+        window_name = event.kwargs.get("window_name", DEFAULT_WINDOW_NAME) or DEFAULT_WINDOW_NAME
         t = datetime.now().timestamp()
         try:
             while not self._windows[window_name]:  # Wait until window is created, if the key exists but is none.

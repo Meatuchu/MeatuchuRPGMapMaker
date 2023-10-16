@@ -1,5 +1,5 @@
 import threading
-from typing import Dict, Callable, Tuple
+from typing import Dict, Callable, Tuple, Any
 
 from . import FeatureManager
 from .event_manager import EventManager
@@ -28,7 +28,11 @@ class ThreadManager(FeatureManager):
         self.event_mgr.register_subscription(NewThreadRequestEvent, self.create_thread)
         self.event_mgr.register_subscription(DestroyThreadRequestEvent, self.destroy_thread)
 
-    def create_thread(self, thread_name: str, thread_target: Callable[..., None], owner_id: str) -> None:
+    def create_thread(self, event: NewThreadRequestEvent) -> None:
+        thread_name: str = event.kwargs["thread_name"]
+        thread_target: Callable[..., None] = event.kwargs["thread_target"]
+        owner_id: str = event.kwargs["owner_id"]
+
         self.log("DEBUG", f"Recieved request to create thread {thread_name}")
 
         if self._threads.get(thread_name):
@@ -44,7 +48,9 @@ class ThreadManager(FeatureManager):
         self.event_mgr.queue_event(NewThreadEvent(thread_name))
         pass
 
-    def destroy_thread(self, thread_name: str, owner_id: str) -> None:
+    def destroy_thread(self, event: DestroyThreadRequestEvent) -> None:
+        thread_name: str = event.kwargs["thread_name"]
+        owner_id: str = event.kwargs["owner_id"]
         self.log("DEBUG", f"Recieved request to destroy thread {thread_name}")
         target = self._threads.get(thread_name)
         if not target:

@@ -37,7 +37,7 @@ class EventManager(FeatureManager):
             )
 
         for subscriber in subscribers:
-            subscriber(*event.args, **event.kwargs)
+            subscriber(event)
 
         if event.name == AppShutDownEvent.name:
             sys.exit()

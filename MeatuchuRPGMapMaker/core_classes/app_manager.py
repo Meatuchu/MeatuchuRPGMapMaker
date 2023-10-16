@@ -18,6 +18,7 @@ from .events import (
     AppShutDownEvent,
     WindowResizeRequestEvent,
     WindowFullscreenModeEditRequestEvent,
+    MouseMoveEvent,
 )
 from ..constants import DEPLOY_STAGE
 from ..entities.board import RPGMapBoard
@@ -108,13 +109,13 @@ class AppManager(FeatureManager):
         if self.stage is DEPLOY_STAGE.DEV:
             self.event_mgr.register_subscription(
                 Event,
-                lambda *args, **kwargs: self.log(
-                    "DEBUG", f"\nGlobal Subscription Log: \n\targs: {args}\n\tkwargs:{kwargs}"
-                ),
+                lambda event: None
+                if isinstance(event, MouseMoveEvent)
+                else self.log("DEBUG", f"\nGlobal Subscription Log: \n\targs: {event.args}\n\tkwargs:{event.kwargs}"),
             )
 
         self.event_mgr.register_subscription(
-            AllThreadsDestroyedEvent, lambda: self.event_mgr.queue_event(AppShutDownEvent())
+            AllThreadsDestroyedEvent, lambda event: self.event_mgr.queue_event(AppShutDownEvent())
         )
 
         pass
