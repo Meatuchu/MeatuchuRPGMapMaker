@@ -1,20 +1,26 @@
-from typing import Dict, List, Callable, Type
+from typing import Dict, List, Callable, Literal, Type
 import sys
 
 from . import FeatureManager
-from .events import Event, AppShutDownEvent
+from .events import Event, InputEvent, RenderEvent, UpdateEvent, AppShutDownEvent
 
 
 class EventManager(FeatureManager):
     _subscriptions: Dict[str, List[Callable[..., None]]]
-    _event_queue: List[Event]
+    _input_event_queue: List[InputEvent]
+    _update_event_queue: List[UpdateEvent]
+    _render_event_queue: List[RenderEvent]
+    _misc_event_queue: List[Event]
 
     def __init__(
         self,
     ) -> None:
         self._event_defs = {}
         self._subscriptions = {}
-        self._event_queue = []
+        self._misc_event_queue = []
+        self._input_event_queue = []
+        self._update_event_queue = []
+        self._render_event_queue = []
         super().__init__()
 
     def register_subscription(self, event_class: Type[Event], function: Callable[..., None]) -> None:
@@ -24,10 +30,26 @@ class EventManager(FeatureManager):
 
     def queue_event(self, event: Event) -> None:
         self.log("DEBUG", f"Adding event {event.name} to event queue")
-        self._event_queue.append(event)
+        if isinstance(event, InputEvent):
+            self._input_event_queue.append(event)
+        elif isinstance(event, UpdateEvent):
+            self._update_event_queue.append(event)
+        elif isinstance(event, RenderEvent):
+            self._render_event_queue.append(event)
+        else:
+            self._misc_event_queue.append(event)
 
-    def process_next_event(self) -> None:
-        event = self._event_queue.pop(0)
+    def process_next_event(self, event_type: Literal["input", "update", "render", None]) -> None:
+        if event_type is "input":
+            q = self._input_event_queue
+        elif event_type is "update":
+            q = self._update_event_queue
+        elif event_type is "render":
+            q = self._render_event_queue
+        else:
+            q = self._misc_event_queue
+
+        event = q.pop(0)
         subscribers = self._subscriptions.get(event.name, []) + self._subscriptions.get(Event.name, [])
 
         if subscribers:
@@ -42,9 +64,29 @@ class EventManager(FeatureManager):
         if event.name == AppShutDownEvent.name:
             sys.exit()
 
-    def process_all_events(self) -> None:
-        if not self._event_queue:
+    def input_step(self, frame_number: int) -> None:
+        if not self._input_event_queue:
             return
-        self.log("DEBUG", "processing all events...")
-        while self._event_queue:
-            self.process_next_event()
+        self.log("DEBUG", "processing all input events...")
+        while self._input_event_queue:
+            self.process_next_event("input")
+        return super().input_step(frame_number)
+
+    def update_step(self, frame_number: int) -> None:
+        if not self._update_event_queue and not self._misc_event_queue:
+            return
+        self.log("DEBUG", "processing all update events...")
+        while self._update_event_queue:
+            self.process_next_event("update")
+        self.log("DEBUG", "processing all misc events...")
+        while self._misc_event_queue:
+            self.process_next_event(None)
+        return super().update_step(frame_number)
+
+    def render_step(self, frame_number: int) -> None:
+        if not self._render_event_queue:
+            return
+        self.log("DEBUG", "processing all render events...")
+        while self._render_event_queue:
+            self.process_next_event("render")
+        return super().render_step(frame_number)

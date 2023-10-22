@@ -7,6 +7,21 @@ def test_event() -> None:
     assert events.Event()
 
 
+def test_input_event() -> None:
+    assert events.InputEvent
+    assert events.InputEvent()
+
+
+def test_update_event() -> None:
+    assert events.UpdateEvent
+    assert events.UpdateEvent()
+
+
+def test_render_event() -> None:
+    assert events.RenderEvent
+    assert events.RenderEvent()
+
+
 def test_new_thread_request_event() -> None:
     assert events.NewThreadRequestEvent
     assert events.NewThreadRequestEvent("test thread", MagicMock(), "unit_test")

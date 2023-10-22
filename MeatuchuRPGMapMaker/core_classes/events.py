@@ -17,7 +17,22 @@ class Event:
         self.kwargs = kwargs
 
 
-class NewThreadRequestEvent(Event):
+class InputEvent(Event):
+    # Used only for processing user input
+    name: str = "InputEvent"
+
+
+class UpdateEvent(Event):
+    # Used only for events relating to updating objects in memory
+    name: str = "UpdateEvent"
+
+
+class RenderEvent(Event):
+    # Used only for events relating to rendering.
+    name: str = "RenderEvent"
+
+
+class NewThreadRequestEvent(UpdateEvent):
     # Fire this event to request a new thread from the ThreadManager
     name: str = "NewThreadRequestEvent"
 
@@ -34,7 +49,7 @@ class NewThreadRequestEvent(Event):
         )
 
 
-class NewThreadEvent(Event):
+class NewThreadEvent(UpdateEvent):
     # Fired when a thread is created
     name: str = "NewThreadEvent"
 
@@ -47,7 +62,7 @@ class NewThreadEvent(Event):
         )
 
 
-class DestroyThreadRequestEvent(Event):
+class DestroyThreadRequestEvent(UpdateEvent):
     # Fire this event to request ThreadManager to destroy a thread
     name: str = "DestroyThreadRequestEvent"
 
@@ -55,7 +70,7 @@ class DestroyThreadRequestEvent(Event):
         super().__init__(thread_name=thread_name, owner_id=owner_id)
 
 
-class DestroyThreadEvent(Event):
+class DestroyThreadEvent(UpdateEvent):
     # Fired when a thread is destroyed
     name: str = "DestroyThreadEvent"
 
@@ -63,7 +78,7 @@ class DestroyThreadEvent(Event):
         super().__init__(thread_name=thread_name)
 
 
-class AllThreadsDestroyedEvent(Event):
+class AllThreadsDestroyedEvent(UpdateEvent):
     # Fired when ThreadManager destroys its final thread.
     name: str = "AllThreadsDestroyedEvent"
 
@@ -71,7 +86,7 @@ class AllThreadsDestroyedEvent(Event):
         super().__init__()
 
 
-class CloseWindowEvent(Event):
+class CloseWindowEvent(UpdateEvent):
     # Fired when a window is closed
     name: str = "CloseWindowEvent"
 
@@ -79,7 +94,7 @@ class CloseWindowEvent(Event):
         super().__init__(window_name=window_name)
 
 
-class KeyPressEvent(Event):
+class KeyPressEvent(InputEvent):
     # Fired when any key is pressed
     name: str = "KeyPressEvent"
 
@@ -87,7 +102,7 @@ class KeyPressEvent(Event):
         super().__init__(key=key)
 
 
-class KeyReleaseEvent(Event):
+class KeyReleaseEvent(InputEvent):
     # Fired when any key is pressed
     name: str = "KeyReleaseEvent"
 
@@ -95,7 +110,7 @@ class KeyReleaseEvent(Event):
         super().__init__(key=key, hold_time=hold_time)
 
 
-class MouseMoveEvent(Event):
+class MouseMoveEvent(InputEvent):
     # Fired when the mouse is moved
     name: str = "MouseMoveEvent"
 
@@ -103,7 +118,7 @@ class MouseMoveEvent(Event):
         super().__init__(x=x, y=y)
 
 
-class WindowResizeRequestEvent(Event):
+class WindowResizeRequestEvent(UpdateEvent):
     name: str = "WindowResizeRequestEvent"
 
     def __init__(self, width: int, height: int, window_name: Optional[str] = None) -> None:
@@ -111,14 +126,14 @@ class WindowResizeRequestEvent(Event):
         pass
 
 
-class WindowFullscreenModeEditRequestEvent(Event):
+class WindowFullscreenModeEditRequestEvent(UpdateEvent):
     name: str = "WindowFullscreenModeEditRequestEvent"
 
     def __init__(self, mode: Literal[0, 1, 2], window_name: Optional[str] = None) -> None:
         super().__init__(mode=mode, window_name=window_name)
 
 
-class AppShutDownEvent(Event):
+class AppShutDownEvent(UpdateEvent):
     # Fired before app shuts down.
     # Subscribe to this event to be given a chance to perform cleanup
     name: str = "AppShutDownEvent"

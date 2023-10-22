@@ -153,7 +153,6 @@ class AppManager(FeatureManager):
             self.input_step(self.frame_counter)
             self.update_step(self.frame_counter)
         self.render_step(self.frame_counter)
-        self.event_mgr.process_all_events()
         self.frame_counter += 1
 
     def should_do_game_tick(self, cur_time: int) -> bool:
@@ -161,7 +160,6 @@ class AppManager(FeatureManager):
 
     def input_step(self, frame_number: int) -> None:
         self.entity_mgr.input_step(self.frame_counter)
-        self.event_mgr.input_step(self.frame_counter)
         self.export_mgr.input_step(self.frame_counter)
         self.input_mgr.input_step(self.frame_counter)
         self.render_mgr.input_step(self.frame_counter)
@@ -169,11 +167,11 @@ class AppManager(FeatureManager):
         self.texture_mgr.input_step(self.frame_counter)
         self.thread_mgr.input_step(self.frame_counter)
         self.window_mgr.input_step(self.frame_counter)
+        self.event_mgr.input_step(self.frame_counter)
         return super().input_step(frame_number)
 
     def update_step(self, frame_number: int) -> None:
         self.entity_mgr.update_step(self.frame_counter)
-        self.event_mgr.update_step(self.frame_counter)
         self.export_mgr.update_step(self.frame_counter)
         self.input_mgr.update_step(self.frame_counter)
         self.render_mgr.update_step(self.frame_counter)
@@ -181,11 +179,11 @@ class AppManager(FeatureManager):
         self.texture_mgr.update_step(self.frame_counter)
         self.thread_mgr.update_step(self.frame_counter)
         self.window_mgr.update_step(self.frame_counter)
+        self.event_mgr.update_step(self.frame_counter)
         return super().update_step(frame_number)
 
     def render_step(self, frame_number: int) -> None:
         self.entity_mgr.render_step(self.frame_counter)
-        self.event_mgr.render_step(self.frame_counter)
         self.export_mgr.render_step(self.frame_counter)
         self.input_mgr.render_step(self.frame_counter)
         self.render_mgr.render_step(self.frame_counter)
@@ -193,6 +191,7 @@ class AppManager(FeatureManager):
         self.texture_mgr.render_step(self.frame_counter)
         self.thread_mgr.render_step(self.frame_counter)
         self.window_mgr.render_step(self.frame_counter)
+        self.event_mgr.render_step(self.frame_counter)
         return super().render_step(frame_number)
 
     def open_new_map(self) -> None:

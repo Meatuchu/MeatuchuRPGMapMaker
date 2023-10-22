@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Dict
 from uuid import uuid4
 
 from ..entities.base_entity import BaseEntity
