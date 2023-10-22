@@ -106,7 +106,7 @@ class AppManager(FeatureManager):
         self.subscribe_to_events()
 
     def subscribe_to_events(self) -> None:
-        if self.stage is DEPLOY_STAGE.DEV:
+        if self.stage is not DEPLOY_STAGE.PROD:
             self.event_mgr.register_subscription(
                 Event,
                 lambda event: None

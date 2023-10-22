@@ -134,11 +134,13 @@ def test_handle_mouse_move() -> None:
 
 def test_handle_mouse_click() -> None:
     m = InputManager()
+    m.register_event_mgr(MagicMock())
     m.handle_mouse_click(0, 0, mouse.Button.left, True)
     m.handle_mouse_click(0, 0, mouse.Button.left, False)
 
 
 def test_handle_mouse_scroll() -> None:
     m = InputManager()
+    m.register_event_mgr(MagicMock())
     m.handle_mouse_scroll(0, 0, 1, 0)
     m.handle_mouse_scroll(0, 0, -1, 0)
