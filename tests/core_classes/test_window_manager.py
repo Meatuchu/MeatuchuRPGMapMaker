@@ -25,7 +25,7 @@ def test_window_already_exists(mock_Tk: MagicMock) -> None:
 
     w.create_window = _new_window_thread_mock
     event_mgr = EventManager()
-    w.register_event_mgr(event_mgr)
+    w.register_event_manager(event_mgr)
     w.create_window()
     with raises(ValueError) as e:
         w.create_window()
@@ -37,7 +37,7 @@ def test_window_activate(thread_request_event_def: MagicMock) -> None:
     w = WindowManager()
     event_mgr = EventManager()
     event_mgr.queue_event = MagicMock()
-    w.register_event_mgr(event_mgr)
+    w.register_event_manager(event_mgr)
     w.create_window()
     w.create_window("side")
     event_mgr.queue_event.assert_has_calls(calls=[call(thread_request_event_def()), call(thread_request_event_def())])
@@ -58,7 +58,7 @@ def test_window_set_size(mock_Tk: MagicMock) -> None:
     set_size_event_2.kwargs = {"width": 300, "height": 300, "window_name": "side"}
     w.create_window = _new_window_thread_mock
     event_mgr = EventManager()
-    w.register_event_mgr(event_mgr)
+    w.register_event_manager(event_mgr)
     w.create_window("side")
     w.create_window()
     w.set_window_size(set_size_event_1)
@@ -71,7 +71,7 @@ def test_register_event_manager() -> None:
     event_mgr = MagicMock()
     o = m.subscribe_to_events
     m.subscribe_to_events = MagicMock(side_effect=o)
-    m.register_event_mgr(event_mgr)
+    m.register_event_manager(event_mgr)
     m.event_mgr = event_mgr
     m.subscribe_to_events.assert_called_once()
 
@@ -105,7 +105,7 @@ def test_create_window_thread_target(mock_tk: MagicMock) -> None:
 
     mock_event_mgr.queue_event = MagicMock(side_effect=mock_queue_event)
 
-    m.register_event_mgr(mock_event_mgr)
+    m.register_event_manager(mock_event_mgr)
     m.create_window("test")
 
     mock_event_mgr.queue_event.assert_called()
@@ -123,7 +123,7 @@ def test_set_fullscreen_mode_0(mock_Tk: MagicMock) -> None:
 
     w.create_window = _new_window_thread_mock
     event_mgr = EventManager()
-    w.register_event_mgr(event_mgr)
+    w.register_event_manager(event_mgr)
     w.create_window("side")
     w.create_window()
     mode = 0
@@ -143,7 +143,7 @@ def test_set_fullscreen_mode_1(mock_Tk: MagicMock) -> None:
 
     w.create_window = _new_window_thread_mock
     event_mgr = EventManager()
-    w.register_event_mgr(event_mgr)
+    w.register_event_manager(event_mgr)
     w.create_window("side")
     w.create_window()
     mode = 1
@@ -163,7 +163,7 @@ def test_set_fullscreen_mode_2(mock_Tk: MagicMock) -> None:
 
     w.create_window = _new_window_thread_mock
     event_mgr = EventManager()
-    w.register_event_mgr(event_mgr)
+    w.register_event_manager(event_mgr)
     w.create_window("side")
     w.create_window()
     mode = 2

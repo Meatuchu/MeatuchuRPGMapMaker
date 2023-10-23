@@ -1,9 +1,13 @@
+from typing import Dict
+
 from . import FeatureManager
 from .event_manager import EventManager
+from ..ui_elements.base_element import Element
 
 
-class RenderingManager(FeatureManager):
+class UIManager(FeatureManager):
     event_mgr: EventManager
+    ui_elements: Dict[str, Element]
 
     def __init__(self) -> None:
         super().__init__()

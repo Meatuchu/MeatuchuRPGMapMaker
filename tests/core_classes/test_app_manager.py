@@ -1,4 +1,4 @@
-from typing import NoReturn
+from typing import Dict, List, NoReturn, cast
 from unittest.mock import MagicMock, call
 
 from pytest import raises
@@ -16,12 +16,14 @@ def test_app_manager_creation() -> None:
         MagicMock(),
         MagicMock(),
         MagicMock(),
+        MagicMock(),
     )
 
 
 def test_app_manager_does_update_on_should_tick() -> None:
     # setup
     a = AppManager(
+        MagicMock(),
         MagicMock(),
         MagicMock(),
         MagicMock(),
@@ -56,6 +58,7 @@ def test_app_manager_does_update_on_should_tick_neg() -> None:
         MagicMock(),
         MagicMock(),
         MagicMock(),
+        MagicMock(),
     )
     a.should_do_game_tick = lambda cur_time: False
     a.input_step = MagicMock()
@@ -71,6 +74,7 @@ def test_app_manager_does_update_on_should_tick_neg() -> None:
 
 def test_activate_app() -> None:
     a = AppManager(
+        MagicMock(),
         MagicMock(),
         MagicMock(),
         MagicMock(),
@@ -108,6 +112,7 @@ def test_should_do_game_tick_negative() -> None:
         MagicMock(),
         MagicMock(),
         MagicMock(),
+        MagicMock(),
     )
 
     a.state.last_update_time = 0
@@ -126,6 +131,7 @@ def test_should_do_game_tick_positive() -> None:
         MagicMock(),
         MagicMock(),
         MagicMock(),
+        MagicMock(),
     )
 
     a.state.last_update_time = 0
@@ -134,56 +140,71 @@ def test_should_do_game_tick_positive() -> None:
 
 
 def test_input_step() -> None:
-    features = MagicMock()
-    features.input_step = MagicMock()
-    a = AppManager(features, features, features, features, features, features, features, features, features)
-    a.input_step(0)
-    features.input_step.assert_has_calls(
-        [
-            call(0),
-            call(0),
-            call(0),
-            call(0),
-            call(0),
-            call(0),
-            call(0),
-            call(0),
-        ]
+    a = AppManager(
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
     )
+    managers = cast(Dict[str, MagicMock], a.get_all_managers())
+    for k in managers:
+        managers[k].input_step = MagicMock(name=f"{k}.input_step")
+    a.input_step(0)
+    for k in managers:
+        managers[k].input_step.assert_called_once()
 
 
 def test_update_step() -> None:
-    features = MagicMock()
-    features.update_step = MagicMock()
     a = AppManager(
-        features,
-        features,
-        features,
-        features,
-        features,
-        features,
-        features,
-        features,
-        features,
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
     )
+    managers = cast(Dict[str, MagicMock], a.get_all_managers())
+    for k in managers:
+        managers[k].update_step = MagicMock(name=f"{k}.update_step")
     a.update_step(0)
-    features.update_step.assert_has_calls(
-        [
-            call(0),
-            call(0),
-            call(0),
-            call(0),
-            call(0),
-            call(0),
-            call(0),
-            call(0),
-            call(0),
-        ]
+    for k in managers:
+        managers[k].update_step.assert_called_once()
+
+
+def test_render_step() -> None:
+    a = AppManager(
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
+        MagicMock(),
     )
+    managers = cast(Dict[str, MagicMock], a.get_all_managers())
+    for k in managers:
+        managers[k].render_step = MagicMock(name=f"{k}.render_step")
+    a.render_step(0)
+    for k in managers:
+        managers[k].render_step.assert_called_once()
 
 
 def test_init_board() -> None:
     a = AppManager(
+        MagicMock(),
         MagicMock(),
         MagicMock(),
         MagicMock(),

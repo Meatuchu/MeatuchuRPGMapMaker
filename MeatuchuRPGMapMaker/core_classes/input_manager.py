@@ -43,7 +43,7 @@ class InputManager(FeatureManager):
         self._pressed_mouse_buttons = {}
         self._mouse_position = (0, 0)
 
-    def register_event_mgr(self, event_mgr: EventManager) -> None:
+    def register_event_manager(self, event_mgr: EventManager) -> None:
         self.event_mgr = event_mgr
         self.subscribe_to_events()
 

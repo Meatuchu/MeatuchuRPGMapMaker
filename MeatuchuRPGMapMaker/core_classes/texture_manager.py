@@ -25,7 +25,7 @@ class TextureManager(FeatureManager):
     def get_texture(self, texture_name: str) -> Image.Image:
         return self.textures[texture_name]
 
-    def register_event_mgr(self, event_mgr: EventManager) -> None:
+    def register_event_manager(self, event_mgr: EventManager) -> None:
         self.event_mgr = event_mgr
         self.subscribe_to_events()
 

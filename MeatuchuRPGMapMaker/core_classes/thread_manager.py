@@ -20,7 +20,7 @@ class ThreadManager(FeatureManager):
         self._threads = {}
         super().__init__()
 
-    def register_event_mgr(self, event_mgr: EventManager) -> None:
+    def register_event_manager(self, event_mgr: EventManager) -> None:
         self.event_mgr = event_mgr
         self.subscribe_to_events()
 

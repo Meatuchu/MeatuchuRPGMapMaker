@@ -96,7 +96,7 @@ class WindowManager(FeatureManager):
         except KeyError:
             raise KeyError(f"Cannot set fullscreen mode for {window_name} window, it doesn't exist!")
 
-    def register_event_mgr(self, event_mgr: EventManager) -> None:
+    def register_event_manager(self, event_mgr: EventManager) -> None:
         self.event_mgr = event_mgr
         self.subscribe_to_events()
 

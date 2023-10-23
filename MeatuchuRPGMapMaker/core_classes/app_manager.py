@@ -1,4 +1,4 @@
-from typing import List, Any, Tuple, Optional
+from typing import Callable, Dict, List, Any, Tuple, Optional
 from datetime import datetime
 import time
 
@@ -12,6 +12,7 @@ from .texture_manager import TextureManager
 from .thread_manager import ThreadManager
 from .window_manager import WindowManager
 from .event_manager import EventManager
+from .ui_manager import UIManager
 from .events import (
     Event,
     AllThreadsDestroyedEvent,
@@ -78,11 +79,12 @@ class AppManager(FeatureManager):
         settings_mgr: SettingsManager,
         texture_mgr: TextureManager,
         thread_mgr: ThreadManager,
+        ui_mgr: UIManager,
         window_mgr: WindowManager,
     ) -> None:
         super().__init__()
         # Prepare app state
-        self.register_event_mgr(event_mgr)
+        self.register_event_manager(event_mgr)
         self.state = AppState()
 
         # Initialize metrics
@@ -98,10 +100,11 @@ class AppManager(FeatureManager):
         self.texture_mgr = texture_mgr
         self.thread_mgr = thread_mgr
         self.window_mgr = window_mgr
-        self.distribute_event_mgr()
+        self.ui_mgr = ui_mgr
+        self.distribute_event_manager()
         self.state.set_tickrate(self.settings_mgr.get_setting("app", "tickrate"))
 
-    def register_event_mgr(self, event_mgr: EventManager) -> None:
+    def register_event_manager(self, event_mgr: EventManager) -> None:
         self.event_mgr = event_mgr
         self.subscribe_to_events()
 
@@ -117,18 +120,17 @@ class AppManager(FeatureManager):
         self.event_mgr.register_subscription(
             AllThreadsDestroyedEvent, lambda event: self.event_mgr.queue_event(AppShutDownEvent())
         )
-
         pass
 
-    def distribute_event_mgr(self) -> None:
-        self.entity_mgr.register_event_mgr(self.event_mgr)
-        self.export_mgr.register_event_mgr(self.event_mgr)
-        self.input_mgr.register_event_mgr(self.event_mgr)
-        self.render_mgr.register_event_mgr(self.event_mgr)
-        self.settings_mgr.register_event_mgr(self.event_mgr)
-        self.texture_mgr.register_event_mgr(self.event_mgr)
-        self.thread_mgr.register_event_mgr(self.event_mgr)
-        self.window_mgr.register_event_mgr(self.event_mgr)
+    def distribute_event_manager(self) -> None:
+        self.entity_mgr.register_event_manager(self.event_mgr)
+        self.export_mgr.register_event_manager(self.event_mgr)
+        self.input_mgr.register_event_manager(self.event_mgr)
+        self.render_mgr.register_event_manager(self.event_mgr)
+        self.settings_mgr.register_event_manager(self.event_mgr)
+        self.texture_mgr.register_event_manager(self.event_mgr)
+        self.thread_mgr.register_event_manager(self.event_mgr)
+        self.window_mgr.register_event_manager(self.event_mgr)
 
     def activate_app(self) -> None:
         self.state.app_active = True
@@ -159,9 +161,10 @@ class AppManager(FeatureManager):
         return (cur_time - self.state.last_update_time) >= self.state.tickgap
 
     def input_step(self, frame_number: int) -> None:
+        self.input_mgr.input_step(self.frame_counter)
+        self.ui_mgr.input_step(self.frame_counter)
         self.entity_mgr.input_step(self.frame_counter)
         self.export_mgr.input_step(self.frame_counter)
-        self.input_mgr.input_step(self.frame_counter)
         self.render_mgr.input_step(self.frame_counter)
         self.settings_mgr.input_step(self.frame_counter)
         self.texture_mgr.input_step(self.frame_counter)
@@ -171,9 +174,10 @@ class AppManager(FeatureManager):
         return super().input_step(frame_number)
 
     def update_step(self, frame_number: int) -> None:
+        self.input_mgr.update_step(self.frame_counter)
+        self.ui_mgr.update_step(self.frame_counter)
         self.entity_mgr.update_step(self.frame_counter)
         self.export_mgr.update_step(self.frame_counter)
-        self.input_mgr.update_step(self.frame_counter)
         self.render_mgr.update_step(self.frame_counter)
         self.settings_mgr.update_step(self.frame_counter)
         self.texture_mgr.update_step(self.frame_counter)
@@ -183,9 +187,10 @@ class AppManager(FeatureManager):
         return super().update_step(frame_number)
 
     def render_step(self, frame_number: int) -> None:
+        self.input_mgr.render_step(self.frame_counter)
+        self.ui_mgr.render_step(self.frame_counter)
         self.entity_mgr.render_step(self.frame_counter)
         self.export_mgr.render_step(self.frame_counter)
-        self.input_mgr.render_step(self.frame_counter)
         self.render_mgr.render_step(self.frame_counter)
         self.settings_mgr.render_step(self.frame_counter)
         self.texture_mgr.render_step(self.frame_counter)
@@ -196,3 +201,10 @@ class AppManager(FeatureManager):
 
     def open_new_map(self) -> None:
         self.state.set_state(("active_board", RPGMapBoard()))
+
+    def get_all_managers(self) -> Dict[str, FeatureManager]:
+        mgrs: Dict[str, FeatureManager] = {}
+        for attribute in dir(self):
+            if attribute.endswith("mgr") and isinstance(self.__getattribute__(attribute), Callable):
+                mgrs[attribute] = self.__getattribute__(attribute)
+        return mgrs
