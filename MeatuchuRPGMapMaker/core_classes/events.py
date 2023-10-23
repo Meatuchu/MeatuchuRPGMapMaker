@@ -184,4 +184,9 @@ class AppShutDownEvent(UpdateEvent):
     name: str = "AppShutDownEvent"
 
 
+class SceneChangeEvent(UpdateEvent):
+    # Fired when the active scene is changed.
+    name: str = "SceneChangeEvent"
+
+
 ### RENDER EVENTS ###

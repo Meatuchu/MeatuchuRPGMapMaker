@@ -1,5 +1,5 @@
 from unittest.mock import MagicMock
-from MeatuchuRPGMapMaker.ui_elements.button import Button
+from MeatuchuRPGMapMaker.ui.elements.button import Button
 
 
 def test_construction() -> None:

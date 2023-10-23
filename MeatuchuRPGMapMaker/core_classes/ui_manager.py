@@ -1,13 +1,12 @@
-from typing import Dict
-
 from . import FeatureManager
 from .event_manager import EventManager
-from ..ui_elements.base_element import Element
+from ..ui.scenes.scene import Scene
+from .events import SceneChangeEvent
 
 
 class UIManager(FeatureManager):
     event_mgr: EventManager
-    ui_elements: Dict[str, Element]
+    _active_scene: Scene
 
     def __init__(self) -> None:
         super().__init__()
@@ -18,3 +17,7 @@ class UIManager(FeatureManager):
 
     def subscribe_to_events(self) -> None:
         pass
+
+    def activate_scene(self, new_scene: Scene) -> None:
+        self._active_scene = new_scene
+        self.event_mgr.queue_event(SceneChangeEvent())
