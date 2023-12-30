@@ -10,6 +10,7 @@ from .events import (
     DestroyThreadEvent,
     DestroyThreadRequestEvent,
 )
+from ..exceptions import DuplicateThreadError
 
 
 class ThreadManager(FeatureManager):
@@ -29,14 +30,14 @@ class ThreadManager(FeatureManager):
         self.event_mgr.register_subscription(DestroyThreadRequestEvent, self.destroy_thread)
 
     def create_thread(self, event: NewThreadRequestEvent) -> None:
-        thread_name: str = event.kwargs["thread_name"]
-        thread_target: Callable[..., None] = event.kwargs["thread_target"]
-        owner_id: str = event.kwargs["owner_id"]
+        thread_name = event.thread_name
+        thread_target = event.thread_target
+        owner_id: str = event.owner_id
 
         self.log("DEBUG", f"Recieved request to create thread {thread_name}")
 
         if self._threads.get(thread_name):
-            raise RuntimeError(f"thread {thread_name} already exists!")
+            raise DuplicateThreadError(thread_name, owner_id)
 
         new_thread = threading.Thread(target=thread_target)
         new_thread.daemon = True
@@ -49,8 +50,8 @@ class ThreadManager(FeatureManager):
         pass
 
     def destroy_thread(self, event: DestroyThreadRequestEvent) -> None:
-        thread_name: str = event.kwargs["thread_name"]
-        owner_id: str = event.kwargs["owner_id"]
+        thread_name = event.thread_name
+        owner_id = event.owner_id
         self.log("DEBUG", f"Recieved request to destroy thread {thread_name}")
         target = self._threads.get(thread_name)
         if not target:

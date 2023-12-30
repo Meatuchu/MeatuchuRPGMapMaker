@@ -1,5 +1,6 @@
-from MeatuchuRPGMapMaker.ui.elements.base_element import Element
+from unittest.mock import MagicMock
+from MeatuchuRPGMapMaker.ui.elements.primitive_elements.base_element import Element
 
 
 def test_construction() -> None:
-    assert Element()
+    assert Element(MagicMock(), "testelement")

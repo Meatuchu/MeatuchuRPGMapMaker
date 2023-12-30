@@ -1,35 +1,26 @@
-from typing import Any, Callable, Dict, Literal, Optional, Tuple, Union
+from typing import Any, Callable, Dict, Literal, Optional, Tuple, Type, Union
+from ..ui.scenes.scene import Scene
 
 
 class Event:
     # Base Event Class
     # Subscribers to this class are invoked for all events
-    name: str = "Event"
-    args: Any
-    kwargs: Any
-
-    def __init__(
-        self,
-        *args: Any,
-        **kwargs: Any,
-    ) -> None:
-        self.args = args
-        self.kwargs = kwargs
+    pass
 
 
 class InputEvent(Event):
     # Used only for processing user input
-    name: str = "InputEvent"
+    pass
 
 
 class UpdateEvent(Event):
     # Used only for events relating to updating objects in memory
-    name: str = "UpdateEvent"
+    pass
 
 
 class RenderEvent(Event):
     # Used only for events relating to rendering.
-    name: str = "RenderEvent"
+    pass
 
 
 ### INPUT EVENTS ###
@@ -37,44 +28,43 @@ class RenderEvent(Event):
 
 class InputSnapshotEvent(InputEvent):
     # Emitted by InputManager on every input step - subscribe to this to get a collection of the current state of input
-    name: str = "InputSnapshotEvent"
-
     def __init__(
         self,
         keys: Dict[str, int],
         mouse_buttons: Dict[str, Dict[str, Union[Tuple[int, int], int]]],
         mouse_position: Tuple[int, int],
     ) -> None:
-        super().__init__(keys=keys, mouse_buttons=mouse_buttons, mouse_position=mouse_position)
+        self.keys = keys
+        self.mouse_buttons = mouse_buttons
+        self.mouse_postion = mouse_position
+        super().__init__()
 
 
 class KeyPressEvent(InputEvent):
     # Fired when any key is pressed
-    name: str = "KeyPressEvent"
-
     def __init__(self, key: str) -> None:
-        super().__init__(key=key)
+        self.key = key
+        super().__init__()
 
 
 class KeyReleaseEvent(InputEvent):
     # Fired when any key is pressed
-    name: str = "KeyReleaseEvent"
-
     def __init__(self, key: str, hold_time: float) -> None:
-        super().__init__(key=key, hold_time=hold_time)
+        self.key = key
+        self.hold_time = hold_time
+        super().__init__()
 
 
 class MouseClickEvent(InputEvent):
     # Fired when a mouse button is pressed
-    name: str = "MouseClickEvent"
-
     def __init__(self, button: str, position: Tuple[int, int]) -> None:
-        super().__init__(button=button, position=position)
+        self.button = button
+        self.position = position
+        super().__init__()
 
 
 class MouseScrollEvent(InputEvent):
-    name: str = "MouseScrollEvent"
-
+    # Fired when the mousewheel is scrolled
     def __init__(
         self,
         x: int,
@@ -82,23 +72,28 @@ class MouseScrollEvent(InputEvent):
         dx: int,
         dy: int,
     ) -> None:
-        super().__init__(x=x, y=y, dx=dx, dy=dy)
+        self.x = x
+        self.y = y
+        self.dx = dx
+        self.dy = dy
+        super().__init__()
 
 
 class MouseClickReleaseEvent(InputEvent):
     # Fired when a mouse button is released
-    name: str = "MouseClickReleaseEvent"
-
     def __init__(self, button: str, position: Tuple[int, int], hold_time: float) -> None:
-        super().__init__(button=button, position=position, hold_time=hold_time)
+        self.button = button
+        self.position = position
+        self.hold_time = hold_time
+        super().__init__()
 
 
 class MouseMoveEvent(InputEvent):
     # Fired when the mouse is moved
-    name: str = "MouseMoveEvent"
-
     def __init__(self, x: int, y: int) -> None:
-        super().__init__(x=x, y=y)
+        self.x = x
+        self.y = y
+        super().__init__()
 
 
 ### UPDATE EVENTS ###
@@ -106,87 +101,92 @@ class MouseMoveEvent(InputEvent):
 
 class NewThreadRequestEvent(UpdateEvent):
     # Fire this event to request a new thread from the ThreadManager
-    name: str = "NewThreadRequestEvent"
-
     def __init__(
         self,
         thread_name: str,
         thread_target: Callable[..., None],
         owner_id: str,
     ) -> None:
-        super().__init__(
-            thread_name=thread_name,
-            thread_target=thread_target,
-            owner_id=owner_id,
-        )
+        self.thread_name = thread_name
+        self.thread_target = thread_target
+        self.owner_id = owner_id
+        super().__init__()
 
 
 class NewThreadEvent(UpdateEvent):
     # Fired when a thread is created
-    name: str = "NewThreadEvent"
-
     def __init__(
         self,
         thread_name: str,
     ) -> None:
-        super().__init__(
-            thread_name=thread_name,
-        )
+        self.thread_name = thread_name
+        super().__init__()
 
 
 class DestroyThreadRequestEvent(UpdateEvent):
     # Fire this event to request ThreadManager to destroy a thread
-    name: str = "DestroyThreadRequestEvent"
-
     def __init__(self, thread_name: str, owner_id: str) -> None:
-        super().__init__(thread_name=thread_name, owner_id=owner_id)
+        self.thread_name = thread_name
+        self.owner_id = owner_id
+        super().__init__()
 
 
 class DestroyThreadEvent(UpdateEvent):
     # Fired when a thread is destroyed
-    name: str = "DestroyThreadEvent"
-
     def __init__(self, thread_name: str) -> None:
-        super().__init__(thread_name=thread_name)
+        self.thread_name = thread_name
+        super().__init__()
 
 
 class AllThreadsDestroyedEvent(UpdateEvent):
     # Fired when ThreadManager destroys its final thread.
-    name: str = "AllThreadsDestroyedEvent"
+    pass
 
 
 class CloseWindowEvent(UpdateEvent):
     # Fired when a window is closed
-    name: str = "CloseWindowEvent"
-
     def __init__(self, window_name: Optional[str] = None) -> None:
-        super().__init__(window_name=window_name)
+        self.window_name = window_name
+        super().__init__()
 
 
 class WindowResizeRequestEvent(UpdateEvent):
-    name: str = "WindowResizeRequestEvent"
-
+    # Fired when a window has been resized
     def __init__(self, width: int, height: int, window_name: Optional[str] = None) -> None:
-        super().__init__(width=width, height=height, window_name=window_name)
-        pass
+        self.width = width
+        self.height = height
+        self.window_name = window_name
+        super().__init__()
 
 
 class WindowFullscreenModeEditRequestEvent(UpdateEvent):
-    name: str = "WindowFullscreenModeEditRequestEvent"
-
+    # Fire this event to request a window's fullscreen mode be updated
     def __init__(self, mode: Literal[0, 1, 2], window_name: Optional[str] = None) -> None:
-        super().__init__(mode=mode, window_name=window_name)
+        self.mode = mode
+        self.window_name = window_name
+        super().__init__()
 
 
 class AppShutDownEvent(UpdateEvent):
-    # Fired before app shuts down.
+    # Fired before the app shuts down. This is the final event to be processed.
     # Subscribe to this event to be given a chance to perform cleanup
-    name: str = "AppShutDownEvent"
+    pass
+
+
+class SceneChangeRequestEvent(UpdateEvent):
+    # Fire this event to request a scene be loaded on a particular window
+    def __init__(
+        self, scene_to_load: Type[Scene], window_name: Optional[str] = None, scene_kwargs: Dict[str, Any] = {}
+    ) -> None:
+        self.window_name = window_name
+        self.scene_to_load = scene_to_load
+        self.scene_kwargs = scene_kwargs
+        super().__init__()
 
 
 class SceneChangeEvent(UpdateEvent):
     # Fired when the active scene is changed.
-    name: str = "SceneChangeEvent"
+    pass
 
 
 ### RENDER EVENTS ###

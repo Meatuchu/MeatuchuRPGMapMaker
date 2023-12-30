@@ -7,7 +7,6 @@ from .core_classes.settings_manager import SettingsManager
 from .core_classes.rendering_manager import RenderingManager
 from .core_classes.texture_manager import TextureManager
 from .core_classes.thread_manager import ThreadManager
-from .core_classes.ui_manager import UIManager
 from .core_classes.window_manager import WindowManager
 from .logger import logger_factory
 from .constants import DEPLOY_STAGE
@@ -28,7 +27,6 @@ app = AppManager(
     SettingsManager(),
     TextureManager(),
     ThreadManager(),
-    UIManager(),
     WindowManager(),
 )
 

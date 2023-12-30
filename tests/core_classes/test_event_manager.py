@@ -3,22 +3,6 @@ from MeatuchuRPGMapMaker.core_classes.event_manager import EventManager
 from MeatuchuRPGMapMaker.core_classes.events import Event, InputEvent, UpdateEvent, RenderEvent, AppShutDownEvent
 
 
-class MockEvent(Event):
-    name: str = "MockEvent"
-
-
-class MockInputEvent(InputEvent):
-    name: str = "MockEvent"
-
-
-class MockUpdateEvent(UpdateEvent):
-    name: str = "MockEvent"
-
-
-class MockRenderEvent(RenderEvent):
-    name: str = "MockEvent"
-
-
 def test_construction() -> None:
     assert EventManager()
 
@@ -26,19 +10,19 @@ def test_construction() -> None:
 def test_register_subscription() -> None:
     e = EventManager()
     trigger_func = MagicMock()
-    e.register_subscription(MockEvent, trigger_func)
+    e.register_subscription(Event, trigger_func)
 
 
 def test_queue_event() -> None:
     e = EventManager()
-    e.queue_event(MockEvent())
+    e.queue_event(Event())
 
 
 def test_process_next_event() -> None:
     e = EventManager()
     trigger_func = MagicMock()
-    e.register_subscription(MockEvent, trigger_func)
-    e.queue_event(MockEvent())
+    e.register_subscription(Event, trigger_func)
+    e.queue_event(Event())
     e.process_next_event(None)
     trigger_func.assert_called_once()
 
@@ -46,10 +30,10 @@ def test_process_next_event() -> None:
 def test_process_all_input_events() -> None:
     e = EventManager()
     trigger_func = MagicMock()
-    e.register_subscription(MockEvent, trigger_func)
-    e1 = MockInputEvent()
-    e2 = MockInputEvent()
-    e3 = MockInputEvent()
+    e.register_subscription(Event, trigger_func)
+    e1 = InputEvent()
+    e2 = InputEvent()
+    e3 = InputEvent()
     e.queue_event(e1)
     e.queue_event(e2)
     e.queue_event(e3)
@@ -60,10 +44,10 @@ def test_process_all_input_events() -> None:
 def test_process_all_update_events() -> None:
     e = EventManager()
     trigger_func = MagicMock()
-    e.register_subscription(MockEvent, trigger_func)
-    e1 = MockUpdateEvent()
-    e2 = MockUpdateEvent()
-    e3 = MockUpdateEvent()
+    e.register_subscription(Event, trigger_func)
+    e1 = UpdateEvent()
+    e2 = UpdateEvent()
+    e3 = UpdateEvent()
     e.queue_event(e1)
     e.queue_event(e2)
     e.queue_event(e3)
@@ -74,10 +58,10 @@ def test_process_all_update_events() -> None:
 def test_process_all_render_events() -> None:
     e = EventManager()
     trigger_func = MagicMock()
-    e.register_subscription(MockEvent, trigger_func)
-    e1 = MockRenderEvent()
-    e2 = MockRenderEvent()
-    e3 = MockRenderEvent()
+    e.register_subscription(Event, trigger_func)
+    e2 = RenderEvent()
+    e1 = RenderEvent()
+    e3 = RenderEvent()
     e.queue_event(e1)
     e.queue_event(e2)
     e.queue_event(e3)
@@ -88,7 +72,7 @@ def test_process_all_render_events() -> None:
 def test_process_all_events_empty_queue() -> None:
     e = EventManager()
     trigger_func = MagicMock()
-    e.register_subscription(MockEvent, trigger_func)
+    e.register_subscription(Event, trigger_func)
     e.input_step(0)
     e.update_step(0)
     e.render_step(0)

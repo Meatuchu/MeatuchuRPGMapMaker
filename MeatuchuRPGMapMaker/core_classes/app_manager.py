@@ -12,17 +12,15 @@ from .texture_manager import TextureManager
 from .thread_manager import ThreadManager
 from .window_manager import WindowManager
 from .event_manager import EventManager
-from .ui_manager import UIManager
 from .events import (
-    Event,
     AllThreadsDestroyedEvent,
     AppShutDownEvent,
     WindowResizeRequestEvent,
     WindowFullscreenModeEditRequestEvent,
-    MouseMoveEvent,
+    SceneChangeRequestEvent,
 )
-from ..constants import DEPLOY_STAGE
 from ..entities.board import RPGMapBoard
+from ..ui.scenes.menu_scene import MenuScene
 
 
 class AppState:
@@ -79,7 +77,6 @@ class AppManager(FeatureManager):
         settings_mgr: SettingsManager,
         texture_mgr: TextureManager,
         thread_mgr: ThreadManager,
-        ui_mgr: UIManager,
         window_mgr: WindowManager,
     ) -> None:
         super().__init__()
@@ -100,7 +97,6 @@ class AppManager(FeatureManager):
         self.texture_mgr = texture_mgr
         self.thread_mgr = thread_mgr
         self.window_mgr = window_mgr
-        self.ui_mgr = ui_mgr
         self.distribute_event_manager()
         self.state.set_tickrate(self.settings_mgr.get_setting("app", "tickrate"))
 
@@ -109,16 +105,8 @@ class AppManager(FeatureManager):
         self.subscribe_to_events()
 
     def subscribe_to_events(self) -> None:
-        if self.stage is not DEPLOY_STAGE.PROD:
-            self.event_mgr.register_subscription(
-                Event,
-                lambda event: None
-                if isinstance(event, MouseMoveEvent)
-                else self.log("DEBUG", f"\nGlobal Subscription Log: \n\targs: {event.args}\n\tkwargs:{event.kwargs}"),
-            )
-
         self.event_mgr.register_subscription(
-            AllThreadsDestroyedEvent, lambda event: self.event_mgr.queue_event(AppShutDownEvent())
+            AllThreadsDestroyedEvent, lambda: self.event_mgr.queue_event(AppShutDownEvent())
         )
         pass
 
@@ -144,6 +132,7 @@ class AppManager(FeatureManager):
         self.event_mgr.queue_event(
             WindowFullscreenModeEditRequestEvent(self.settings_mgr.get_setting("window", "fullscreen_mode"))
         )
+        self.event_mgr.queue_event(SceneChangeRequestEvent(MenuScene))
         while True:
             while self.state.app_active:
                 self.app_frame_process()
@@ -162,7 +151,6 @@ class AppManager(FeatureManager):
 
     def input_step(self, frame_number: int) -> None:
         self.input_mgr.input_step(self.frame_counter)
-        self.ui_mgr.input_step(self.frame_counter)
         self.entity_mgr.input_step(self.frame_counter)
         self.export_mgr.input_step(self.frame_counter)
         self.render_mgr.input_step(self.frame_counter)
@@ -175,7 +163,6 @@ class AppManager(FeatureManager):
 
     def update_step(self, frame_number: int) -> None:
         self.input_mgr.update_step(self.frame_counter)
-        self.ui_mgr.update_step(self.frame_counter)
         self.entity_mgr.update_step(self.frame_counter)
         self.export_mgr.update_step(self.frame_counter)
         self.render_mgr.update_step(self.frame_counter)
@@ -188,7 +175,6 @@ class AppManager(FeatureManager):
 
     def render_step(self, frame_number: int) -> None:
         self.input_mgr.render_step(self.frame_counter)
-        self.ui_mgr.render_step(self.frame_counter)
         self.entity_mgr.render_step(self.frame_counter)
         self.export_mgr.render_step(self.frame_counter)
         self.render_mgr.render_step(self.frame_counter)

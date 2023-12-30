@@ -27,7 +27,7 @@ def test_handle_keypress_key() -> None:
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types
-        event_types.add(event.name)
+        event_types.add(event.__class__.__name__)
 
     e.queue_event = MagicMock(side_effect=mock_queue_event)
     m.register_event_manager(e)
@@ -43,7 +43,7 @@ def test_handle_keypress_keycode() -> None:
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types
-        event_types.add(event.name)
+        event_types.add(event.__class__.__name__)
 
     e.queue_event = MagicMock(side_effect=mock_queue_event)
     m.register_event_manager(e)
@@ -70,7 +70,7 @@ def test_handle_keyrelease_key() -> None:
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types
-        event_types.add(event.name)
+        event_types.add(event.__class__.__name__)
 
     e.queue_event = MagicMock(side_effect=mock_queue_event)
     m.register_event_manager(e)
@@ -88,7 +88,7 @@ def test_handle_keyrelease_keycode() -> None:
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types
-        event_types.add(event.name)
+        event_types.add(event.__class__.__name__)
 
     e.queue_event = MagicMock(side_effect=mock_queue_event)
     m.register_event_manager(e)
@@ -106,7 +106,7 @@ def test_handle_keyrelease_no_key() -> None:
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types
-        event_types.add(event.name)
+        event_types.add(event.__class__.__name__)
 
     e.queue_event = MagicMock(side_effect=mock_queue_event)
     m.register_event_manager(e)
@@ -125,7 +125,7 @@ def test_handle_mouse_move() -> None:
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types
-        event_types.add(event.name)
+        event_types.add(event.__class__.__name__)
 
     e.queue_event = MagicMock(side_effect=mock_queue_event)
     m.register_event_manager(e)

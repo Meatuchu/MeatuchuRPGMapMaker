@@ -44,7 +44,7 @@ class Logger:
     ) -> None:
         t = _MSG_LEVEL(msg_level)
         # Used to align messages by their label
-        level_label_gap = " " * max((7 - len(msg_level)), 0)
+        level_label_gap = " " * (max((7 - len(msg_level)), 0) + 1)
         if self._should_log(t):
             tlabel = f"[{get_cur_time().strftime('%Y-%m-%d %H:%M:%S.%f')}] {msg_level}"
             tlabel = f"{tlabel}{level_label_gap}{module}" if module else tlabel
