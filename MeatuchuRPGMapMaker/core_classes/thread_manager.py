@@ -1,4 +1,5 @@
 import threading
+import traceback
 from typing import Dict, Callable, Tuple, Any
 
 from . import FeatureManager
@@ -9,6 +10,7 @@ from .events import (
     NewThreadRequestEvent,
     DestroyThreadEvent,
     DestroyThreadRequestEvent,
+    ThreadErrorEvent,
 )
 from ..exceptions import DuplicateThreadError
 
@@ -28,11 +30,12 @@ class ThreadManager(FeatureManager):
     def subscribe_to_events(self) -> None:
         self.event_mgr.register_subscription(NewThreadRequestEvent, self.create_thread)
         self.event_mgr.register_subscription(DestroyThreadRequestEvent, self.destroy_thread)
+        self.event_mgr.register_subscription(ThreadErrorEvent, self.log_thread_error)
 
     def create_thread(self, event: NewThreadRequestEvent) -> None:
         thread_name = event.thread_name
-        thread_target = event.thread_target
         owner_id: str = event.owner_id
+        thread_target = self._thread_wrapper(thread_name, event.thread_target, owner_id)
 
         self.log("DEBUG", f"Recieved request to create thread {thread_name}")
 
@@ -63,9 +66,23 @@ class ThreadManager(FeatureManager):
             return
 
         thread.join()
-        self.log("DEBUG", f"(fake) Destroyed thread {thread_name}")
+        self.log("DEBUG", f"Joined thread {thread_name}")
         del self._threads[thread_name]
         self.event_mgr.queue_event(DestroyThreadEvent(thread_name))
         if not self._threads:
             self.event_mgr.queue_event(AllThreadsDestroyedEvent())
         pass
+
+    def log_thread_error(self, event: ThreadErrorEvent) -> None:
+        self.log("ERROR", f'{event.exception.__class__.__name__} in thread "{event.thread_name}"!')
+        self.log("ERROR", f"Exception Message -\n{type(event.exception)}\n{str(event.exception)}")
+        self.log("ERROR", f"Exception Trace -\n{traceback.format_exc()}")
+
+    def _thread_wrapper(self, name: str, target: Callable[..., Any], owner_id: str) -> Callable[..., Any]:
+        def wrapper(*args: Any, **kwargs: Any) -> Any:
+            try:
+                target(*args, **kwargs)
+            except Exception as e:
+                self.event_mgr.queue_event(ThreadErrorEvent(name, owner_id, e))
+
+        return wrapper

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Any, Callable, Dict, Literal, Optional, Tuple, Type, Union
 from ..ui.scenes.scene import Scene
 
@@ -5,7 +6,8 @@ from ..ui.scenes.scene import Scene
 class Event:
     # Base Event Class
     # Subscribers to this class are invoked for all events
-    pass
+    def __init__(self) -> None:
+        self.created_at = datetime.now().timestamp()
 
 
 class InputEvent(Event):
@@ -190,3 +192,13 @@ class SceneChangeEvent(UpdateEvent):
 
 
 ### RENDER EVENTS ###
+
+
+### EXCEPTION EVENTS ###
+class ThreadErrorEvent(Event):
+    # Base class for thread errors
+    def __init__(self, thread_name: str, owner_id: str, exception: Exception) -> None:
+        self.thread_name = thread_name
+        self.owner_id = owner_id
+        self.exception = exception
+        super().__init__()

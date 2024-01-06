@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Any, Tuple, Optional
+from typing import Callable, Dict, List, Any, Tuple, Optional, cast
 from datetime import datetime
 import time
 
@@ -18,6 +18,7 @@ from .events import (
     WindowResizeRequestEvent,
     WindowFullscreenModeEditRequestEvent,
     SceneChangeRequestEvent,
+    Event,
 )
 from ..entities.board import RPGMapBoard
 from ..ui.scenes.menu_scene import MenuScene
@@ -105,9 +106,8 @@ class AppManager(FeatureManager):
         self.subscribe_to_events()
 
     def subscribe_to_events(self) -> None:
-        self.event_mgr.register_subscription(
-            AllThreadsDestroyedEvent, lambda: self.event_mgr.queue_event(AppShutDownEvent())
-        )
+        shutdown: Callable[[Event], None] = lambda _: self.event_mgr.queue_event(AppShutDownEvent())
+        self.event_mgr.register_subscription(AllThreadsDestroyedEvent, shutdown)
         pass
 
     def distribute_event_manager(self) -> None:

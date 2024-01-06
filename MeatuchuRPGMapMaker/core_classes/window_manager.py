@@ -1,4 +1,5 @@
 from tkinter import Tk as TkWindow, Canvas as TkCanvas
+
 from typing import Dict, Callable, Optional
 from datetime import datetime
 
@@ -16,6 +17,7 @@ from ..ui.scenes.scene import Scene
 from ..exceptions import DuplicateWindowError, WindowNotExistError, WindowNotFoundError
 
 DEFAULT_WINDOW_NAME = "main"
+WINDOW_CREATE_TIMEOUT = 5
 
 
 class FPSMeasure:
@@ -100,7 +102,7 @@ class WindowManager(FeatureManager):
         t = datetime.now().timestamp()
         try:
             while not self._windows[window_name]:  # Wait until window is created, if the key exists but is none.
-                if datetime.now().timestamp() - t > 1:
+                if datetime.now().timestamp() - t > WINDOW_CREATE_TIMEOUT:
                     raise WindowNotFoundError(window_name)
             window = self._windows[window_name]
             assert window
@@ -120,7 +122,7 @@ class WindowManager(FeatureManager):
         t = datetime.now().timestamp()
         try:
             while not self._windows[window_name]:  # Wait until window is created, if the key exists but is none.
-                if datetime.now().timestamp() - t > 1:
+                if datetime.now().timestamp() - t > WINDOW_CREATE_TIMEOUT:
                     raise WindowNotFoundError(window_name)
             window = self._windows[window_name]
             assert window
@@ -151,7 +153,7 @@ class WindowManager(FeatureManager):
             old_scene.unload()
         try:
             while not self._windows[window_name]:  # Wait until window is created, if the key exists but is none.
-                if datetime.now().timestamp() - t > 1:
+                if datetime.now().timestamp() - t > WINDOW_CREATE_TIMEOUT:
                     raise WindowNotFoundError(window_name)
             window = self._windows[window_name]
             assert window
