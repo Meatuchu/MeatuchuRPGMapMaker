@@ -10,7 +10,9 @@ from MeatuchuRPGMapMaker.core_classes.events import (
     WindowResizeRequestEvent,
     WindowFullscreenModeEditRequestEvent,
 )
-from MeatuchuRPGMapMaker.exceptions import DuplicateWindowError, WindowNotExistError
+from MeatuchuRPGMapMaker.exceptions import DuplicateWindowError, WindowNotExistError, WindowNotFoundError
+
+WindowManager.window_create_timeout = 0.1
 
 
 # tests
@@ -90,6 +92,7 @@ def test_set_window_size_not_exist() -> None:
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
 def test_create_window_thread_target(mock_tk: MagicMock) -> None:
     m = WindowManager()
+    m._get_window_thread = MagicMock()
 
     mock_event_mgr = MagicMock()
     event_types: Set[str] = set()
@@ -172,5 +175,5 @@ def test_set_fullscreen_mode_2(mock_Tk: MagicMock) -> None:
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
 def test_set_fullscreen_mode_not_exist(mock_tk: MagicMock) -> None:
     m = WindowManager()
-    with raises(KeyError):
-        m.set_fullscreen_mode(MagicMock(kwargs={"mode": 0, "window_name": None}))
+    with raises(WindowNotFoundError):
+        m.set_fullscreen_mode(WindowFullscreenModeEditRequestEvent(0, "buckle_my_shoe"))

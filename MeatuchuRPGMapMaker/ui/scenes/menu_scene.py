@@ -16,8 +16,8 @@ class MenuScene(Scene):
                     window,
                     "startgamebutton",
                     "Test Button Please Ignore",
-                    x=0,
-                    y=0,
+                    x=200,
+                    y=200,
                     press_handler=lambda: print("pressed"),
                 ),
             ]

@@ -152,7 +152,19 @@ class CloseWindowEvent(UpdateEvent):
         super().__init__()
 
 
-class WindowResizeRequestEvent(UpdateEvent):
+class AppShutDownEvent(UpdateEvent):
+    # Fired before the app shuts down. This is the final event to be processed.
+    # Subscribe to this event to be given a chance to perform cleanup
+    pass
+
+
+class SceneChangeEvent:
+    # Fired when the active scene is changed.
+    pass
+
+
+### RENDER EVENTS ###
+class WindowResizeRequestEvent(RenderEvent):
     # Fired when a window has been resized
     def __init__(self, width: int, height: int, window_name: Optional[str] = None) -> None:
         self.width = width
@@ -161,7 +173,7 @@ class WindowResizeRequestEvent(UpdateEvent):
         super().__init__()
 
 
-class WindowFullscreenModeEditRequestEvent(UpdateEvent):
+class WindowFullscreenModeEditRequestEvent(RenderEvent):
     # Fire this event to request a window's fullscreen mode be updated
     def __init__(self, mode: Literal[0, 1, 2], window_name: Optional[str] = None) -> None:
         self.mode = mode
@@ -169,13 +181,7 @@ class WindowFullscreenModeEditRequestEvent(UpdateEvent):
         super().__init__()
 
 
-class AppShutDownEvent(UpdateEvent):
-    # Fired before the app shuts down. This is the final event to be processed.
-    # Subscribe to this event to be given a chance to perform cleanup
-    pass
-
-
-class SceneChangeRequestEvent(UpdateEvent):
+class SceneChangeRequestEvent(RenderEvent):
     # Fire this event to request a scene be loaded on a particular window
     def __init__(
         self, scene_to_load: Type[Scene], window_name: Optional[str] = None, scene_kwargs: Dict[str, Any] = {}
@@ -184,14 +190,6 @@ class SceneChangeRequestEvent(UpdateEvent):
         self.scene_to_load = scene_to_load
         self.scene_kwargs = scene_kwargs
         super().__init__()
-
-
-class SceneChangeEvent(UpdateEvent):
-    # Fired when the active scene is changed.
-    pass
-
-
-### RENDER EVENTS ###
 
 
 ### EXCEPTION EVENTS ###
