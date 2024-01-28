@@ -8,24 +8,24 @@ parsed_args = {}
 
 
 def process_args() -> None:
-    val_name: Optional[str] = None
+    key: Optional[str] = None
     for arg in arguments:
-        if arg.startswith("---") and not val_name:
+        if arg.startswith("---") and not key:
             raise KeyError(f"Arguments must start with one or two dashes!")
         if arg == "--":
             continue
         if arg.startswith("--"):
-            val_name = arg
+            key = arg
             continue
         if arg.startswith("-"):
-            if not val_name:
+            if not key:
                 parsed_args[arg] = True
             else:
-                val_name = None
+                key = None
                 continue
 
-        if val_name:
-            parsed_args[val_name] = arg
+        if key:
+            parsed_args[key] = arg
 
 
 def get_arg_value(key: str) -> Optional[Any]:

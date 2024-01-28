@@ -49,7 +49,7 @@ class WindowManager(FeatureManager):
     _scenes: Dict[str, Scene]
     _window_events: Dict[str, List[Event]]
 
-    window_create_timeout = 5.0
+    window_create_timeout = 0.1
 
     def __init__(self) -> None:
         self._windows = {}
@@ -63,13 +63,12 @@ class WindowManager(FeatureManager):
         window_name: str = DEFAULT_WINDOW_NAME,
     ) -> Callable[[], None]:
         def _ret() -> None:
-            # window_active is used to determine if the window is still open
-            window_active = True
+            class WindowStatus:
+                active = True
 
-            def set_window_inactive() -> None:
-                self.log("ERROR", f"window {window_name} was closed")
-                nonlocal window_active
-                window_active = False
+                @classmethod
+                def set_inactive(cls) -> None:
+                    WindowStatus.active = False
 
             # Create the window and canvas
             window_obj = TkWindow()
@@ -82,12 +81,12 @@ class WindowManager(FeatureManager):
             self.log("INFO", f"Activating window {window_name}")
 
             # Set the window to close when the close button is pressed
-            window_obj.protocol("WM_DELETE_WINDOW", set_window_inactive)
+            window_obj.protocol("WM_DELETE_WINDOW", WindowStatus.set_inactive)
 
             # Start the mainloop
             fps = FPSMeasure(window_name, self.log)
             try:
-                while window_active:
+                while WindowStatus.active:
                     window_obj.update()
                     window_obj.update_idletasks()
                     fps.inc_frames()
