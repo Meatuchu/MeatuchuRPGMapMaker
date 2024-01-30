@@ -11,7 +11,6 @@ class Button(Element):
     width: int
     height: int
     _press_handler: Callable[..., None] = lambda: None
-    pressed: bool = False
     _tkinter_button: TkButton
 
     def __init__(
@@ -48,3 +47,9 @@ class Button(Element):
     def destroy(self) -> None:
         self._tkinter_button.destroy()
         return super().destroy()
+
+    def tick_update(self) -> None:
+        super().tick_update()
+        self.x = self.x + 1
+        self.y = self.y + 1
+        self._tkinter_button.place(x=self.x, y=self.y)

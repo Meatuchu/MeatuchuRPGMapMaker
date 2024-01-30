@@ -1,4 +1,4 @@
-from MeatuchuRPGMapMaker.entities.board import RPGMapBoard, RPGMapLayer
+from MeatuchuRPGMapMaker.game.entities.board import RPGMapBoard, RPGMapLayer
 
 
 def test_board_can_be_constructed() -> None:

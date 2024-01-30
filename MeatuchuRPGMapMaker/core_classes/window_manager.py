@@ -87,6 +87,9 @@ class WindowManager(FeatureManager):
             fps = FPSMeasure(window_name, self.log)
             try:
                 while WindowStatus.active:
+                    if self._scenes.get(window_name):
+                        self._scenes[window_name].tick_update()
+                        self._scenes[window_name].frame_update()
                     window_obj.update()
                     window_obj.update_idletasks()
                     fps.inc_frames()
@@ -99,10 +102,11 @@ class WindowManager(FeatureManager):
                             self.set_fullscreen_mode(event)
                         elif isinstance(event, SceneChangeRequestEvent):
                             self.load_scene(event)
-            except Exception as e:
-                self.log("ERROR", f"window {window_name} encountered an error: {e}")
+            except Exception as err:
+                self.log("ERROR", f"window {window_name} encountered an error: {err.__class__.__name__}: {str(err)}")
 
             # Window is closed, clean up
+            window_obj.destroy()
             self.log("DEBUG", f"window {window_name} was closed")
             if self._scenes.get(window_name):
                 del self._scenes[window_name]
@@ -174,8 +178,6 @@ class WindowManager(FeatureManager):
         self.event_mgr.register_subscription(SceneChangeRequestEvent, self.pass_event_to_window_queue)
         pass
 
-    _window_events: Dict[str, List[Event]] = {}
-
     def pass_event_to_window_queue(self, event: Event) -> None:
         window_name = cast(str, event.window_name or DEFAULT_WINDOW_NAME)  # type: ignore
         if self._windows[window_name] or True:
@@ -183,6 +185,7 @@ class WindowManager(FeatureManager):
             self._window_events[window_name].append(event)  # type: ignore
 
     def load_scene(self, event: SceneChangeRequestEvent) -> None:
+        self.log("DEBUG", f"loading scene {event.scene_to_load.__name__}")
         t = datetime.now().timestamp()
         window_name = event.window_name or DEFAULT_WINDOW_NAME
         scene = event.scene_to_load
@@ -203,4 +206,14 @@ class WindowManager(FeatureManager):
         except KeyError:
             raise WindowNotExistError(window_name)
         except Exception as e:
-            self.log("ERROR", f"failed to load scene {scene.name} to window {window_name}: {e}")
+            self.log("ERROR", f"failed to load scene {scene.__name__} to window {window_name}: {e}")
+            raise e
+
+    def input_step(self, frame_number: int) -> None:
+        return super().input_step(frame_number)
+
+    def update_step(self, frame_number: int) -> None:
+        return super().update_step(frame_number)
+
+    def render_step(self, frame_number: int) -> None:
+        return super().render_step(frame_number)

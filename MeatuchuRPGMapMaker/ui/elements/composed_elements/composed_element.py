@@ -11,3 +11,18 @@ class ComposedElement(Element):
 
     def __init__(self, window: TkWindow, name: str) -> None:
         super().__init__(window, name)
+
+    def tick_update(self) -> None:
+        super().tick_update()
+        for e in self._elements.values():
+            e.tick_update()
+
+    def frame_update(self) -> None:
+        super().frame_update()
+        for e in self._elements.values():
+            e.frame_update()
+
+    def destroy(self) -> None:
+        for e in self._elements.values():
+            e.destroy()
+        return super().destroy()

@@ -19,3 +19,11 @@ class Element:
 
     def destroy(self) -> None:
         pass
+
+    def frame_update(self) -> None:
+        """Called every frame"""
+        pass
+
+    def tick_update(self) -> None:
+        """Called every tick"""
+        pass

@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Any, Tuple, Optional, cast
+from typing import Callable, Dict, List, Any, Tuple, Optional
 from datetime import datetime
 import time
 
@@ -20,7 +20,7 @@ from .events import (
     SceneChangeRequestEvent,
     Event,
 )
-from ..entities.board import RPGMapBoard
+from ..game.entities.board import RPGMapBoard
 from ..ui.scenes.menu_scene import MenuScene
 
 

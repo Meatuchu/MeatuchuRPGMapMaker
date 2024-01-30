@@ -21,7 +21,7 @@ class Scene:
 
     def place_element(self, e: Element) -> None:
         if self._elements.get(e.name):
-            raise DuplicateSceneElementError(e.name, self.name)
+            raise DuplicateSceneElementError(e.name, self.__class__.__name__)
         self._elements[e.name] = e
 
     def place_elements(self, es: List[Element]) -> None:
@@ -32,3 +32,11 @@ class Scene:
         for e in self._elements.values():
             e.destroy()
         self._elements = {}
+
+    def frame_update(self) -> None:
+        for e in self._elements.values():
+            e.frame_update()
+
+    def tick_update(self) -> None:
+        for e in self._elements.values():
+            e.tick_update()

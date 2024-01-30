@@ -67,11 +67,11 @@ class EventManager(FeatureManager):
             sys.exit()
 
     def process_next_event(self, event_type: Literal["input", "update", "render", None]) -> None:
-        if event_type is "input":
+        if event_type == "input":
             q = self._input_event_queue
-        elif event_type is "update":
+        elif event_type == "update":
             q = self._update_event_queue
-        elif event_type is "render":
+        elif event_type == "render":
             q = self._render_event_queue
         else:
             q = self._misc_event_queue

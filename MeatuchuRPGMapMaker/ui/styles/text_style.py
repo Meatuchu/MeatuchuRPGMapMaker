@@ -16,3 +16,11 @@ class H1(Normal):
 
 class H2(H1):
     SIZE = 36
+
+
+class H3(H2):
+    SIZE = 24
+
+
+class H4(H3):
+    SIZE = 18

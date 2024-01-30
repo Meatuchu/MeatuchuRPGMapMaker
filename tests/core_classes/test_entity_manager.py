@@ -1,8 +1,8 @@
 from unittest.mock import MagicMock
 from MeatuchuRPGMapMaker.core_classes.entity_manager import EntityManager
-from MeatuchuRPGMapMaker.entities.base_entity import BaseEntity
-from MeatuchuRPGMapMaker.entities.wall_entity import WallEntity
-from MeatuchuRPGMapMaker.entities.floor_entity import FloorEntity
+from MeatuchuRPGMapMaker.game.entities.base_entity import BaseEntity
+from MeatuchuRPGMapMaker.game.entities.wall_entity import WallEntity
+from MeatuchuRPGMapMaker.game.entities.floor_entity import FloorEntity
 
 
 def test_insert_and_retrieve_entity() -> None:
