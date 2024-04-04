@@ -146,11 +146,13 @@ def test_input_step() -> None:
         MagicMock(),
     )
     managers = cast(Dict[str, MagicMock], a.get_all_managers())
+    managers["event_mgr"].queue_scheduled_events = MagicMock(name="event_mgr.queue_scheduled_events")
     for k in managers:
         managers[k].input_step = MagicMock(name=f"{k}.input_step")
     a.input_step(0)
     for k in managers:
         managers[k].input_step.assert_called_once()
+    managers["event_mgr"].queue_scheduled_events.assert_called_once()
 
 
 def test_update_step() -> None:
@@ -166,11 +168,13 @@ def test_update_step() -> None:
         MagicMock(),
     )
     managers = cast(Dict[str, MagicMock], a.get_all_managers())
+    managers["event_mgr"].queue_scheduled_events = MagicMock(name="event_mgr.queue_scheduled_events")
     for k in managers:
         managers[k].update_step = MagicMock(name=f"{k}.update_step")
     a.update_step(0)
     for k in managers:
         managers[k].update_step.assert_called_once()
+    managers["event_mgr"].queue_scheduled_events.assert_called_once()
 
 
 def test_render_step() -> None:
@@ -186,11 +190,13 @@ def test_render_step() -> None:
         MagicMock(),
     )
     managers = cast(Dict[str, MagicMock], a.get_all_managers())
+    managers["event_mgr"].queue_scheduled_events = MagicMock(name="event_mgr.queue_scheduled_events")
     for k in managers:
         managers[k].render_step = MagicMock(name=f"{k}.render_step")
     a.render_step(0)
     for k in managers:
         managers[k].render_step.assert_called_once()
+    managers["event_mgr"].queue_scheduled_events.assert_called_once()
 
 
 def test_init_board() -> None:

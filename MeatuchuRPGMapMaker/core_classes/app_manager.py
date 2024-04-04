@@ -150,6 +150,7 @@ class AppManager(FeatureManager):
         return (cur_time - self.state.last_update_time) >= self.state.tickgap
 
     def input_step(self, frame_number: int) -> None:
+        self.event_mgr.queue_scheduled_events()
         self.input_mgr.input_step(self.frame_counter)
         self.entity_mgr.input_step(self.frame_counter)
         self.export_mgr.input_step(self.frame_counter)
@@ -162,6 +163,7 @@ class AppManager(FeatureManager):
         return super().input_step(frame_number)
 
     def update_step(self, frame_number: int) -> None:
+        self.event_mgr.queue_scheduled_events()
         self.input_mgr.update_step(self.frame_counter)
         self.entity_mgr.update_step(self.frame_counter)
         self.export_mgr.update_step(self.frame_counter)
@@ -174,6 +176,7 @@ class AppManager(FeatureManager):
         return super().update_step(frame_number)
 
     def render_step(self, frame_number: int) -> None:
+        self.event_mgr.queue_scheduled_events()
         self.input_mgr.render_step(self.frame_counter)
         self.entity_mgr.render_step(self.frame_counter)
         self.export_mgr.render_step(self.frame_counter)
