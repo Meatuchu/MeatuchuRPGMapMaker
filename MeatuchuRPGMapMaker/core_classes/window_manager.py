@@ -179,10 +179,12 @@ class WindowManager(FeatureManager):
         pass
 
     def pass_event_to_window_queue(self, event: Event) -> None:
-        window_name = cast(str, event.window_name or DEFAULT_WINDOW_NAME)  # type: ignore
-        if self._windows[window_name] or True:
-            self._window_events[window_name] = self._window_events.get(window_name, [])
-            self._window_events[window_name].append(event)  # type: ignore
+        try:
+            window_name = cast(str, event.window_name) or DEFAULT_WINDOW_NAME  # type: ignore
+        except AttributeError:
+            window_name = DEFAULT_WINDOW_NAME
+        self._window_events[window_name] = self._window_events.get(window_name, [])
+        self._window_events[window_name].append(event)  # type: ignore
 
     def load_scene(self, event: SceneChangeRequestEvent) -> None:
         self.log("DEBUG", f"loading scene {event.scene_to_load.__name__}")
