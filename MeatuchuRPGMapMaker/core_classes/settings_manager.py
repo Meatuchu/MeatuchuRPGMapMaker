@@ -46,7 +46,7 @@ class SettingsManager(FeatureManager):
         v = stage_config.get(group, default[group]).get(key, default[group][key])
         self.log(
             "INFO",
-            f'Retrieved value {f"{v}" if type(v) is str else v} from setting "{key}" in group "{group}" for stage "{self.stage}"',
+            f'Retrieved value {f"{v}" if isinstance(v, str) else v} from setting "{key}" in group "{group}" for stage "{self.stage}"',
         )
         return v
 

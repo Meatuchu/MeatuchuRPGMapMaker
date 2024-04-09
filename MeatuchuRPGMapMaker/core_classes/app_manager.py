@@ -106,7 +106,9 @@ class AppManager(FeatureManager):
         self.subscribe_to_events()
 
     def subscribe_to_events(self) -> None:
-        shutdown: Callable[[Event], None] = lambda _: self.event_mgr.queue_event(AppShutDownEvent())
+        def shutdown(_: Event) -> None:
+            return self.event_mgr.queue_event(AppShutDownEvent())
+
         self.event_mgr.register_subscription(AllThreadsDestroyedEvent, shutdown)
         pass
 

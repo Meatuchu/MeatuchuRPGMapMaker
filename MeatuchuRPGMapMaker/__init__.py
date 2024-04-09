@@ -11,7 +11,7 @@ def process_args() -> None:
     key: Optional[str] = None
     for arg in arguments:
         if arg.startswith("---") and not key:
-            raise KeyError(f"Arguments must start with one or two dashes!")
+            raise KeyError("Arguments must start with one or two dashes!")
         if arg == "--":
             continue
         if arg.startswith("--"):

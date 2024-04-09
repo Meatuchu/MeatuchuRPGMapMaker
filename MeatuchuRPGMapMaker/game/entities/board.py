@@ -27,13 +27,13 @@ class RPGMapLayer:
     def get_tile_at_position_floor(self, x: int, y: int) -> Optional[FloorEntity]:
         try:
             return self.floor_tiles[x][y]
-        except:
+        except IndexError:
             return None
 
     def get_tile_at_position_wall(self, x: int, y: int) -> Optional[WallEntity]:
         try:
             return self.wall_tiles[x][y]
-        except:
+        except IndexError:
             return None
 
     def place_floor_at_position(self, x: int, y: int, tile: FloorEntity) -> None:
@@ -57,8 +57,8 @@ class RPGMapBoard:
 
     def get_all_tiles_at_position(self, x: int, y: int) -> List[Tuple[Optional[FloorEntity], Optional[WallEntity]]]:
         r: List[Tuple[Optional[FloorEntity], Optional[WallEntity]]] = []
-        for l in self.layers:
-            r.append(l.get_tiles_at_position(x, y))
+        for layer in self.layers:
+            r.append(layer.get_tiles_at_position(x, y))
         return r
 
     def place_floor_at_position_in_layer(self, x: int, y: int, z: int, tile: FloorEntity) -> None:

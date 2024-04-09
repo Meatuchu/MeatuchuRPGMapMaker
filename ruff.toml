@@ -1,0 +1,7 @@
+[lint]
+
+# Ignore following errors - Pyright will handle instead
+ignore = [
+  "F401", # Unused imports
+  "F841", # Unused imports and variables
+]

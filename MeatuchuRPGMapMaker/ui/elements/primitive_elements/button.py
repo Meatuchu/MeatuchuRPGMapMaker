@@ -11,7 +11,7 @@ class Button(Element):
     y: int
     width: int
     height: int
-    _press_handler: Callable[..., None] = lambda: None
+    _press_handler: Callable[..., None]
     _tkinter_button: TkButton
 
     def __init__(
