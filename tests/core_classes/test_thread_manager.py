@@ -1,10 +1,11 @@
 # pyright: reportPrivateUsage=false
-from unittest.mock import MagicMock, patch
-from pytest import raises
 from typing import cast
+from unittest.mock import MagicMock, patch
 
+from pytest import raises
+
+from MeatuchuRPGMapMaker.core_classes.events import DestroyThreadRequestEvent, NewThreadRequestEvent
 from MeatuchuRPGMapMaker.core_classes.thread_manager import ThreadManager
-from MeatuchuRPGMapMaker.core_classes.events import NewThreadRequestEvent, DestroyThreadRequestEvent
 from MeatuchuRPGMapMaker.exceptions import DuplicateThreadError
 
 

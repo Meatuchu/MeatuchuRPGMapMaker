@@ -1,5 +1,6 @@
-from typing import Dict
 from tkinter import Tk as TkWindow
+from typing import Dict
+
 from ..primitive_elements.base_element import Element
 
 

@@ -1,6 +1,9 @@
+# pyright: reportPrivateUsage=false
+
 from unittest.mock import MagicMock, call, patch
+
 from MeatuchuRPGMapMaker.core_classes.event_manager import EventManager
-from MeatuchuRPGMapMaker.core_classes.events import Event, InputEvent, UpdateEvent, RenderEvent, AppShutDownEvent
+from MeatuchuRPGMapMaker.core_classes.events import AppShutDownEvent, Event, InputEvent, RenderEvent, UpdateEvent
 
 
 def test_construction() -> None:
@@ -23,7 +26,7 @@ def test_process_next_event() -> None:
     trigger_func = MagicMock()
     e.register_subscription(Event, trigger_func)
     e.queue_event(Event())
-    e.process_next_event(None)
+    e._process_next_event(None)
     trigger_func.assert_called_once()
 
 
@@ -99,10 +102,10 @@ def test_schedule_event(mock_time: MagicMock) -> None:
     e.schedule_event(event1, 100)
     e.schedule_event(event2, 100)
     e.schedule_event(event3, 50)
-    assert e._scheduled_events.peekitem(0) == (50, [event3])  # type: ignore
-    assert e._scheduled_events.peekitem(1) == (100, [event1, event2])  # type: ignore
-    assert e._scheduled_events.popitem(0) == (50, [event3])  # type: ignore
-    assert e._scheduled_events.popitem(0) == (100, [event1, event2])  # type: ignore
+    assert e._scheduled_events.peekitem(0) == (50, [event3])
+    assert e._scheduled_events.peekitem(1) == (100, [event1, event2])
+    assert e._scheduled_events.popitem(0) == (50, [event3])
+    assert e._scheduled_events.popitem(0) == (100, [event1, event2])
 
 
 @patch("MeatuchuRPGMapMaker.core_classes.event_manager.time.time")
@@ -130,7 +133,7 @@ def test_schedule_event_queued(mock_time: MagicMock) -> None:
     e.input_step(0)
 
     # Check that the events were triggered
-    assert e._scheduled_events.peekitem(0) == (100, [event1, event2])  # type: ignore
+    assert e._scheduled_events.peekitem(0) == (100, [event1, event2])
     trigger_func.assert_has_calls(calls=[call(event3)])
 
     # Simulate time passing
@@ -139,7 +142,7 @@ def test_schedule_event_queued(mock_time: MagicMock) -> None:
     e.queue_scheduled_events()
     e.input_step(0)
 
-    assert not e._scheduled_events  # type: ignore
+    assert not e._scheduled_events
     trigger_func.assert_has_calls(
         calls=[call(event1), call(event2)],
     )

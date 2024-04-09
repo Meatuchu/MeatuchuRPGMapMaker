@@ -1,10 +1,11 @@
 # pyright: reportPrivateUsage=false
-from unittest.mock import MagicMock, call, patch
-from pytest import raises
 from datetime import datetime
+from unittest.mock import MagicMock, call, patch
 
-from MeatuchuRPGMapMaker.logger import Logger, _MSG_LEVEL, logger_factory
+from pytest import raises
+
 from MeatuchuRPGMapMaker.constants import DEPLOY_STAGE
+from MeatuchuRPGMapMaker.logger import _MSG_LEVEL, Logger, logger_factory
 
 
 def test_logger_prod_logs() -> None:
@@ -40,13 +41,13 @@ def test_logger_log() -> None:
 
 def test_logger_invalid_stage() -> None:
     with raises(ValueError):
-        Logger("invalid value")  # type: ignore
+        Logger("invalid value")  # pyright: ignore[reportArgumentType]
 
 
 def test_logger_log_negative() -> None:
     logger = Logger("prod")
     with raises(ValueError):
-        logger.log("invalid value", "test")  # type: ignore
+        logger.log("invalid value", "test")  # pyright: ignore[reportArgumentType]
 
 
 def test_logger_factory_returns_same_instance() -> None:
@@ -71,9 +72,7 @@ def test_logger_handle_error_preprod() -> None:
         raise Exception("test")
     except Exception as e:
         a.handle_exception(e)
-    a.log.assert_has_calls(
-        calls=[call("ERROR", "An unhandled Exception has occurred with message: test")]
-    )
+    a.log.assert_has_calls(calls=[call("ERROR", "An unhandled Exception has occurred with message: test")])
 
 
 def test_logger_handle_error_prod() -> None:

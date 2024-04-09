@@ -1,27 +1,27 @@
-from typing import Callable, Dict, List, Any, Tuple, Optional
-from datetime import datetime
 import time
+from datetime import datetime
+from typing import Any, Callable, Dict, List, Optional, Tuple
 
+from ..game.entities.board import RPGMapBoard
+from ..ui.scenes.menu_scene import MenuScene
 from . import FeatureManager
-from .export_manager import ExportManager
 from .entity_manager import EntityManager
+from .event_manager import EventManager
+from .events import (
+    AllThreadsDestroyedEvent,
+    AppShutDownEvent,
+    Event,
+    SceneChangeRequestEvent,
+    WindowFullscreenModeEditRequestEvent,
+    WindowResizeRequestEvent,
+)
+from .export_manager import ExportManager
 from .input_manager import InputManager
 from .rendering_manager import RenderingManager
 from .settings_manager import SettingsManager
 from .texture_manager import TextureManager
 from .thread_manager import ThreadManager
 from .window_manager import WindowManager
-from .event_manager import EventManager
-from .events import (
-    AllThreadsDestroyedEvent,
-    AppShutDownEvent,
-    WindowResizeRequestEvent,
-    WindowFullscreenModeEditRequestEvent,
-    SceneChangeRequestEvent,
-    Event,
-)
-from ..game.entities.board import RPGMapBoard
-from ..ui.scenes.menu_scene import MenuScene
 
 
 class AppState:

@@ -1,5 +1,6 @@
 from datetime import datetime
 from typing import Any, Callable, Dict, Literal, Optional, Tuple, Type, Union
+
 from ..ui.scenes.scene import Scene
 
 
@@ -21,7 +22,8 @@ class UpdateEvent(Event):
 
 
 class RenderEvent(Event):
-    # Used only for events relating to rendering.
+    # Used only for events relating to rendering and windows
+    window_name: Optional[str]
     pass
 
 

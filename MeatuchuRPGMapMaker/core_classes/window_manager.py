@@ -1,22 +1,22 @@
 import time
-from tkinter import Tk as TkWindow, Canvas as TkCanvas
-
-from typing import Dict, Callable, List, Optional, cast
 from datetime import datetime
+from tkinter import Canvas as TkCanvas
+from tkinter import Tk as TkWindow
+from typing import Callable, Dict, List, Optional
 
+from ..exceptions import DuplicateWindowError, WindowNotExistError, WindowNotFoundError
+from ..ui.scenes.scene import Scene
 from . import FeatureManager
 from .event_manager import EventManager
 from .events import (
     CloseWindowEvent,
-    NewThreadRequestEvent,
     DestroyThreadRequestEvent,
-    WindowResizeRequestEvent,
-    WindowFullscreenModeEditRequestEvent,
+    NewThreadRequestEvent,
+    RenderEvent,
     SceneChangeRequestEvent,
-    Event,
+    WindowFullscreenModeEditRequestEvent,
+    WindowResizeRequestEvent,
 )
-from ..ui.scenes.scene import Scene
-from ..exceptions import DuplicateWindowError, WindowNotExistError, WindowNotFoundError
 
 DEFAULT_WINDOW_NAME = "main"
 
@@ -47,7 +47,7 @@ class WindowManager(FeatureManager):
     _windows: Dict[str, Optional[TkWindow]]
     _canvases: Dict[str, TkCanvas]
     _scenes: Dict[str, Scene]
-    _window_events: Dict[str, List[Event]]
+    _window_events: Dict[str, List[RenderEvent]]
 
     window_create_timeout = 0.1
 
@@ -160,7 +160,7 @@ class WindowManager(FeatureManager):
                     raise WindowNotFoundError(window_name)
             window = self._windows[window_name]
             assert window
-            window.attributes("-fullscreen", mode >= 1)  # type: ignore
+            window.attributes("-fullscreen", mode >= 1)  # pyright: ignore[reportUnknownMemberType]
             self.log(
                 "DEBUG",
                 f"set {window_name} fullscreen mode to {mode}",
@@ -178,11 +178,8 @@ class WindowManager(FeatureManager):
         self.event_mgr.register_subscription(SceneChangeRequestEvent, self.pass_event_to_window_queue)
         pass
 
-    def pass_event_to_window_queue(self, event: Event) -> None:
-        try:
-            window_name = cast(str, event.window_name) or DEFAULT_WINDOW_NAME  # type: ignore
-        except AttributeError:
-            window_name = DEFAULT_WINDOW_NAME
+    def pass_event_to_window_queue(self, event: RenderEvent) -> None:
+        window_name = event.window_name or DEFAULT_WINDOW_NAME
         self._window_events[window_name] = self._window_events.get(window_name, [])
         self._window_events[window_name].append(event)  # type: ignore
 

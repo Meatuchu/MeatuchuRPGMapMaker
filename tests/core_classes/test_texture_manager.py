@@ -1,8 +1,8 @@
-from unittest.mock import MagicMock
 import os
+from unittest.mock import MagicMock
 
-from MeatuchuRPGMapMaker.core_classes.texture_manager import TextureManager
 from MeatuchuRPGMapMaker import ROOTDIR
+from MeatuchuRPGMapMaker.core_classes.texture_manager import TextureManager
 
 
 def test_construction() -> None:

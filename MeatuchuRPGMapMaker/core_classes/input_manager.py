@@ -1,7 +1,9 @@
-from typing import Optional, Union, Dict, Tuple, cast
-from pynput import keyboard, mouse
 import time
+from typing import Dict, Optional, Tuple, Union, cast
 
+from pynput import keyboard, mouse
+
+from ..helpers import debounce
 from . import FeatureManager
 from .event_manager import EventManager
 from .events import (
@@ -13,7 +15,6 @@ from .events import (
     MouseMoveEvent,
     MouseScrollEvent,
 )
-from ..helpers import debounce
 
 
 class InputManager(FeatureManager):

@@ -1,16 +1,20 @@
-# pyright: reportPrivateUsage=false
 from typing import Set
 from unittest.mock import MagicMock, call, patch
+
 from pytest import raises
-from MeatuchuRPGMapMaker.core_classes.window_manager import WindowManager, DEFAULT_WINDOW_NAME
+
 from MeatuchuRPGMapMaker.core_classes.event_manager import EventManager
 from MeatuchuRPGMapMaker.core_classes.events import (
     Event,
     NewThreadRequestEvent,
-    WindowResizeRequestEvent,
+    RenderEvent,
     WindowFullscreenModeEditRequestEvent,
+    WindowResizeRequestEvent,
 )
+from MeatuchuRPGMapMaker.core_classes.window_manager import DEFAULT_WINDOW_NAME, WindowManager
 from MeatuchuRPGMapMaker.exceptions import DuplicateWindowError, WindowNotExistError, WindowNotFoundError
+
+# pyright: reportPrivateUsage=false
 
 WindowManager.window_create_timeout = 0.1
 
@@ -180,35 +184,13 @@ def test_set_fullscreen_mode_not_exist(mock_tk: MagicMock) -> None:
 
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
-def test_pass_event_to_window_queue_name_not_exist(mock_tk: MagicMock) -> None:
-    w = WindowManager()
-
-    window_name = "main"
-
-    event1 = MagicMock(spec=Event)
-    event2 = MagicMock(spec=Event)
-
-    # Test when window exists
-    w._windows[window_name] = MagicMock()
-    w.pass_event_to_window_queue(event1)
-    assert len(w._window_events[window_name]) == 1
-    assert w._window_events[window_name][0] == event1
-
-    # Test when window does not exist
-    w._windows[window_name] = None
-    w.pass_event_to_window_queue(event2)
-    assert len(w._window_events[window_name]) == 2
-    assert w._window_events[window_name][1] == event2
-
-
-@patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
 def test_pass_event_to_window_queue_name_empty(mock_tk: MagicMock) -> None:
     w = WindowManager()
 
     window_name = "main"
 
-    event1 = MagicMock(spec=Event)
-    event2 = MagicMock(spec=Event)
+    event1 = MagicMock(spec=RenderEvent)
+    event2 = MagicMock(spec=RenderEvent)
     event1.window_name = None
     event2.window_name = ""
 
@@ -231,8 +213,8 @@ def test_pass_event_to_window_queue_named(mock_tk: MagicMock) -> None:
 
     window_name = "some_other_window"
 
-    event1 = MagicMock(spec=Event)
-    event2 = MagicMock(spec=Event)
+    event1 = MagicMock(spec=RenderEvent)
+    event2 = MagicMock(spec=RenderEvent)
     event1.window_name = window_name
     event2.window_name = window_name
 

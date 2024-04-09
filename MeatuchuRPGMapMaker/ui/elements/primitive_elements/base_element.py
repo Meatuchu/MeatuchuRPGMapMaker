@@ -1,6 +1,6 @@
 from tkinter import Tk as TkWindow
 
-from ....exceptions import ElementNotNamedError, ElementCreatedWithoutWindowError
+from ....exceptions import ElementCreatedWithoutWindowError, ElementNotNamedError
 
 
 class Element:

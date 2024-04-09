@@ -1,7 +1,7 @@
 from tkinter import Tk as TkWindow
 
-from .. import ComposedElement
 from ....elements.primitive_elements import Button
+from .. import ComposedElement
 
 
 class MainMenuOptions(ComposedElement):

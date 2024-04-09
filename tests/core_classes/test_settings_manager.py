@@ -1,6 +1,6 @@
 from unittest.mock import MagicMock, patch
-from MeatuchuRPGMapMaker.core_classes.settings_manager import SettingsManager
 
+from MeatuchuRPGMapMaker.core_classes.settings_manager import SettingsManager
 
 mock_settings = {"default": {"window": {"width": 123, "height": 456}}}
 

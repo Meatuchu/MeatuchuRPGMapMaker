@@ -1,7 +1,9 @@
-from tkinter import Tk as TkWindow, Label as TkLabel
+from tkinter import Label as TkLabel
+from tkinter import Tk as TkWindow
 from typing import Type
-from .base_element import Element
+
 from ...styles import TextStyles
+from .base_element import Element
 
 
 class FloatingText(Element):

@@ -1,4 +1,5 @@
 from unittest.mock import MagicMock
+
 from MeatuchuRPGMapMaker.ui.elements.primitive_elements import Button
 
 

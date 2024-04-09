@@ -1,6 +1,6 @@
-from functools import wraps
-from typing import Callable, Any
 from datetime import datetime
+from functools import wraps
+from typing import Any, Callable
 
 
 def debounce(

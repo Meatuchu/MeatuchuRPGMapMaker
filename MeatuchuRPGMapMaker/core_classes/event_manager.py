@@ -1,11 +1,12 @@
-from typing import Dict, List, Callable, Literal, Tuple, Type, cast, Any
-from sortedcontainers import SortedDict  # type: ignore
 import sys
 import time
+from typing import Callable, Dict, List, Literal, Tuple, Type, cast
+
+from sortedcontainers import SortedDict  # pyright: ignore[reportMissingTypeStubs]
 
 from . import FeatureManager
 from . import events as Events
-from .events import Event, InputEvent, UpdateEvent, RenderEvent
+from .events import Event, InputEvent, RenderEvent, UpdateEvent
 
 # Events in this list will not be logged
 HIDDEN_EVENTS = [Events.InputSnapshotEvent, Events.MouseMoveEvent]
@@ -41,7 +42,9 @@ class EventManager(FeatureManager):
         self.log("DEBUG", f"Scheduling event {event.__class__.__name__} to run in {delay_sec} seconds")
 
         timestamp = time.time() + delay_sec
-        events_at_time: List[Event] = cast(List[Event], self._scheduled_events.get(timestamp, []))  # type: ignore
+        events_at_time: List[Event] = cast(
+            List[Event], self._scheduled_events.get(timestamp, [])  # pyright: ignore[reportUnknownMemberType]
+        )
         events_at_time.append(event)
         self._scheduled_events[timestamp] = events_at_time
 
@@ -60,9 +63,9 @@ class EventManager(FeatureManager):
                 self.queue_event(event)
 
     def queue_event(self, event: Event) -> None:
-        self.log_event(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
+        self._log_event(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
         if isinstance(event, Events.ThreadErrorEvent):
-            self.process_event(event)
+            self._process_event(event)
             return
 
         if isinstance(event, InputEvent):
@@ -74,13 +77,13 @@ class EventManager(FeatureManager):
         else:
             self._misc_event_queue.append(event)
 
-    def process_event(self, event: Event) -> None:
+    def _process_event(self, event: Event) -> None:
         subscribers = self._subscriptions.get(event.__class__.__name__, [])
         if event.__class__.__name__ is not Event.__name__:
             subscribers += self._subscriptions.get(Event.__name__, [])
 
         if subscribers:
-            self.log_event(
+            self._log_event(
                 event,
                 "INFO",
                 f"Begin processing event {event.__class__.__name__} ({len(subscribers)} subscribers)",
@@ -92,7 +95,7 @@ class EventManager(FeatureManager):
         if isinstance(event, Events.AppShutDownEvent):
             sys.exit()
 
-    def process_next_event(self, event_type: Literal["input", "update", "render", None]) -> None:
+    def _process_next_event(self, event_type: Literal["input", "update", "render", None]) -> None:
         if event_type == "input":
             q = self._input_event_queue
         elif event_type == "update":
@@ -102,30 +105,30 @@ class EventManager(FeatureManager):
         else:
             q = self._misc_event_queue
 
-        self.process_event(q.pop(0))
+        self._process_event(q.pop(0))
 
     def input_step(self, frame_number: int) -> None:
         while self._input_event_queue:
-            self.process_next_event("input")
+            self._process_next_event("input")
         while self._misc_event_queue:
-            self.process_next_event(None)
+            self._process_next_event(None)
         return super().input_step(frame_number)
 
     def update_step(self, frame_number: int) -> None:
         while self._update_event_queue:
-            self.process_next_event("update")
+            self._process_next_event("update")
         while self._misc_event_queue:
-            self.process_next_event(None)
+            self._process_next_event(None)
         return super().update_step(frame_number)
 
     def render_step(self, frame_number: int) -> None:
         while self._render_event_queue:
-            self.process_next_event("render")
+            self._process_next_event("render")
         while self._misc_event_queue:
-            self.process_next_event(None)
+            self._process_next_event(None)
         return super().render_step(frame_number)
 
-    def log_event(self, event: Event, level: Literal["ERROR", "WARNING", "DEBUG", "INFO"], msg: str) -> None:
+    def _log_event(self, event: Event, level: Literal["ERROR", "WARNING", "DEBUG", "INFO"], msg: str) -> None:
         if event.__class__ in [InputEvent, RenderEvent, UpdateEvent]:
             return
         for t in HIDDEN_EVENTS:

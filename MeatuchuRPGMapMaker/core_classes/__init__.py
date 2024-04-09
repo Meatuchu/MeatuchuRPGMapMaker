@@ -1,7 +1,8 @@
 from typing import Literal
 from uuid import uuid4
-from ..logger import logger_factory
+
 from ..constants import DEPLOY_STAGE
+from ..logger import logger_factory
 
 
 class FeatureManager:

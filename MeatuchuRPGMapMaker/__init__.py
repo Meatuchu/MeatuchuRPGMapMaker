@@ -1,10 +1,10 @@
-import sys
-from typing import List, Optional, Any
 import os
+import sys
+from typing import Any, Dict, List, Optional, Union
 
 arguments: List[str] = sys.argv[1:]
 
-parsed_args = {}
+parsed_args: Dict[str, Union[str, bool]] = {}
 
 
 def process_args() -> None:
@@ -30,7 +30,7 @@ def process_args() -> None:
 
 def get_arg_value(key: str) -> Optional[Any]:
     if key.startswith("--"):
-        return parsed_args.get(key, None)  # type: ignore
+        return parsed_args.get(key, None)
     elif key.startswith("-"):
         if parsed_args.get(key):
             return True

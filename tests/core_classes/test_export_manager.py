@@ -1,4 +1,5 @@
 from unittest.mock import MagicMock
+
 from MeatuchuRPGMapMaker.core_classes.export_manager import ExportManager
 
 

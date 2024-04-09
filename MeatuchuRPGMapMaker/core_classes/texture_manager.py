@@ -1,10 +1,11 @@
-from PIL import Image
-from typing import Dict
 import os
+from typing import Dict
 
+from PIL import Image
+
+from .. import ROOTDIR
 from . import FeatureManager
 from .event_manager import EventManager
-from .. import ROOTDIR
 
 
 class TextureManager(FeatureManager):

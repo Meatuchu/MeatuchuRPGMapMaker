@@ -1,8 +1,9 @@
 from tkinter import Tk as TkWindow
-from .scene import Scene
-from ..elements.primitive_elements import FloatingText
+
 from ..elements.composed_elements.main_menu.options import MainMenuOptions
+from ..elements.primitive_elements import FloatingText
 from ..styles import TextStyles
+from .scene import Scene
 
 
 class MenuScene(Scene):

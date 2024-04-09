@@ -1,5 +1,6 @@
+from tkinter import Button as TkButton
+from tkinter import Tk as TkWindow
 from typing import Callable
-from tkinter import Button as TkButton, Tk as TkWindow
 
 from .base_element import Element
 

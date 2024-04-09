@@ -2,6 +2,7 @@ from typing import Dict, NoReturn, cast
 from unittest.mock import MagicMock
 
 from pytest import raises
+
 from MeatuchuRPGMapMaker.core_classes.app_manager import AppManager
 
 

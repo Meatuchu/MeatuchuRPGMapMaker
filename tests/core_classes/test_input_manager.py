@@ -1,9 +1,11 @@
 # pyright: reportPrivateUsage=false
 from typing import Set
-from unittest.mock import MagicMock, call
-from MeatuchuRPGMapMaker.core_classes.input_manager import InputManager
-from MeatuchuRPGMapMaker.core_classes.events import KeyPressEvent, KeyReleaseEvent, Event
+from unittest.mock import MagicMock
+
 from pynput import keyboard, mouse
+
+from MeatuchuRPGMapMaker.core_classes.events import Event
+from MeatuchuRPGMapMaker.core_classes.input_manager import InputManager
 
 
 def test_create_input_manager() -> None:

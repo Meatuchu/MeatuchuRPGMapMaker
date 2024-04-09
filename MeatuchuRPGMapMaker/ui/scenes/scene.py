@@ -1,8 +1,8 @@
 from tkinter import Tk as TkWindow
 from typing import Dict, List
 
-from ..elements.primitive_elements.base_element import Element
 from ...exceptions import DuplicateSceneElementError
+from ..elements.primitive_elements.base_element import Element
 
 
 class Scene:

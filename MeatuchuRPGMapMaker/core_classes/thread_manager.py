@@ -1,18 +1,18 @@
 import threading
 import traceback
-from typing import Dict, Callable, Tuple, Any
+from typing import Any, Callable, Dict, Tuple
 
+from ..exceptions import DuplicateThreadError
 from . import FeatureManager
 from .event_manager import EventManager
 from .events import (
     AllThreadsDestroyedEvent,
-    NewThreadEvent,
-    NewThreadRequestEvent,
     DestroyThreadEvent,
     DestroyThreadRequestEvent,
+    NewThreadEvent,
+    NewThreadRequestEvent,
     ThreadErrorEvent,
 )
-from ..exceptions import DuplicateThreadError
 
 
 class ThreadManager(FeatureManager):
