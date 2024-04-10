@@ -93,10 +93,10 @@ def test_thread_error_event() -> None:
 
 
 def test_scene_change_request_event() -> None:
-    from MeatuchuRPGMapMaker.ui.scenes.scene import Scene
-
     assert SceneChangeRequestEvent
-    assert SceneChangeRequestEvent(Scene)
+    assert SceneChangeRequestEvent("MapEditScene")
+    assert SceneChangeRequestEvent("MenuScene")
+    assert SceneChangeRequestEvent("MapEditScene", "test_window", {"test": "value"})
 
 
 def test_scene_change_event() -> None:

@@ -269,24 +269,23 @@ def test_load_scene(
     event_mgr.queue_event = MagicMock()
 
     # Test
-    w.load_scene(SceneChangeRequestEvent(Scene))
+    w.load_scene(SceneChangeRequestEvent("MapEditScene"))
     event_mgr.queue_event.assert_called_once_with(mock_scene_change_event.return_value)
 
 
-@patch("MeatuchuRPGMapMaker.core_classes.window_manager.Scene")
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.SceneChangeEvent")
 def test_load_new_scene(
     mock_scene_change_event: MagicMock,
     mock_tk: MagicMock,
-    mock_scene: MagicMock,
 ) -> None:
-    mock_scene = MagicMock(spec=Scene)
+    mock_scene_def = MagicMock(spec=Scene, __name__="Scene")
     # Mock SceneChangeEvent
-    old_scene = MagicMock(unload=MagicMock())
-    new_scene = MagicMock()
+    old_scene = MagicMock(spec=Scene, unload=MagicMock())
+    old_scene.name = "OldScene"
+    new_scene = MagicMock(spec=Scene, unload=MagicMock())
+    new_scene.name = "NewScene"
 
-    mock_scene.return_value = old_scene
     mock_scene_change_event.return_value = MagicMock()
 
     # Create window manager
@@ -309,10 +308,16 @@ def test_load_new_scene(
     event_mgr.queue_event = MagicMock()
 
     # Test
-    w.load_scene(SceneChangeRequestEvent(lambda *_, **__: old_scene))  # pyright: ignore[reportUnknownLambdaType, reportArgumentType]
+    event1 = SceneChangeRequestEvent("MapEditScene")
+    mock_scene_def.return_value = old_scene
+    event1.scene_to_load = mock_scene_def  # pyright: ignore[reportAttributeAccessIssue]
+    w.load_scene(event1)
     assert w._scenes[DEFAULT_WINDOW_NAME] == old_scene
 
-    w.load_scene(SceneChangeRequestEvent(lambda *_, **__: new_scene))  # pyright: ignore[reportUnknownLambdaType, reportArgumentType]
+    event2 = SceneChangeRequestEvent("MapEditScene")
+    mock_scene_def.return_value = new_scene
+    event2.scene_to_load = mock_scene_def  # pyright: ignore[reportAttributeAccessIssue]
+    w.load_scene(event2)
     assert old_scene.unload.called_once()
     assert w._scenes[DEFAULT_WINDOW_NAME] == new_scene
 

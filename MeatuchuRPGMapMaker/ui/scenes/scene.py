@@ -13,14 +13,14 @@ class Scene:
     # Attributes
     _window: TkWindow
     _elements: Dict[str, Element]
-    _queue_event: Callable[[Event], None]
+    _fire_event: Callable[[Event], None]
     name: str
 
-    def __init__(self, window: TkWindow, queue_event: Callable[[Event], None]) -> None:
+    def __init__(self, window: TkWindow, fire_event: Callable[[Event], None]) -> None:
         self.name = self.__class__.__name__
         self._window = window
         self._elements = {}
-        self._queue_event = queue_event
+        self._fire_event = fire_event
 
     def place_element(self, e: Element) -> None:
         if self._elements.get(e.name):

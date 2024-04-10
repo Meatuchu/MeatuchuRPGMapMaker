@@ -2,5 +2,6 @@
 
 # pyright: reportUnusedImport=false
 
+from .base_element import Element
 from .button import Button
 from .floatingtext import FloatingText

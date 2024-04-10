@@ -182,21 +182,33 @@ class WindowManager(FeatureManager):
 
     def load_scene(self, event: SceneChangeRequestEvent) -> None:
         self.log("DEBUG", f"loading scene {event.scene_to_load.__name__}")
+
         window_name = event.window_name or DEFAULT_WINDOW_NAME
         scene = event.scene_to_load
-        old_scene = self._scenes.get(window_name)
-        if old_scene:
-            old_scene.unload()
+
         self._wait_for_window(window_name)
         window = self._windows[window_name]
         assert window
+
         try:
+            # Grab old scene
+            old_scene = self._scenes.get(window_name)
+
+            # Create new scene
             self._scenes[window_name] = scene(window, self._outgoing_events.append)
+
+            # Unload old scene
+            if old_scene:
+                old_scene.unload()
+
             self.log(
                 "DEBUG",
                 f"loaded scene {self._scenes[window_name].name} to window {window_name}",
             )
+
+            # Queue event to notify the scene has changed
             self.event_mgr.queue_event(SceneChangeEvent())
+
         except Exception as e:
             self.log("ERROR", f"failed to load scene {scene.__name__} to window {window_name}: {e}")
             raise e
