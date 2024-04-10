@@ -17,11 +17,8 @@ from ..events import (
 )
 from . import FeatureManager
 
-# Events in this list will not be logged
-HIDDEN_EVENTS = [
-    InputSnapshotEvent,
-    MouseMoveEvent,
-]
+# Processing of Events in this list will not be logged
+HIDDEN_EVENTS = [InputSnapshotEvent, MouseMoveEvent, LogEvent]
 
 # Events in this list will be processed immediately upon being queued
 IMMEDIATE_EVENTS = [
@@ -110,17 +107,16 @@ class EventManager(FeatureManager):
         if event.__class__.__name__ is not Event.__name__:
             subscribers += self._subscriptions.get(Event.__name__, [])
 
-        if not isinstance(event, LogEvent):
-            if subscribers:
-                self._log_event_handle_info(
-                    event,
-                    "INFO",
-                    f"Begin processing event {event.__class__.__name__} ({len(subscribers)} subscribers)",
-                )
-            else:
-                self._log_event_handle_info(
-                    event, "WARNING", f"Begin processing event {event.__class__.__name__} (no subscribers)"
-                )
+        if subscribers:
+            self._log_event_handle_info(
+                event,
+                "INFO",
+                f"Begin processing event {event.__class__.__name__} ({len(subscribers)} subscribers)",
+            )
+        else:
+            self._log_event_handle_info(
+                event, "WARNING", f"Begin processing event {event.__class__.__name__} (no subscribers)"
+            )
 
         for subscriber in subscribers:
             subscriber(event)
