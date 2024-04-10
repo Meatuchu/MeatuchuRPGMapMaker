@@ -329,3 +329,38 @@ def test_wait_for_window_not_exist() -> None:
     m = WindowManager()
     with raises(WindowNotExistError):
         m._wait_for_window("buckle_my_shoe")
+
+
+def test_render_step_with_outgoing_events() -> None:
+    # Create a mock event manager
+    event_mgr = MagicMock()
+
+    # Create a mock event
+    event = MagicMock(spec=Event)
+
+    # Create a mock window manager
+    w = WindowManager()
+    w.event_mgr = event_mgr
+    w._outgoing_events = [event]
+
+    # Call the render_step method
+    w.render_step(1)
+
+    # Assert that the event manager's queue_event method was called with the event
+    event_mgr.queue_event.assert_called_once_with(event)
+
+
+def test_render_step_without_outgoing_events() -> None:
+    # Create a mock event manager
+    event_mgr = MagicMock()
+
+    # Create a mock window manager
+    w = WindowManager()
+    w.event_mgr = event_mgr
+    w._outgoing_events = []
+
+    # Call the render_step method
+    w.render_step(1)
+
+    # Assert that the event manager's queue_event method was not called
+    event_mgr.queue_event.assert_not_called()
