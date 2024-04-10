@@ -2,6 +2,7 @@ from tkinter import Tk as TkWindow
 from typing import Callable
 
 from .....events.Event import Event
+from .....events.LogEvent import LogEvent
 from ....elements.primitive_elements import Button
 from .. import ComposedElement
 
@@ -25,7 +26,9 @@ class MainMenuOptions(ComposedElement):
                 "Start",
                 x=x + 5,
                 y=y + 5,
-                press_handler=lambda: fire_event(Event()),
+                press_handler=lambda: fire_event(
+                    LogEvent("INFO", "Start button pressed", "MainMenuOptions_StartButton")
+                ),
             ),
         }
 

@@ -53,7 +53,7 @@ class EventManager(FeatureManager):
 
     def subscribe_to_events(self) -> None:
         def handle_log_event(event: LogEvent) -> None:
-            self.log(event.msg_level, event.msg)
+            self._logger.log(event.msg_level, event.msg, event.src)
 
         self.register_subscription(LogEvent, handle_log_event)
 
@@ -110,14 +110,15 @@ class EventManager(FeatureManager):
         if event.__class__.__name__ is not Event.__name__:
             subscribers += self._subscriptions.get(Event.__name__, [])
 
-        if subscribers:
-            self._log_event(
-                event,
-                "INFO",
-                f"Begin processing event {event.__class__.__name__} ({len(subscribers)} subscribers)",
-            )
-        else:
-            self._log_event(event, "WARNING", f"Begin processing event {event.__class__.__name__} (no subscribers)")
+        if not isinstance(event, LogEvent):
+            if subscribers:
+                self._log_event(
+                    event,
+                    "INFO",
+                    f"Begin processing event {event.__class__.__name__} ({len(subscribers)} subscribers)",
+                )
+            else:
+                self._log_event(event, "WARNING", f"Begin processing event {event.__class__.__name__} (no subscribers)")
 
         for subscriber in subscribers:
             subscriber(event)

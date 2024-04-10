@@ -28,10 +28,12 @@ def test_queue_event() -> None:
 
 def test_queue_immediate_event() -> None:
     e = EventManager()
+    e._logger.log = MagicMock()
     trigger_func = MagicMock()
     e.register_subscription(LogEvent, trigger_func)
-    e.queue_event(LogEvent("INFO", "Test message"))
+    e.queue_event(LogEvent("INFO", "Test message", "Test source"))
     trigger_func.assert_called_once()
+    e._logger.log.assert_called_with("INFO", "Test message", "Test source")
 
 
 def test_process_next_event() -> None:
