@@ -58,6 +58,7 @@ class WindowManager(FeatureManager):
         self._canvases = {}
         self._scenes = {}
         self._window_events = {}
+        self._outgoing_events = []
         super().__init__()
 
     def _get_window_thread(
@@ -217,4 +218,6 @@ class WindowManager(FeatureManager):
         return super().update_step(frame_number)
 
     def render_step(self, frame_number: int) -> None:
+        while self._outgoing_events:
+            self.event_mgr.queue_event(self._outgoing_events.pop(0))
         return super().render_step(frame_number)

@@ -100,6 +100,8 @@ class EventManager(FeatureManager):
                 "INFO",
                 f"Begin processing event {event.__class__.__name__} ({len(subscribers)} subscribers)",
             )
+        else:
+            self._log_event(event, "WARNING", f"Begin processing event {event.__class__.__name__} (no subscribers)")
 
         for subscriber in subscribers:
             subscriber(event)

@@ -17,6 +17,7 @@ class Button(Element):
     def __init__(
         self,
         window: TkWindow,
+        fire_event: Callable[..., None],
         name: str,
         label: str = "Button",
         x: int = 0,
@@ -25,7 +26,7 @@ class Button(Element):
         height: int = 50,
         press_handler: Callable[..., None] = lambda: None,
     ) -> None:
-        super().__init__(window, name)
+        super().__init__(window, fire_event, name)
         self._label = label
         self.x = x
         self.y = y
@@ -48,9 +49,3 @@ class Button(Element):
     def destroy(self) -> None:
         self._tkinter_button.destroy()
         return super().destroy()
-
-    def tick_update(self) -> None:
-        super().tick_update()
-        self.x = self.x + 1
-        self.y = self.y + 1
-        self._tkinter_button.place(x=self.x, y=self.y)
