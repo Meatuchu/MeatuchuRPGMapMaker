@@ -89,7 +89,7 @@ class EventManager(FeatureManager):
                 self.queue_event(event)
 
     def queue_event(self, event: Event) -> None:
-        self._log_event(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
+        self._log_event_handle_info(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
 
         for t in IMMEDIATE_EVENTS:
             if isinstance(event, t):
@@ -112,13 +112,15 @@ class EventManager(FeatureManager):
 
         if not isinstance(event, LogEvent):
             if subscribers:
-                self._log_event(
+                self._log_event_handle_info(
                     event,
                     "INFO",
                     f"Begin processing event {event.__class__.__name__} ({len(subscribers)} subscribers)",
                 )
             else:
-                self._log_event(event, "WARNING", f"Begin processing event {event.__class__.__name__} (no subscribers)")
+                self._log_event_handle_info(
+                    event, "WARNING", f"Begin processing event {event.__class__.__name__} (no subscribers)"
+                )
 
         for subscriber in subscribers:
             subscriber(event)
@@ -159,7 +161,9 @@ class EventManager(FeatureManager):
             self._process_next_event(None)
         return super().render_step(frame_number)
 
-    def _log_event(self, event: Event, level: Literal["ERROR", "WARNING", "DEBUG", "INFO"], msg: str) -> None:
+    def _log_event_handle_info(
+        self, event: Event, level: Literal["ERROR", "WARNING", "DEBUG", "INFO"], msg: str
+    ) -> None:
         if event.__class__ in [InputEvent, RenderEvent, UpdateEvent]:
             return
         for t in HIDDEN_EVENTS:
