@@ -18,6 +18,7 @@ from .MouseScrollEvent import MouseScrollEvent
 from .NewThreadEvent import NewThreadEvent
 from .NewThreadRequestEvent import NewThreadRequestEvent
 from .RenderEvent import RenderEvent
+from .SceneChangeEvent import SceneChangeEvent
 from .SceneChangeRequestEvent import SceneChangeRequestEvent
 from .ThreadErrorEvent import ThreadErrorEvent
 from .UpdateEvent import UpdateEvent

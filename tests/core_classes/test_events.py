@@ -7,12 +7,17 @@ from MeatuchuRPGMapMaker.events import (
     DestroyThreadRequestEvent,
     Event,
     InputEvent,
+    InputSnapshotEvent,
     KeyPressEvent,
     KeyReleaseEvent,
+    LogEvent,
     MouseMoveEvent,
     NewThreadEvent,
     NewThreadRequestEvent,
     RenderEvent,
+    SceneChangeEvent,
+    SceneChangeRequestEvent,
+    ThreadErrorEvent,
     UpdateEvent,
 )
 
@@ -80,3 +85,30 @@ def test_mouse_move_event() -> None:
 def test_app_shutdown_event() -> None:
     assert AppShutDownEvent
     assert AppShutDownEvent()
+
+
+def test_thread_error_event() -> None:
+    assert ThreadErrorEvent
+    assert ThreadErrorEvent("thread_name", "owner_id", Exception("test exception"))
+
+
+def test_scene_change_request_event() -> None:
+    from MeatuchuRPGMapMaker.ui.scenes.scene import Scene
+
+    assert SceneChangeRequestEvent
+    assert SceneChangeRequestEvent(Scene)
+
+
+def test_scene_change_event() -> None:
+    assert SceneChangeEvent
+    assert SceneChangeEvent()
+
+
+def test_log_event() -> None:
+    assert LogEvent
+    assert LogEvent("ERROR", "test message")
+
+
+def test_input_snapshot_event() -> None:
+    assert InputSnapshotEvent
+    assert InputSnapshotEvent({"a": 123}, {}, (0, 0))
