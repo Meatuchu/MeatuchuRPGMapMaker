@@ -10,6 +10,7 @@ from ..events import (
     Event,
     NewThreadRequestEvent,
     RenderEvent,
+    SceneChangeEvent,
     SceneChangeRequestEvent,
     WindowFullscreenModeEditRequestEvent,
     WindowResizeRequestEvent,
@@ -136,40 +137,28 @@ class WindowManager(FeatureManager):
         width = event.width or 800
         height = event.height or 600
         window_name = event.window_name or DEFAULT_WINDOW_NAME
-        t = datetime.now().timestamp()
-        try:
-            while not self._windows[window_name]:  # Wait until window is created, if the key exists but is none.
-                if datetime.now().timestamp() - t > self.window_create_timeout:
-                    raise WindowNotFoundError(window_name)
-            window = self._windows[window_name]
-            assert window
-            window.geometry(f"{width}x{height}")
-            self._canvases[window_name].config(width=width, height=height)
-            self._canvases[window_name].pack()
-            self.log(
-                "DEBUG",
-                f"set side window {window_name} size to {width} by {height}",
-            )
-        except KeyError:
-            raise WindowNotExistError(window_name)
+        self._wait_for_window(window_name)
+        window = self._windows[window_name]
+        assert window
+        window.geometry(f"{width}x{height}")
+        self._canvases[window_name].config(width=width, height=height)
+        self._canvases[window_name].pack()
+        self.log(
+            "DEBUG",
+            f"set side window {window_name} size to {width} by {height}",
+        )
 
     def set_fullscreen_mode(self, event: WindowFullscreenModeEditRequestEvent) -> None:
         mode = event.mode
         window_name = event.window_name or DEFAULT_WINDOW_NAME
-        t = datetime.now().timestamp()
-        try:
-            while not self._windows.get(window_name):  # Wait until window is created, if the key exists but is none.
-                if datetime.now().timestamp() - t > self.window_create_timeout:
-                    raise WindowNotFoundError(window_name)
-            window = self._windows[window_name]
-            assert window
-            window.attributes("-fullscreen", mode >= 1)  # pyright: ignore[reportUnknownMemberType]
-            self.log(
-                "DEBUG",
-                f"set {window_name} fullscreen mode to {mode}",
-            )
-        except KeyError:
-            raise WindowNotExistError(window_name)
+        self._wait_for_window(window_name)
+        window = self._windows[window_name]
+        assert window
+        window.attributes("-fullscreen", mode >= 1)  # pyright: ignore[reportUnknownMemberType]
+        self.log(
+            "DEBUG",
+            f"set {window_name} fullscreen mode to {mode}",
+        )
 
     def register_event_manager(self, event_mgr: EventManager) -> None:
         self.event_mgr = event_mgr
@@ -188,28 +177,33 @@ class WindowManager(FeatureManager):
 
     def load_scene(self, event: SceneChangeRequestEvent) -> None:
         self.log("DEBUG", f"loading scene {event.scene_to_load.__name__}")
-        t = datetime.now().timestamp()
         window_name = event.window_name or DEFAULT_WINDOW_NAME
         scene = event.scene_to_load
         old_scene = self._scenes.get(window_name)
         if old_scene:
             old_scene.unload()
+        self._wait_for_window(window_name)
+        window = self._windows[window_name]
+        assert window
         try:
-            while not self._windows[window_name]:  # Wait until window is created, if the key exists but is none.
-                if datetime.now().timestamp() - t > self.window_create_timeout:
-                    raise WindowNotFoundError(window_name)
-            window = self._windows[window_name]
-            assert window
             self._scenes[window_name] = scene(window, self._outgoing_events.append)
             self.log(
                 "DEBUG",
                 f"loaded scene {self._scenes[window_name].name} to window {window_name}",
             )
-        except KeyError:
-            raise WindowNotExistError(window_name)
+            self.event_mgr.queue_event(SceneChangeEvent())
         except Exception as e:
             self.log("ERROR", f"failed to load scene {scene.__name__} to window {window_name}: {e}")
             raise e
+
+    def _wait_for_window(self, window_name: str) -> None:
+        try:
+            time = datetime.now().timestamp()
+            while not self._windows[window_name]:  # Wait until window is created, if the key exists but is none.
+                if datetime.now().timestamp() - time > self.window_create_timeout:
+                    raise WindowNotFoundError(window_name)
+        except KeyError:
+            raise WindowNotExistError(window_name)
 
     def input_step(self, frame_number: int) -> None:
         return super().input_step(frame_number)

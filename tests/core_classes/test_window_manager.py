@@ -11,6 +11,7 @@ from MeatuchuRPGMapMaker.core_classes.window_manager import (
 from MeatuchuRPGMapMaker.events.Event import Event
 from MeatuchuRPGMapMaker.events.NewThreadRequestEvent import NewThreadRequestEvent
 from MeatuchuRPGMapMaker.events.RenderEvent import RenderEvent
+from MeatuchuRPGMapMaker.events.SceneChangeRequestEvent import SceneChangeRequestEvent
 from MeatuchuRPGMapMaker.events.WindowFullscreenModeEditRequestEvent import (
     WindowFullscreenModeEditRequestEvent,
 )
@@ -20,6 +21,7 @@ from MeatuchuRPGMapMaker.exceptions import (
     WindowNotExistError,
     WindowNotFoundError,
 )
+from MeatuchuRPGMapMaker.ui.scenes.scene import Scene
 
 # pyright: reportPrivateUsage=false
 
@@ -186,7 +188,7 @@ def test_set_fullscreen_mode_2(mock_Tk: MagicMock) -> None:
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
 def test_set_fullscreen_mode_not_exist(mock_tk: MagicMock) -> None:
     m = WindowManager()
-    with raises(WindowNotFoundError):
+    with raises(WindowNotExistError):
         m.set_fullscreen_mode(WindowFullscreenModeEditRequestEvent(0, "buckle_my_shoe"))
 
 
@@ -236,3 +238,94 @@ def test_pass_event_to_window_queue_named(mock_tk: MagicMock) -> None:
     w.pass_event_to_window_queue(event2)
     assert len(w._window_events[window_name]) == 2
     assert w._window_events[window_name][1] == event2
+
+
+@patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
+@patch("MeatuchuRPGMapMaker.core_classes.window_manager.SceneChangeEvent")
+def test_load_scene(
+    mock_scene_change_event: MagicMock,
+    mock_tk: MagicMock,
+) -> None:
+    # Mock SceneChangeEvent
+    mock_scene_change_event.return_value = MagicMock()
+
+    # Create window manager
+    w = WindowManager()
+    event_mgr = EventManager()
+    w.register_event_manager(event_mgr)
+
+    # Mock create_window
+    o = w.create_window
+
+    def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
+        o()
+        w._windows[window_name] = mock_tk()
+        w._canvases[window_name] = mock_tk()
+
+    w.create_window = _new_window_thread_mock
+
+    # Prepare window
+    w.create_window()
+    event_mgr.queue_event = MagicMock()
+
+    # Test
+    w.load_scene(SceneChangeRequestEvent(Scene))
+    event_mgr.queue_event.assert_called_once_with(mock_scene_change_event.return_value)
+
+
+@patch("MeatuchuRPGMapMaker.core_classes.window_manager.Scene")
+@patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
+@patch("MeatuchuRPGMapMaker.core_classes.window_manager.SceneChangeEvent")
+def test_load_new_scene(
+    mock_scene_change_event: MagicMock,
+    mock_tk: MagicMock,
+    mock_scene: MagicMock,
+) -> None:
+    mock_scene = MagicMock(spec=Scene)
+    # Mock SceneChangeEvent
+    old_scene = MagicMock(unload=MagicMock())
+    new_scene = MagicMock()
+
+    mock_scene.return_value = old_scene
+    mock_scene_change_event.return_value = MagicMock()
+
+    # Create window manager
+    w = WindowManager()
+    event_mgr = EventManager()
+    w.register_event_manager(event_mgr)
+
+    # Mock create_window
+    o = w.create_window
+
+    def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
+        o()
+        w._windows[window_name] = mock_tk()
+        w._canvases[window_name] = mock_tk()
+
+    w.create_window = _new_window_thread_mock
+
+    # Prepare window
+    w.create_window()
+    event_mgr.queue_event = MagicMock()
+
+    # Test
+    w.load_scene(SceneChangeRequestEvent(lambda *_, **__: old_scene))  # pyright: ignore[reportUnknownLambdaType, reportArgumentType]
+    assert w._scenes[DEFAULT_WINDOW_NAME] == old_scene
+
+    w.load_scene(SceneChangeRequestEvent(lambda *_, **__: new_scene))  # pyright: ignore[reportUnknownLambdaType, reportArgumentType]
+    assert old_scene.unload.called_once()
+    assert w._scenes[DEFAULT_WINDOW_NAME] == new_scene
+
+
+def test_wait_for_window_fail() -> None:
+    m = WindowManager()
+    m.window_create_timeout = 0.01
+    m._windows = {"buckle_my_shoe": None}
+    with raises(WindowNotFoundError):
+        m._wait_for_window("buckle_my_shoe")
+
+
+def test_wait_for_window_not_exist() -> None:
+    m = WindowManager()
+    with raises(WindowNotExistError):
+        m._wait_for_window("buckle_my_shoe")
