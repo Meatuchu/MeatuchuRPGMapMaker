@@ -3,7 +3,8 @@ from typing import Dict
 
 from PIL import Image
 
-from .. import ROOTDIR
+from MeatuchuRPGMapMaker import ROOTDIR
+
 from . import FeatureManager
 from .event_manager import EventManager
 

@@ -1,7 +1,8 @@
 # pyright: reportImportCycles=false
 from typing import Any, Dict, Optional, Type
 
-from ..ui.scenes.scene import Scene
+from MeatuchuRPGMapMaker.ui.scenes.scene import Scene
+
 from .RenderEvent import RenderEvent
 
 

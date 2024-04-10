@@ -4,7 +4,7 @@ from tkinter import Canvas as TkCanvas
 from tkinter import Tk as TkWindow
 from typing import Callable, Dict, List, Optional
 
-from ..events import (
+from MeatuchuRPGMapMaker.events import (
     CloseWindowEvent,
     DestroyThreadRequestEvent,
     Event,
@@ -15,8 +15,13 @@ from ..events import (
     WindowFullscreenModeEditRequestEvent,
     WindowResizeRequestEvent,
 )
-from ..exceptions import DuplicateWindowError, WindowNotExistError, WindowNotFoundError
-from ..ui.scenes.scene import Scene
+from MeatuchuRPGMapMaker.exceptions import (
+    DuplicateWindowError,
+    WindowNotExistError,
+    WindowNotFoundError,
+)
+from MeatuchuRPGMapMaker.ui.scenes.scene import Scene
+
 from . import FeatureManager
 from .event_manager import EventManager
 

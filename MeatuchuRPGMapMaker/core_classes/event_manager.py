@@ -4,7 +4,7 @@ from typing import Callable, Dict, List, Literal, Tuple, Type, cast
 
 from sortedcontainers import SortedDict  # pyright: ignore[reportMissingTypeStubs]
 
-from ..events import (
+from MeatuchuRPGMapMaker.events import (
     AppShutDownEvent,
     Event,
     InputEvent,
@@ -15,6 +15,7 @@ from ..events import (
     ThreadErrorEvent,
     UpdateEvent,
 )
+
 from . import FeatureManager
 
 # Processing of Events in this list will not be logged

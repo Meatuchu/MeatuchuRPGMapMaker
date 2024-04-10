@@ -29,7 +29,7 @@
     "--cov-report=xml"
   ],
   "python.analysis.diagnosticMode": "workspace",
-  "python.analysis.importFormat": "relative",
+  "python.analysis.importFormat": "absolute",
   "python.analysis.enablePytestSupport": true,
   "python.analysis.typeCheckingMode": "strict",
   "python.testing.pytestEnabled": true,

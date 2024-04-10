@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from ..events import (
+from MeatuchuRPGMapMaker.events import (
     AllThreadsDestroyedEvent,
     AppShutDownEvent,
     Event,
@@ -10,8 +10,9 @@ from ..events import (
     WindowFullscreenModeEditRequestEvent,
     WindowResizeRequestEvent,
 )
-from ..game.entities.board import RPGMapBoard
-from ..ui.scenes.menu_scene import MenuScene
+from MeatuchuRPGMapMaker.game.entities.board import RPGMapBoard
+from MeatuchuRPGMapMaker.ui.scenes.menu_scene import MenuScene
+
 from . import FeatureManager
 from .entity_manager import EntityManager
 from .event_manager import EventManager

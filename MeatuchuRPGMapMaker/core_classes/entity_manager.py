@@ -1,7 +1,8 @@
 from typing import Dict
 from uuid import uuid4
 
-from ..game.entities.base_entity import BaseEntity
+from MeatuchuRPGMapMaker.game.entities.base_entity import BaseEntity
+
 from . import FeatureManager
 from .event_manager import EventManager
 

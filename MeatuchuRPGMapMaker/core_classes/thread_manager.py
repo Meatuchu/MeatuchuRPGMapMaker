@@ -2,7 +2,7 @@ import threading
 import traceback
 from typing import Any, Callable, Dict, Tuple
 
-from ..events import (
+from MeatuchuRPGMapMaker.events import (
     AllThreadsDestroyedEvent,
     DestroyThreadEvent,
     DestroyThreadRequestEvent,
@@ -10,7 +10,8 @@ from ..events import (
     NewThreadRequestEvent,
     ThreadErrorEvent,
 )
-from ..exceptions import DuplicateThreadError
+from MeatuchuRPGMapMaker.exceptions import DuplicateThreadError
+
 from . import FeatureManager
 from .event_manager import EventManager
 
