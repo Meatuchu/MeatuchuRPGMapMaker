@@ -3,7 +3,11 @@
 from unittest.mock import MagicMock, call, patch
 
 from MeatuchuRPGMapMaker.core_classes.event_manager import EventManager
-from MeatuchuRPGMapMaker.core_classes.events import AppShutDownEvent, Event, InputEvent, RenderEvent, UpdateEvent
+from MeatuchuRPGMapMaker.events.AppShutDownEvent import AppShutDownEvent
+from MeatuchuRPGMapMaker.events.Event import Event
+from MeatuchuRPGMapMaker.events.InputEvent import InputEvent
+from MeatuchuRPGMapMaker.events.RenderEvent import RenderEvent
+from MeatuchuRPGMapMaker.events.UpdateEvent import UpdateEvent
 
 
 def test_construction() -> None:

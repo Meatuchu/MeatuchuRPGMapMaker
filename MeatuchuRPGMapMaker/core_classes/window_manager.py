@@ -4,19 +4,20 @@ from tkinter import Canvas as TkCanvas
 from tkinter import Tk as TkWindow
 from typing import Callable, Dict, List, Optional
 
-from ..exceptions import DuplicateWindowError, WindowNotExistError, WindowNotFoundError
-from ..ui.scenes.scene import Scene
-from . import FeatureManager
-from .event_manager import EventManager
-from .events import (
+from ..events import (
     CloseWindowEvent,
     DestroyThreadRequestEvent,
+    Event,
     NewThreadRequestEvent,
     RenderEvent,
     SceneChangeRequestEvent,
     WindowFullscreenModeEditRequestEvent,
     WindowResizeRequestEvent,
 )
+from ..exceptions import DuplicateWindowError, WindowNotExistError, WindowNotFoundError
+from ..ui.scenes.scene import Scene
+from . import FeatureManager
+from .event_manager import EventManager
 
 DEFAULT_WINDOW_NAME = "main"
 
@@ -48,6 +49,7 @@ class WindowManager(FeatureManager):
     _canvases: Dict[str, TkCanvas]
     _scenes: Dict[str, Scene]
     _window_events: Dict[str, List[RenderEvent]]
+    _outgoing_events: List[Event]
 
     window_create_timeout = 0.1
 
@@ -197,7 +199,7 @@ class WindowManager(FeatureManager):
                     raise WindowNotFoundError(window_name)
             window = self._windows[window_name]
             assert window
-            self._scenes[window_name] = scene(window)
+            self._scenes[window_name] = scene(window, self._outgoing_events.append)
             self.log(
                 "DEBUG",
                 f"loaded scene {self._scenes[window_name].name} to window {window_name}",

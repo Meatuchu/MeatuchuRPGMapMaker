@@ -4,12 +4,23 @@ from typing import Callable, Dict, List, Literal, Tuple, Type, cast
 
 from sortedcontainers import SortedDict  # pyright: ignore[reportMissingTypeStubs]
 
+from ..events import (
+    AppShutDownEvent,
+    Event,
+    InputEvent,
+    InputSnapshotEvent,
+    MouseMoveEvent,
+    RenderEvent,
+    ThreadErrorEvent,
+    UpdateEvent,
+)
 from . import FeatureManager
-from . import events as Events
-from .events import Event, InputEvent, RenderEvent, UpdateEvent
 
 # Events in this list will not be logged
-HIDDEN_EVENTS = [Events.InputSnapshotEvent, Events.MouseMoveEvent]
+HIDDEN_EVENTS = [
+    InputSnapshotEvent,
+    MouseMoveEvent,
+]
 
 
 class EventManager(FeatureManager):
@@ -65,7 +76,7 @@ class EventManager(FeatureManager):
 
     def queue_event(self, event: Event) -> None:
         self._log_event(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
-        if isinstance(event, Events.ThreadErrorEvent):
+        if isinstance(event, ThreadErrorEvent):
             self._process_event(event)
             return
 
@@ -93,7 +104,7 @@ class EventManager(FeatureManager):
         for subscriber in subscribers:
             subscriber(event)
 
-        if isinstance(event, Events.AppShutDownEvent):
+        if isinstance(event, AppShutDownEvent):
             sys.exit()
 
     def _process_next_event(self, event_type: Literal["input", "update", "render", None]) -> None:

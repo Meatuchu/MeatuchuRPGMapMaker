@@ -4,15 +4,22 @@ from unittest.mock import MagicMock, call, patch
 from pytest import raises
 
 from MeatuchuRPGMapMaker.core_classes.event_manager import EventManager
-from MeatuchuRPGMapMaker.core_classes.events import (
-    Event,
-    NewThreadRequestEvent,
-    RenderEvent,
-    WindowFullscreenModeEditRequestEvent,
-    WindowResizeRequestEvent,
+from MeatuchuRPGMapMaker.core_classes.window_manager import (
+    DEFAULT_WINDOW_NAME,
+    WindowManager,
 )
-from MeatuchuRPGMapMaker.core_classes.window_manager import DEFAULT_WINDOW_NAME, WindowManager
-from MeatuchuRPGMapMaker.exceptions import DuplicateWindowError, WindowNotExistError, WindowNotFoundError
+from MeatuchuRPGMapMaker.events.Event import Event
+from MeatuchuRPGMapMaker.events.NewThreadRequestEvent import NewThreadRequestEvent
+from MeatuchuRPGMapMaker.events.RenderEvent import RenderEvent
+from MeatuchuRPGMapMaker.events.WindowFullscreenModeEditRequestEvent import (
+    WindowFullscreenModeEditRequestEvent,
+)
+from MeatuchuRPGMapMaker.events.WindowResizeRequestEvent import WindowResizeRequestEvent
+from MeatuchuRPGMapMaker.exceptions import (
+    DuplicateWindowError,
+    WindowNotExistError,
+    WindowNotFoundError,
+)
 
 # pyright: reportPrivateUsage=false
 

@@ -1,6 +1,7 @@
 from tkinter import Tk as TkWindow
-from typing import Dict, List
+from typing import Callable, Dict, List
 
+from ...events.Event import Event
 from ...exceptions import DuplicateSceneElementError
 from ..elements.primitive_elements.base_element import Element
 
@@ -12,12 +13,14 @@ class Scene:
     # Attributes
     _window: TkWindow
     _elements: Dict[str, Element]
+    _queue_event: Callable[[Event], None]
     name: str
 
-    def __init__(self, window: TkWindow) -> None:
+    def __init__(self, window: TkWindow, queue_event: Callable[[Event], None]) -> None:
         self.name = self.__class__.__name__
         self._window = window
         self._elements = {}
+        self._queue_event = queue_event
 
     def place_element(self, e: Element) -> None:
         if self._elements.get(e.name):

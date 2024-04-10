@@ -1,5 +1,7 @@
 from tkinter import Tk as TkWindow
+from typing import Callable
 
+from ...events.Event import Event
 from ..elements.composed_elements.main_menu.options import MainMenuOptions
 from ..elements.primitive_elements import FloatingText
 from ..styles import TextStyles
@@ -9,8 +11,8 @@ from .scene import Scene
 class MenuScene(Scene):
     # Main menu scene :)
 
-    def __init__(self, window: TkWindow) -> None:
-        super().__init__(window)
+    def __init__(self, window: TkWindow, queue_event: Callable[[Event], None]) -> None:
+        super().__init__(window, queue_event)
 
         self.place_elements(
             [

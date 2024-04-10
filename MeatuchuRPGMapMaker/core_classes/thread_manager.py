@@ -2,10 +2,7 @@ import threading
 import traceback
 from typing import Any, Callable, Dict, Tuple
 
-from ..exceptions import DuplicateThreadError
-from . import FeatureManager
-from .event_manager import EventManager
-from .events import (
+from ..events import (
     AllThreadsDestroyedEvent,
     DestroyThreadEvent,
     DestroyThreadRequestEvent,
@@ -13,6 +10,9 @@ from .events import (
     NewThreadRequestEvent,
     ThreadErrorEvent,
 )
+from ..exceptions import DuplicateThreadError
+from . import FeatureManager
+from .event_manager import EventManager
 
 
 class ThreadManager(FeatureManager):

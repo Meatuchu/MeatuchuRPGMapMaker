@@ -2,12 +2,7 @@ import time
 from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
-from ..game.entities.board import RPGMapBoard
-from ..ui.scenes.menu_scene import MenuScene
-from . import FeatureManager
-from .entity_manager import EntityManager
-from .event_manager import EventManager
-from .events import (
+from ..events import (
     AllThreadsDestroyedEvent,
     AppShutDownEvent,
     Event,
@@ -15,6 +10,11 @@ from .events import (
     WindowFullscreenModeEditRequestEvent,
     WindowResizeRequestEvent,
 )
+from ..game.entities.board import RPGMapBoard
+from ..ui.scenes.menu_scene import MenuScene
+from . import FeatureManager
+from .entity_manager import EntityManager
+from .event_manager import EventManager
 from .export_manager import ExportManager
 from .input_manager import InputManager
 from .rendering_manager import RenderingManager

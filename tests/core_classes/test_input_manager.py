@@ -4,8 +4,8 @@ from unittest.mock import MagicMock
 
 from pynput import keyboard, mouse
 
-from MeatuchuRPGMapMaker.core_classes.events import Event
 from MeatuchuRPGMapMaker.core_classes.input_manager import InputManager
+from MeatuchuRPGMapMaker.events.Event import Event
 
 
 def test_create_input_manager() -> None:
