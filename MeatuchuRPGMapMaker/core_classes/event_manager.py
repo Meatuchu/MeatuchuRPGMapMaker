@@ -9,6 +9,7 @@ from ..events import (
     Event,
     InputEvent,
     InputSnapshotEvent,
+    LogEvent,
     MouseMoveEvent,
     RenderEvent,
     ThreadErrorEvent,
@@ -20,6 +21,12 @@ from . import FeatureManager
 HIDDEN_EVENTS = [
     InputSnapshotEvent,
     MouseMoveEvent,
+]
+
+# Events in this list will be processed immediately upon being queued
+IMMEDIATE_EVENTS = [
+    ThreadErrorEvent,
+    LogEvent,
 ]
 
 
@@ -76,9 +83,11 @@ class EventManager(FeatureManager):
 
     def queue_event(self, event: Event) -> None:
         self._log_event(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
-        if isinstance(event, ThreadErrorEvent):
-            self._process_event(event)
-            return
+
+        for t in IMMEDIATE_EVENTS:
+            if isinstance(event, t):
+                self._process_event(event)
+                return
 
         if isinstance(event, InputEvent):
             self._input_event_queue.append(event)

@@ -6,6 +6,7 @@ from MeatuchuRPGMapMaker.core_classes.event_manager import EventManager
 from MeatuchuRPGMapMaker.events.AppShutDownEvent import AppShutDownEvent
 from MeatuchuRPGMapMaker.events.Event import Event
 from MeatuchuRPGMapMaker.events.InputEvent import InputEvent
+from MeatuchuRPGMapMaker.events.LogEvent import LogEvent
 from MeatuchuRPGMapMaker.events.RenderEvent import RenderEvent
 from MeatuchuRPGMapMaker.events.UpdateEvent import UpdateEvent
 
@@ -23,6 +24,14 @@ def test_register_subscription() -> None:
 def test_queue_event() -> None:
     e = EventManager()
     e.queue_event(Event())
+
+
+def test_queue_immediate_event() -> None:
+    e = EventManager()
+    trigger_func = MagicMock()
+    e.register_subscription(LogEvent, trigger_func)
+    e.queue_event(LogEvent("INFO", "Test message"))
+    trigger_func.assert_called_once()
 
 
 def test_process_next_event() -> None:

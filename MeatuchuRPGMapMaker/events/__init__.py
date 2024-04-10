@@ -10,6 +10,7 @@ from .InputEvent import InputEvent
 from .InputSnapshotEvent import InputSnapshotEvent
 from .KeyPressEvent import KeyPressEvent
 from .KeyReleaseEvent import KeyReleaseEvent
+from .LogEvent import LogEvent
 from .MouseClickEvent import MouseClickEvent
 from .MouseClickReleaseEvent import MouseClickReleaseEvent
 from .MouseMoveEvent import MouseMoveEvent
