@@ -41,6 +41,7 @@ class EventManager(FeatureManager):
     def __init__(
         self,
     ) -> None:
+        super().__init__()
         self._event_defs = {}
         self._subscriptions = {}
         self._misc_event_queue = []
@@ -48,7 +49,13 @@ class EventManager(FeatureManager):
         self._update_event_queue = []
         self._render_event_queue = []
         self._scheduled_events = SortedDict()
-        super().__init__()
+        self.subscribe_to_events()
+
+    def subscribe_to_events(self) -> None:
+        def handle_log_event(event: LogEvent) -> None:
+            self.log(event.msg_level, event.msg)
+
+        self.register_subscription(LogEvent, handle_log_event)
 
     def register_subscription(self, event_class: Type[Event], function: Callable[..., None]) -> None:
         target = event_class.__name__
