@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable, Dict, List
+from typing import Callable, Dict, List, Optional, Type
 
 from ...events.Event import Event
 from ...exceptions import DuplicateSceneElementError
@@ -14,13 +14,34 @@ class Scene:
     _window: TkWindow
     _elements: Dict[str, Element]
     _fire_event: Callable[[Event], None]
+    _subscription_ids: List[str]
+    _subscribe_to_event: Optional[Callable[[Type[Event], Callable[..., None]], str]]
+    _unsubscribe_from_event: Optional[Callable[[str], None]]
     name: str
 
-    def __init__(self, window: TkWindow, fire_event: Callable[[Event], None]) -> None:
+    def __init__(
+        self,
+        window: TkWindow,
+        fire_event: Callable[[Event], None],
+        subscribe_to_event: Optional[Callable[[Type[Event], Callable[..., None]], str]] = None,
+        unsubscribe_from_event: Optional[Callable[[str], None]] = None,
+    ) -> None:
         self.name = self.__class__.__name__
         self._window = window
         self._elements = {}
         self._fire_event = fire_event
+        self._subscribe_to_event = subscribe_to_event
+        self._unsubscribe_from_event = unsubscribe_from_event
+        self._subscription_ids = []
+
+    def _subscribe(self, event_type: Type[Event], handler: Callable[..., None]) -> None:
+        if self._subscribe_to_event:
+            self._subscription_ids.append(self._subscribe_to_event(event_type, handler))
+
+    def _unsubscribe(self, sid: str) -> None:
+        if self._unsubscribe_from_event:
+            self._unsubscribe_from_event(sid)
+        self._subscription_ids.remove(sid)
 
     def place_element(self, e: Element) -> None:
         if self._elements.get(e.name):
@@ -35,6 +56,8 @@ class Scene:
         for e in self._elements.values():
             e.destroy()
         self._elements = {}
+        while self._subscription_ids:
+            self._unsubscribe(self._subscription_ids[0])
 
     def frame_update(self) -> None:
         for e in self._elements.values():

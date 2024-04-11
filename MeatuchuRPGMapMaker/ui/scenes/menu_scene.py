@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable
+from typing import Callable, Optional, Type
 
 from ...events.Event import Event
 from ..elements.composed_elements.main_menu.options import MainMenuOptions
@@ -11,8 +11,14 @@ from .scene import Scene
 class MenuScene(Scene):
     # Main menu scene :)
 
-    def __init__(self, window: TkWindow, fire_event: Callable[[Event], None]) -> None:
-        super().__init__(window, fire_event)
+    def __init__(
+        self,
+        window: TkWindow,
+        fire_event: Callable[[Event], None],
+        subscribe_to_event: Optional[Callable[[Type[Event], Callable[..., None]], str]] = None,
+        unsubscribe_from_event: Optional[Callable[[str], None]] = None,
+    ):
+        super().__init__(window, fire_event, subscribe_to_event, unsubscribe_from_event)
 
         self.place_elements(
             [

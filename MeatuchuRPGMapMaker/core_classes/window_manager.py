@@ -195,7 +195,13 @@ class WindowManager(FeatureManager):
             old_scene = self._scenes.get(window_name)
 
             # Create new scene
-            self._scenes[window_name] = scene(window, self._outgoing_events.append)
+            self._scenes[window_name] = scene(
+                window,
+                self._outgoing_events.append,
+                self.event_mgr.register_subscription,
+                self.event_mgr.unregister_subscription,
+                **event.scene_kwargs,
+            )
 
             # Unload old scene
             if old_scene:
