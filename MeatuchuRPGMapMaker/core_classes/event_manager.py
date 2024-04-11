@@ -70,7 +70,7 @@ class EventManager(FeatureManager):
     def register_subscription(self, event_class: Type[Event], function: Callable[..., None]) -> str:
         subscriber = EventSubcriber(function)
         target = event_class.__name__
-        self.log("WARNING", f"registering subscriber to {target}")
+        self.log("INFO", f"registering subscriber to {target}")
         self._subscriptions[target] = self._subscriptions.get(target, list())
         self._subscriptions[target].append(subscriber)
         return subscriber.id
@@ -155,7 +155,7 @@ class EventManager(FeatureManager):
             )
         else:
             self._log_event_handle_info(
-                event, "WARNING", f"Begin processing event {event.__class__.__name__} (no subscribers)"
+                event, "DEBUG", f"Begin processing event {event.__class__.__name__} (no subscribers)"
             )
 
         for subscriber in subscribers:

@@ -45,7 +45,7 @@ class SettingsManager(FeatureManager):
         default = __settings_values__["default"]
         v = stage_config.get(group, default[group]).get(key, default[group][key])
         self.log(
-            "INFO",
+            "DEBUG",
             f'Retrieved value {f"{v}" if isinstance(v, str) else v} from setting "{key}" in group "{group}" for stage "{self.stage}"',
         )
         return v
