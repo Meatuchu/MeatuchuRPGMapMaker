@@ -24,6 +24,7 @@ HIDDEN_EVENTS = [InputSnapshotEvent, MouseMoveEvent, LogEvent]
 
 # Events in this list will be processed immediately upon being queued
 IMMEDIATE_EVENTS = [
+    AppShutDownEvent,
     ThreadErrorEvent,
     LogEvent,
 ]
@@ -45,6 +46,7 @@ class EventManager(FeatureManager):
     _render_event_queue: List[RenderEvent]
     _misc_event_queue: List[Event]
     _scheduled_events: SortedDict
+    app_shutdown_fired: bool = False
 
     def __init__(
         self,
@@ -106,6 +108,24 @@ class EventManager(FeatureManager):
                 self.queue_event(event)
 
     def queue_event(self, event: Event) -> None:
+        if self.app_shutdown_fired:
+            if isinstance(event, AppShutDownEvent):
+                return
+            self.log("ERROR", f"App is shutting down, unable to handle queued event {event.__class__.__name__}")
+            return
+
+        if isinstance(event, AppShutDownEvent):
+            self.app_shutdown_fired = True
+            count = (
+                len(self._input_event_queue)
+                + len(self._update_event_queue)
+                + len(self._render_event_queue)
+                + len(self._misc_event_queue)
+                + len(self._scheduled_events)
+            )
+            if count:
+                self.log("ERROR", f"App is shutting down, {count} events will be discarded")
+
         self._log_event_handle_info(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
 
         for t in IMMEDIATE_EVENTS:
