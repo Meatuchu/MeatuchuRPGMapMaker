@@ -1,6 +1,7 @@
 import sys
 import time
 from typing import Callable, Dict, List, Literal, Tuple, Type, cast
+from uuid import uuid4
 
 from sortedcontainers import SortedDict  # pyright: ignore[reportMissingTypeStubs]
 
@@ -28,8 +29,17 @@ IMMEDIATE_EVENTS = [
 ]
 
 
+class EventSubcriber:
+    id: str
+    fn: Callable[..., None]
+
+    def __init__(self, fn: Callable[..., None]) -> None:
+        self.id = str(uuid4())
+        self.fn = fn
+
+
 class EventManager(FeatureManager):
-    _subscriptions: Dict[str, List[Callable[..., None]]]
+    _subscriptions: Dict[str, List[EventSubcriber]]
     _input_event_queue: List[InputEvent]
     _update_event_queue: List[UpdateEvent]
     _render_event_queue: List[RenderEvent]
@@ -55,11 +65,20 @@ class EventManager(FeatureManager):
 
         self.register_subscription(LogEvent, handle_log_event)
 
-    def register_subscription(self, event_class: Type[Event], function: Callable[..., None]) -> None:
+    def register_subscription(self, event_class: Type[Event], function: Callable[..., None]) -> str:
+        subscriber = EventSubcriber(function)
         target = event_class.__name__
         self.log("WARNING", f"registering subscriber to {target}")
         self._subscriptions[target] = self._subscriptions.get(target, list())
-        self._subscriptions[target].append(function)
+        self._subscriptions[target].append(subscriber)
+        return subscriber.id
+
+    def unregister_subscription(self, subscriber_id: str) -> None:
+        for _event_name, subscribers in self._subscriptions.items():
+            for subscriber in subscribers:
+                if subscriber.id == subscriber_id:
+                    subscribers.remove(subscriber)
+                    return
 
     def schedule_event(self, event: Event, delay_sec: float) -> None:
         self.log("DEBUG", f"Scheduling event {event.__class__.__name__} to run in {delay_sec} seconds")
@@ -120,7 +139,7 @@ class EventManager(FeatureManager):
             )
 
         for subscriber in subscribers:
-            subscriber(event)
+            subscriber.fn(event)
 
         if isinstance(event, AppShutDownEvent):
             sys.exit()

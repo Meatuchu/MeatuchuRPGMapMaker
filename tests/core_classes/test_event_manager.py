@@ -21,6 +21,23 @@ def test_register_subscription() -> None:
     e.register_subscription(Event, trigger_func)
 
 
+def test_unregister_subscription() -> None:
+    e = EventManager()
+    trigger_func = MagicMock()
+    e.register_subscription(Event, trigger_func)
+    idToRemove = e.register_subscription(Event, trigger_func)
+    e.register_subscription(Event, trigger_func)
+    e.register_subscription(Event, trigger_func)
+
+    assert len(e._subscriptions[Event.__name__]) == 4
+
+    e.unregister_subscription(idToRemove)
+
+    subscription_ids = [subscription.id for subscription in e._subscriptions[Event.__name__]]
+    assert idToRemove not in subscription_ids
+    assert len(subscription_ids) == 3
+
+
 def test_queue_event() -> None:
     e = EventManager()
     e.queue_event(Event())
