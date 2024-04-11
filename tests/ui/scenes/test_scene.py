@@ -27,7 +27,10 @@ def test_scene_subscribe_to_event() -> None:
         subscriptions.pop(id, None)
 
     s = Scene(MagicMock(), q.append, subscribe_to_event, unsubscribe_from_event)
+    subscriptions = {}  # clear out default subscriptions
+
     assert s._subscribe_to_event
+
     s._subscribe(Event, mock_event_subfn)
     s._subscribe(Event, mock_event_subfn)
     s._subscribe(Event, mock_event_subfn)
@@ -49,7 +52,10 @@ def test_scene_unsubscribe_to_event() -> None:
         subscriptions.pop(id, None)
 
     s = Scene(MagicMock(), q.append, subscribe_to_event, unsubscribe_from_event)
+    subscriptions = {}  # clear out default subscriptions
+
     assert s._subscribe_to_event
+
     s._subscribe(Event, mock_event_subfn)
     s._subscribe(Event, mock_event_subfn)
     s._subscribe(Event, mock_event_subfn)

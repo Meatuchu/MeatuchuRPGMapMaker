@@ -3,6 +3,8 @@ from typing import Dict, Optional, Tuple, Union, cast
 
 from pynput import keyboard, mouse
 
+from MeatuchuRPGMapMaker.classes.input_snapshot import InputSnapshot
+from MeatuchuRPGMapMaker.constants import NS_PER_MS
 from MeatuchuRPGMapMaker.events import (
     InputSnapshotEvent,
     KeyPressEvent,
@@ -91,7 +93,7 @@ class InputManager(FeatureManager):
 
         if self._pressed_keys.get(c):
             t = self._pressed_keys.pop(c)
-            hold_time_ms = (time.time_ns() - t) / 1000000
+            hold_time_ms = (time.time_ns() - t) / NS_PER_MS
             self.event_mgr.queue_event(KeyReleaseEvent(c, hold_time_ms))
         else:
             self.log("ERROR", f"Detected key release for non-pressed key {c}")
@@ -123,8 +125,8 @@ class InputManager(FeatureManager):
             # this is a release event
             if self._pressed_mouse_buttons.get(button.name):
                 t = self._pressed_mouse_buttons.pop(button.name)
-                click_time_ns = (time.time_ns() - cast(int, t["press_time"])) / 1000000
-                self.event_mgr.queue_event(MouseClickReleaseEvent(button.name, (x, y), click_time_ns))
+                click_time_ms = (time.time_ns() - cast(int, t["press_time"])) / NS_PER_MS
+                self.event_mgr.queue_event(MouseClickReleaseEvent(button.name, (x, y), click_time_ms))
             else:
                 self.log("ERROR", f"Detected click release for non-pressed mouse button {button.name}")
 
@@ -140,9 +142,11 @@ class InputManager(FeatureManager):
     def input_step(self, frame_number: int) -> None:
         self.event_mgr.queue_event(
             InputSnapshotEvent(
-                self._pressed_keys,
-                self._pressed_mouse_buttons,
-                self._mouse_position,
+                InputSnapshot(
+                    self._pressed_keys,
+                    self._pressed_mouse_buttons,
+                    self._mouse_position,
+                )
             )
         )
         return super().input_step(frame_number)

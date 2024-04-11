@@ -29,7 +29,7 @@ class MapEditScene(Scene):
 
 class MainMenuButton(Button):
     def __init__(self, window: TkWindow, fire_event: Callable[[Event], None]) -> None:
-        def press_handler():
+        def press_handler() -> None:
             fire_event(LogEvent("INFO", "Main menu button pressed", "MapEditScene_MainMenuButton"))
             fire_event(SceneChangeRequestEvent("MenuScene"))
 
@@ -38,7 +38,7 @@ class MainMenuButton(Button):
             fire_event,
             "mainmenubutton",
             "Return to Main Menu",
-            x=100,
-            y=200,
+            x=50,
+            y=100,
             press_handler=press_handler,
         )

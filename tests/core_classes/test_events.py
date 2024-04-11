@@ -1,5 +1,6 @@
 from unittest.mock import MagicMock
 
+from MeatuchuRPGMapMaker.classes.input_snapshot import InputSnapshot
 from MeatuchuRPGMapMaker.events import (
     AllThreadsDestroyedEvent,
     AppShutDownEvent,
@@ -111,4 +112,4 @@ def test_log_event() -> None:
 
 def test_input_snapshot_event() -> None:
     assert InputSnapshotEvent
-    assert InputSnapshotEvent({"a": 123}, {}, (0, 0))
+    assert InputSnapshotEvent(InputSnapshot({"a": 123}, {}, (0, 0)))

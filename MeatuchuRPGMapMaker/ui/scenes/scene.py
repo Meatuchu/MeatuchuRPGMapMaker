@@ -1,6 +1,10 @@
 from tkinter import Tk as TkWindow
 from typing import Callable, Dict, List, Optional, Type
 
+from MeatuchuRPGMapMaker.events import InputSnapshotEvent
+from MeatuchuRPGMapMaker.keybinds.common.close_window import CloseWindowKB
+from MeatuchuRPGMapMaker.keybinds.Keybind import Keybind
+
 from ...events.Event import Event
 from ...exceptions import DuplicateSceneElementError
 from ..elements.primitive_elements.base_element import Element
@@ -17,6 +21,7 @@ class Scene:
     _subscription_ids: List[str]
     _subscribe_to_event: Optional[Callable[[Type[Event], Callable[..., None]], str]]
     _unsubscribe_from_event: Optional[Callable[[str], None]]
+    _keybinds: List[Keybind]
     name: str
 
     def __init__(
@@ -33,6 +38,17 @@ class Scene:
         self._subscribe_to_event = subscribe_to_event
         self._unsubscribe_from_event = unsubscribe_from_event
         self._subscription_ids = []
+        self._keybinds = []
+
+        self._add_keybind(CloseWindowKB(self._fire_event))
+        self._subscribe(InputSnapshotEvent, self._input_snapshot_event_handler)
+
+    def _add_keybind(self, kb: Keybind) -> None:
+        self._keybinds.append(kb)
+
+    def _input_snapshot_event_handler(self, event: InputSnapshotEvent) -> None:
+        for kb in self._keybinds:
+            kb.check(event.snapshot)
 
     def _subscribe(self, event_type: Type[Event], handler: Callable[..., None]) -> None:
         if self._subscribe_to_event:
@@ -53,6 +69,7 @@ class Scene:
             self.place_element(e)
 
     def unload(self) -> None:
+        self._keybinds = []
         for e in self._elements.values():
             e.destroy()
         self._elements = {}

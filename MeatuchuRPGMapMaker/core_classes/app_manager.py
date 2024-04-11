@@ -35,9 +35,9 @@ class AppState:
     def __init__(self) -> None:
         self.app_active = False
 
-    def set_tickrate(self, tickrate: int = 60) -> None:
-        self.tickrate = tickrate
-        self.tickgap = 1000000000 / tickrate
+    def set_tickrate(self, tickrate_per_sec: int = 60) -> None:
+        self.tickrate = tickrate_per_sec
+        self.tickgap = 1000000000 / tickrate_per_sec
 
     def set_state(self, new_state: Tuple[str, Any]) -> None:
         key, val = new_state
