@@ -38,7 +38,9 @@ class MainMenuButton(Button):
             fire_event,
             "mainmenubutton",
             "Return to Main Menu",
-            x=50,
-            y=100,
+            x=55,
+            y=105,
+            height=30,
+            width=160,
             press_handler=press_handler,
         )

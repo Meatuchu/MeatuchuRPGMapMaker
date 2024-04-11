@@ -7,7 +7,7 @@ from ....elements.primitive_elements import Button
 from .. import ComposedElement
 
 
-class CloseApp(ComposedElement):
+class CloseAppButton(ComposedElement):
     def __init__(
         self,
         window: TkWindow,

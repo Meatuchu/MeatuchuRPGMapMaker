@@ -38,7 +38,7 @@ class Button(Element):
             text=label,
             command=self.press_handler,
         )
-        self._tkinter_button.place(x=x, y=y)
+        self._tkinter_button.place(x=x, y=y, width=width, height=height)
 
     def set_press_handler(self, handler: Callable[..., None]) -> None:
         self._press_handler = handler
