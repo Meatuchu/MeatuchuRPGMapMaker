@@ -17,7 +17,7 @@ STAGE = DEPLOY_STAGE(STAGE_STR)
 
 logger = logger_factory()
 
-logger.log("INFO", f"starting app in stage {STAGE_STR}")
+logger.log("VERBOSE", f"starting app in stage {STAGE_STR}")
 
 app = AppManager(
     EntityManager(),

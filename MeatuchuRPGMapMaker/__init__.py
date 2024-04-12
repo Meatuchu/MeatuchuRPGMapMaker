@@ -26,6 +26,7 @@ def process_args() -> None:
 
         if key:
             parsed_args[key] = arg
+            key = None
 
 
 def get_arg_value(key: str) -> Optional[Any]:
@@ -48,4 +49,5 @@ def set_arg_value(key: str) -> None:
 process_args()
 
 STAGE_STR: str = get_arg_value("--stage") or "prod"
+VERBOSE_FLAG: bool = get_arg_value("-v") or False
 ROOTDIR: str = os.path.dirname(__file__)

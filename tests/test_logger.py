@@ -39,6 +39,14 @@ def test_logger_log() -> None:
             logger.log(level.value, "test_msg")
 
 
+def test_logger_log_verbose() -> None:
+    for stage in DEPLOY_STAGE:
+        logger = Logger(stage.value)
+        logger.verbose = True
+        for level in _MSG_LEVEL:
+            logger.log(level.value, "test_msg")
+
+
 def test_logger_invalid_stage() -> None:
     with raises(ValueError):
         Logger("invalid value")  # pyright: ignore[reportArgumentType]

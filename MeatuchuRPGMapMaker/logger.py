@@ -5,7 +5,7 @@ from typing import Callable, Literal, Optional
 
 from colorama import Fore, Style
 
-from . import STAGE_STR
+from . import STAGE_STR, VERBOSE_FLAG
 from .constants import DEPLOY_STAGE
 
 
@@ -18,20 +18,27 @@ class _MSG_LEVEL(Enum):
     WARNING = "WARNING"
     DEBUG = "DEBUG"
     INFO = "INFO"
+    VERBOSE = "VERBOSE"
+
+
+MsgLevelType = Literal["ERROR", "WARNING", "DEBUG", "INFO", "VERBOSE"]
 
 
 class Logger:
     stage: DEPLOY_STAGE
+    verbose: bool
     should_print_color: bool
     _colors = {
         "WARNING": Fore.YELLOW,
         "ERROR": Fore.RED,
         "INFO": Fore.WHITE,
         "DEBUG": Fore.CYAN,
+        "VERBOSE": Fore.MAGENTA,
     }
 
     def __init__(self, stage: Optional[Literal["prod", "beta", "dev"]] = None) -> None:
         self.stage = DEPLOY_STAGE(stage or STAGE_STR)
+        self.verbose = VERBOSE_FLAG
         self.should_print_color = True
 
     def toggle_colored_print(self) -> None:
@@ -39,7 +46,7 @@ class Logger:
 
     def log(
         self,
-        msg_level: Literal["ERROR", "WARNING", "DEBUG", "INFO"],
+        msg_level: MsgLevelType,
         msg: str,
         module: str = "",
     ) -> None:
@@ -61,6 +68,8 @@ class Logger:
             return self.stage in [DEPLOY_STAGE.BETA, DEPLOY_STAGE.DEV]
         if msg_level == _MSG_LEVEL.DEBUG:
             return self.stage in [DEPLOY_STAGE.DEV]
+        if msg_level == _MSG_LEVEL.VERBOSE:
+            return self.verbose
 
     def _color_msg(self, msg_level: _MSG_LEVEL, msg: str) -> str:
         if self.should_print_color:
