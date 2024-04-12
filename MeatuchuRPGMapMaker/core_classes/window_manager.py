@@ -45,7 +45,7 @@ class FPSMeasure:
     def get_fps(self) -> None:
         if time.time() - self.last_print > 1:
             self.last_print = time.time()
-            self.logfn("DEBUG", f"Window {self.window_name} FPS: {self.frames}")
+            self.logfn("VERBOSE", f"Window {self.window_name} FPS: {self.frames}")
             self.frames = 0
 
 
