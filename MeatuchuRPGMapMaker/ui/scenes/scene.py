@@ -3,6 +3,7 @@ from typing import Callable, Dict, List, Optional, Type
 
 from MeatuchuRPGMapMaker.events import InputSnapshotEvent
 from MeatuchuRPGMapMaker.keybinds.common.close_window import CloseWindowKB
+from MeatuchuRPGMapMaker.keybinds.common.fullscreen import FullScreenKB
 from MeatuchuRPGMapMaker.keybinds.Keybind import Keybind
 
 from ...events.Event import Event
@@ -41,6 +42,7 @@ class Scene:
         self._keybinds = []
 
         self._add_keybind(CloseWindowKB(self._fire_event))
+        self._add_keybind(FullScreenKB(self._fire_event))
         self._subscribe(InputSnapshotEvent, self._input_snapshot_event_handler)
 
     def _add_keybind(self, kb: Keybind) -> None:
