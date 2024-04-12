@@ -24,3 +24,6 @@ from .ThreadErrorEvent import ThreadErrorEvent
 from .UpdateEvent import UpdateEvent
 from .WindowFullscreenModeEditRequestEvent import WindowFullscreenModeEditRequestEvent
 from .WindowResizeRequestEvent import WindowResizeRequestEvent
+from .WindowToggleFullscreenModeRequestEvent import (
+    WindowToggleFullscreenModeRequestEvent,
+)

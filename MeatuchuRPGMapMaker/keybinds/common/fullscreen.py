@@ -2,7 +2,7 @@ from typing import Callable, Dict, List, Optional
 
 from MeatuchuRPGMapMaker.events import (
     Event,
-    WindowFullscreenModeEditRequestEvent,
+    WindowToggleFullscreenModeRequestEvent,
 )
 
 from ..Keybind import Keybind
@@ -21,5 +21,5 @@ class FullScreenKB(Keybind):
         super().__init__()
 
     def execute(self) -> None:
-        self.fire_event(WindowFullscreenModeEditRequestEvent(2))
+        self.fire_event(WindowToggleFullscreenModeRequestEvent())
         pass

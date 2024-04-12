@@ -14,6 +14,7 @@ from MeatuchuRPGMapMaker.events import (
     SceneChangeRequestEvent,
     WindowFullscreenModeEditRequestEvent,
     WindowResizeRequestEvent,
+    WindowToggleFullscreenModeRequestEvent,
 )
 from MeatuchuRPGMapMaker.exceptions import (
     DuplicateWindowError,
@@ -74,10 +75,28 @@ class WindowManager(FeatureManager):
         def _ret() -> None:
             class WindowStatus:
                 active = True
+                fullscreen_mode: int = 0
 
                 @classmethod
                 def set_inactive(cls) -> None:
                     WindowStatus.active = False
+
+                @classmethod
+                def set_fullscreen(cls, mode: int) -> None:
+                    WindowStatus.fullscreen_mode = mode
+
+            def handle_event(event: Event) -> None:
+                if isinstance(event, WindowResizeRequestEvent):
+                    self.set_window_size(event)
+                elif isinstance(event, WindowFullscreenModeEditRequestEvent):
+                    WindowStatus.set_fullscreen(event.mode)
+                    self.set_fullscreen_mode(event)
+                elif isinstance(event, WindowToggleFullscreenModeRequestEvent):
+                    mode = 1 if WindowStatus.fullscreen_mode == 0 else 0
+                    WindowStatus.set_fullscreen(mode)
+                    self.set_fullscreen_mode(WindowFullscreenModeEditRequestEvent(mode, event.window_name))
+                elif isinstance(event, SceneChangeRequestEvent):
+                    self.load_scene(event)
 
             # Create the window and canvas
             window_obj = TkWindow()
@@ -104,13 +123,8 @@ class WindowManager(FeatureManager):
                     fps.inc_frames()
                     fps.get_fps()
                     while len(self._window_events[window_name]):
-                        event = self._window_events[window_name].pop(0)
-                        if isinstance(event, WindowResizeRequestEvent):
-                            self.set_window_size(event)
-                        elif isinstance(event, WindowFullscreenModeEditRequestEvent):
-                            self.set_fullscreen_mode(event)
-                        elif isinstance(event, SceneChangeRequestEvent):
-                            self.load_scene(event)
+                        handle_event(self._window_events[window_name].pop(0))
+
             except Exception as err:
                 self.log("ERROR", f"window {window_name} encountered an error: {err.__class__.__name__}: {str(err)}")
 
@@ -171,6 +185,7 @@ class WindowManager(FeatureManager):
 
     def subscribe_to_events(self) -> None:
         self.event_mgr.register_subscription(WindowResizeRequestEvent, self.pass_event_to_window_queue)
+        self.event_mgr.register_subscription(WindowToggleFullscreenModeRequestEvent, self.pass_event_to_window_queue)
         self.event_mgr.register_subscription(WindowFullscreenModeEditRequestEvent, self.pass_event_to_window_queue)
         self.event_mgr.register_subscription(SceneChangeRequestEvent, self.pass_event_to_window_queue)
         pass
