@@ -208,7 +208,7 @@ class WindowManager(FeatureManager):
                 old_scene.unload()
 
             self.log(
-                "DEBUG",
+                "VERBOSE",
                 f"loaded scene {self._scenes[window_name].name} to window {window_name}",
             )
 

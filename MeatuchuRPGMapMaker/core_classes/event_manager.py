@@ -155,7 +155,7 @@ class EventManager(FeatureManager):
             )
         else:
             self._log_event_handle_info(
-                event, "DEBUG", f"Begin processing event {event.__class__.__name__} (no subscribers)"
+                event, "VERBOSE", f"Begin processing event {event.__class__.__name__} (no subscribers)"
             )
 
         for subscriber in subscribers:
@@ -198,7 +198,7 @@ class EventManager(FeatureManager):
         return super().render_step(frame_number)
 
     def _log_event_handle_info(
-        self, event: Event, level: Literal["ERROR", "WARNING", "DEBUG", "INFO"], msg: str
+        self, event: Event, level: Literal["ERROR", "WARNING", "DEBUG", "INFO", "VERBOSE"], msg: str
     ) -> None:
         if event.__class__ in [InputEvent, RenderEvent, UpdateEvent]:
             return

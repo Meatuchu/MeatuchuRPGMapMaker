@@ -31,7 +31,7 @@ class EntityManager(FeatureManager):
 
     def _get_id(self) -> str:
         id = str(uuid4())
-        self.log("DEBUG", f"Generated ID {id}")
+        self.log("VERBOSE", f"Generated ID {id}")
         return id
 
     def get_entity_by_id(self, id: str) -> BaseEntity:

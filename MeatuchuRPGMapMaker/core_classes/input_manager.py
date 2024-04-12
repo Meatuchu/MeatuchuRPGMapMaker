@@ -100,7 +100,7 @@ class InputManager(FeatureManager):
 
     @debounce(1)
     def _mouse_move_log(self, x: int, y: int) -> None:
-        self.log("DEBUG", f"Mouse Move Event at {x}, {y}")
+        self.log("VERBOSE", f"Mouse Move Event at {x}, {y}")
 
     def handle_mouse_move(self, x: int, y: int) -> None:
         self._mouse_move_log(x, y)

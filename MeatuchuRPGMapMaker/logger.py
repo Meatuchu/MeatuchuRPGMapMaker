@@ -60,6 +60,8 @@ class Logger:
             print(f"{clabel}: {msg}")
 
     def _should_log(self, msg_level: _MSG_LEVEL) -> bool:
+        if self.verbose:
+            return True
         if msg_level == _MSG_LEVEL.ERROR:
             return True
         if msg_level == _MSG_LEVEL.WARNING:
@@ -68,8 +70,7 @@ class Logger:
             return self.stage in [DEPLOY_STAGE.BETA, DEPLOY_STAGE.DEV]
         if msg_level == _MSG_LEVEL.DEBUG:
             return self.stage in [DEPLOY_STAGE.DEV]
-        if msg_level == _MSG_LEVEL.VERBOSE:
-            return self.verbose
+        return False
 
     def _color_msg(self, msg_level: _MSG_LEVEL, msg: str) -> str:
         if self.should_print_color:

@@ -29,7 +29,7 @@ class FeatureManager:
 
     def log(
         self,
-        level: Literal["ERROR", "WARNING", "DEBUG", "INFO"],
+        level: Literal["ERROR", "WARNING", "DEBUG", "INFO", "VERBOSE"],
         msg: str,
     ) -> None:
         self._logger.log(level, msg, self.name)
