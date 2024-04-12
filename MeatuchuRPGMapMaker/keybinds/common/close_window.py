@@ -12,7 +12,7 @@ class CloseWindowKB(Keybind):
             self.states = [KeyState(bind) for bind in binds]
         else:
             self.states = [
-                KeyState({"esc": 1000}),
+                KeyState({"esc": 3000}),
                 KeyState({"ctrl": 0, "w": 0}),
                 KeyState({"alt": 0, "f4": 0}),
             ]
