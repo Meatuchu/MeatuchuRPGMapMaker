@@ -17,14 +17,16 @@ class Keybind:
             assert self.states
             assert self.fire_event
         except (AssertionError, AttributeError):
-            raise AttributeError("Keybinds must have a states list and a fire_event method")
+            raise AttributeError(f"{self.__class__.__name__} must have a states list and a fire_event method")
         self.fire_event(LogEvent("VERBOSE", f"Keybind {self.__class__.__name__} ready"))
 
     def check(self, input_snapshot: InputSnapshot) -> bool:
         try:
             self.__ready
         except AttributeError:
-            raise AttributeError("Tried to check event which did not call parent contstructor")
+            raise AttributeError(
+                f"Tried to check KeyBind {self.__class__.__name__} which did not call parent contstructor"
+            )
 
         for state in self.states:
             if state.check(input_snapshot):
