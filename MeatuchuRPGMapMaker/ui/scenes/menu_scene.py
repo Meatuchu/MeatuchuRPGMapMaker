@@ -2,7 +2,7 @@ from tkinter import Tk as TkWindow
 from typing import Callable, Optional, Type
 
 from ...events.Event import Event
-from ..elements.composed_elements.main_menu.options import MainMenuOptions
+from ..elements.composed_elements.main_menu.options_list import MainMenuOptions
 from ..elements.primitive_elements import FloatingText
 from ..styles import TextStyles
 from .scene import Scene

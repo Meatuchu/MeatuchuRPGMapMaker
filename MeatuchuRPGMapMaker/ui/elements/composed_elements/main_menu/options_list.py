@@ -5,11 +5,21 @@ from MeatuchuRPGMapMaker.events.Event import Event
 from MeatuchuRPGMapMaker.events.LogEvent import LogEvent
 from MeatuchuRPGMapMaker.events.SceneChangeRequestEvent import SceneChangeRequestEvent
 
-from ....elements.primitive_elements import Button
+from ...primitive_elements import Button
 from .. import ComposedElement
 
 
 class MainMenuOptions(ComposedElement):
+    option_btns_count: int = 0
+    x: int
+    y: int
+    widget_width: int = 100
+    padding_size: int = 5
+    button_space: int = 1
+    button_width: int = 100
+    button_height: int = 30
+    _fire_event: Callable[[Event], None]
+
     def __init__(
         self,
         window: TkWindow,
@@ -19,11 +29,25 @@ class MainMenuOptions(ComposedElement):
         name: str = "mainmenuoptions",
     ) -> None:
         super().__init__(window, name, fire_event)
+        self.x = x
+        self.y = y
+        self._elements = {}
 
-        self._elements = {
-            "startbutton": StartButton(window, fire_event, x, y),
-            "settingsbutton": SettingsButton(window, fire_event, x, y),
-        }
+        self.add_option_item(StartButton(window, fire_event))
+        self.add_option_item(SettingsButton(window, fire_event))
+        self.add_option_item(Button(window, fire_event, "exitbutton", "Exit", place_on_creation=False))
+
+    def add_option_item(self, element: Button) -> None:
+        try:
+            self.add_element(element)
+            element.height = self.button_height
+            element.width = self.button_width
+            element.x = self.x + self.padding_size
+            element.y = self.y + self.padding_size + (self.option_btns_count * (element.height + self.button_space))
+            element.place()
+            self.option_btns_count += 1
+        except ValueError as e:
+            self._fire_event(LogEvent("ERROR", str(e), "MainMenuOptions_add_option_item"))
 
     def tick_update(self) -> None:
         super().tick_update()
@@ -44,6 +68,7 @@ class StartButton(Button):
             height=30,
             width=100,
             press_handler=press_handler,
+            place_on_creation=False,
         )
 
 
@@ -57,9 +82,10 @@ class SettingsButton(Button):
             fire_event,
             "settingsbutton",
             "Settings",
-            x=x + 5,
-            y=y + 35,
+            x=x,
+            y=y,
             height=30,
             width=100,
             press_handler=press_handler,
+            place_on_creation=False,
         )

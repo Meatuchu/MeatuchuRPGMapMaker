@@ -2,7 +2,7 @@
 from tkinter import Tk
 from unittest.mock import MagicMock
 
-from MeatuchuRPGMapMaker.ui.elements.composed_elements.main_menu.options import (
+from MeatuchuRPGMapMaker.ui.elements.composed_elements.main_menu.options_list import (
     MainMenuOptions,
 )
 

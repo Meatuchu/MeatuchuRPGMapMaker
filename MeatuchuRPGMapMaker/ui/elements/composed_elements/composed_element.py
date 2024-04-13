@@ -8,12 +8,17 @@ from ..primitive_elements.base_element import Element
 
 class ComposedElement(Element):
     # Composed Elements are elements treated as a single element, but which are comprised of one or more element classes
-    # They are defined here to reduce the possibility of circular dependency.
+    # They are defined in their own folder to reduce the possibility of circular dependency.
 
     _elements: Dict[str, Element]
 
     def __init__(self, window: TkWindow, name: str, fire_event: Callable[[Event], None]) -> None:
         super().__init__(window, fire_event, name)
+
+    def add_element(self, element: Element) -> None:
+        if self._elements.get(element.name):
+            raise ValueError(f"Element with name {element.name} already exists in {self.name}")
+        self._elements[element.name] = element
 
     def tick_update(self) -> None:
         super().tick_update()
