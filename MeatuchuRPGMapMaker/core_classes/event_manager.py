@@ -114,6 +114,8 @@ class EventManager(FeatureManager):
             self.log("ERROR", f"App is shutting down, unable to handle queued event {event.__class__.__name__}")
             return
 
+        self._log_event_handle_info(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
+
         if isinstance(event, AppShutDownEvent):
             self.app_shutdown_fired = True
             count = (
@@ -125,8 +127,6 @@ class EventManager(FeatureManager):
             )
             if count:
                 self.log("ERROR", f"App is shutting down, {count} events will be discarded")
-
-        self._log_event_handle_info(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
 
         for t in IMMEDIATE_EVENTS:
             if isinstance(event, t):

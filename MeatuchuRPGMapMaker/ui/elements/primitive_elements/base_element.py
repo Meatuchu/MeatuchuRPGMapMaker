@@ -22,6 +22,7 @@ class Element:
         window: TkWindow,
         fire_event: Callable[[Event], None],
         name: str,
+        place_on_creation: bool = True,
     ) -> None:
         if not name:
             raise (ElementNotNamedError(self.__class__.__name__))
@@ -29,6 +30,9 @@ class Element:
             raise (ElementCreatedWithoutWindowError(self.__class__.__name__))
         self.name = name
         self._fire_event = fire_event
+
+        if place_on_creation:
+            self.place()
 
     def place(self) -> None:
         pass

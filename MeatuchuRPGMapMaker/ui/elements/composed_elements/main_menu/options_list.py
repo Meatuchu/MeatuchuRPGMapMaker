@@ -1,6 +1,7 @@
 from tkinter import Tk as TkWindow
 from typing import Callable
 
+from MeatuchuRPGMapMaker.events import AppShutDownEvent
 from MeatuchuRPGMapMaker.events.Event import Event
 from MeatuchuRPGMapMaker.events.LogEvent import LogEvent
 from MeatuchuRPGMapMaker.events.SceneChangeRequestEvent import SceneChangeRequestEvent
@@ -28,14 +29,23 @@ class MainMenuOptions(ComposedElement):
         y: int = 0,
         name: str = "mainmenuoptions",
     ) -> None:
-        super().__init__(window, name, fire_event)
         self.x = x
         self.y = y
         self._elements = {}
 
         self.add_option_item(StartButton(window, fire_event))
         self.add_option_item(SettingsButton(window, fire_event))
-        self.add_option_item(Button(window, fire_event, "exitbutton", "Exit", place_on_creation=False))
+        self.add_option_item(
+            Button(
+                window,
+                fire_event,
+                "exitbutton",
+                "Exit",
+                press_handler=lambda: fire_event(AppShutDownEvent()),
+                place_on_creation=False,
+            )
+        )
+        super().__init__(window, name, fire_event)
 
     def add_option_item(self, element: Button) -> None:
         try:

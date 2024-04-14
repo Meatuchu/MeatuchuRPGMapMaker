@@ -27,7 +27,6 @@ class Button(Element):
         press_handler: Callable[..., None] = lambda: None,
         place_on_creation: bool = True,
     ) -> None:
-        super().__init__(window, fire_event, name)
         self._label = label
         self.x = x
         self.y = y
@@ -39,9 +38,7 @@ class Button(Element):
             text=label,
             command=self.press_handler,
         )
-
-        if place_on_creation:
-            self.place()
+        super().__init__(window, fire_event, name, place_on_creation=place_on_creation)
 
     def place(self) -> None:
         self._tkinter_button.place(x=self.x, y=self.y, width=self.width, height=self.height)

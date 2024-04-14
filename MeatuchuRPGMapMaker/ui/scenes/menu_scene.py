@@ -17,7 +17,7 @@ class MenuScene(Scene):
         fire_event: Callable[[Event], None],
         subscribe_to_event: Optional[Callable[[Type[Event], Callable[..., None]], str]] = None,
         unsubscribe_from_event: Optional[Callable[[str], None]] = None,
-    ):
+    ) -> None:
         super().__init__(window, fire_event, subscribe_to_event, unsubscribe_from_event)
 
         self.place_elements(

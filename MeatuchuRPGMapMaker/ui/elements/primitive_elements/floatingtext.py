@@ -27,8 +27,10 @@ class FloatingText(Element):
         self.y = y
         self._tktext = TkLabel(window, text=text)
         self._tktext.config(font=(style.FONT, style.SIZE))
-        self._tktext.place(x=x, y=y)
         super().__init__(window, fire_event, name)
+
+    def place(self) -> None:
+        self._tktext.place(x=self.x, y=self.y)
 
     def destroy(self) -> None:
         self._tktext.destroy()
