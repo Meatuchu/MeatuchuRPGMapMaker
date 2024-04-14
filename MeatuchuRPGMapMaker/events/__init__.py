@@ -6,6 +6,7 @@ from .CloseWindowEvent import CloseWindowEvent
 from .DestroyThreadEvent import DestroyThreadEvent
 from .DestroyThreadRequestEvent import DestroyThreadRequestEvent
 from .Event import Event
+from .FileSaveRequestEvent import FileSaveRequestEvent
 from .InputEvent import InputEvent
 from .InputSnapshotEvent import InputSnapshotEvent
 from .KeyPressEvent import KeyPressEvent

@@ -2,6 +2,7 @@ from tkinter import Tk as TkWindow
 from typing import Callable, Optional, Type
 
 from MeatuchuRPGMapMaker.events import LogEvent, SceneChangeRequestEvent
+from MeatuchuRPGMapMaker.keybinds.common.file_save import FileSaveKB
 
 from ...events.Event import Event
 from ..elements.primitive_elements import Button
@@ -25,6 +26,7 @@ class MapEditScene(Scene):
                 MainMenuButton(window, fire_event),
             ]
         )
+        self._add_keybind(FileSaveKB(self._fire_event))
 
 
 class MainMenuButton(Button):
