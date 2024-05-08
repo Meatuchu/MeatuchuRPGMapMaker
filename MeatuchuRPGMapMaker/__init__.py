@@ -2,26 +2,27 @@ import os
 import sys
 from typing import Any, Dict, List, Optional, Union
 
-arguments: List[str] = sys.argv[1:]
+DEFAULT_STAGE: str = "prod"
 
+
+arguments: List[str] = sys.argv[1:]
 parsed_args: Dict[str, Union[str, bool]] = {}
 
 
 def process_args() -> None:
     key: Optional[str] = None
     for arg in arguments:
-        if arg.startswith("---") and not key:
-            raise KeyError("Arguments must start with one or two dashes!")
+        if not key:
+            if arg.startswith("---") or not arg.startswith("-"):
+                raise ValueError(f'Error parsing arguments: unexpected symbol "{arg}"')
+
         if arg == "--":
             continue
-        if arg.startswith("--"):
-            key = arg
-            continue
+
         if arg.startswith("-"):
+            parsed_args[arg] = True
             if not key:
-                parsed_args[arg] = True
-            else:
-                key = None
+                key = arg
                 continue
 
         if key:
@@ -30,13 +31,8 @@ def process_args() -> None:
 
 
 def get_arg_value(key: str) -> Optional[Any]:
-    if key.startswith("--"):
+    if key.startswith("-"):
         return parsed_args.get(key, None)
-    elif key.startswith("-"):
-        if parsed_args.get(key):
-            return True
-        else:
-            return False
     else:
         KeyError("Arguments must start with one or two dashes!")
 
@@ -47,7 +43,8 @@ def set_arg_value(key: str) -> None:
 
 
 process_args()
+print(parsed_args)
 
-STAGE_STR: str = get_arg_value("--stage") or "prod"
-VERBOSE_FLAG: bool = get_arg_value("-v") or False
+STAGE_STR: str = get_arg_value("-s") or get_arg_value("--stage") or "prod"
+VERBOSE_FLAG: bool = get_arg_value("-v") or get_arg_value("--verbose") or False
 ROOTDIR: str = os.path.dirname(__file__)
