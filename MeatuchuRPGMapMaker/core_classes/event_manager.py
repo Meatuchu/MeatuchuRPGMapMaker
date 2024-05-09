@@ -10,6 +10,7 @@ from MeatuchuRPGMapMaker.events import (
     Event,
     InputEvent,
     InputSnapshotEvent,
+    KeyPressEvent,
     LogEvent,
     MouseMoveEvent,
     RenderEvent,
@@ -76,7 +77,7 @@ class EventManager(FeatureManager):
         return subscriber.id
 
     def unregister_subscription(self, subscriber_id: str) -> None:
-        for _event_name, subscribers in self._subscriptions.items():
+        for subscribers in self._subscriptions.values():
             for subscriber in subscribers:
                 if subscriber.id == subscriber_id:
                     subscribers.remove(subscriber)
@@ -157,6 +158,9 @@ class EventManager(FeatureManager):
             self._log_event_handle_info(
                 event, "VERBOSE", f"Begin processing event {event.__class__.__name__} (no subscribers)"
             )
+
+        if isinstance(event, KeyPressEvent):
+            self.log("VERBOSE", f"Key Press Event: {event.key}")
 
         for subscriber in subscribers:
             subscriber.fn(event)

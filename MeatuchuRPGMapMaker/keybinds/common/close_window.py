@@ -14,7 +14,9 @@ class CloseWindowKB(Keybind):
             self.states = [
                 KeyState({"esc": 3000}),
                 KeyState({"ctrl": 0, "w": 0}),
+                KeyState({"ctrl_r": 0, "w": 0}),
                 KeyState({"alt": 0, "f4": 0}),
+                KeyState({"alt_r": 0, "f4": 0}),
             ]
         self.fire_event = fire_event
         super().__init__()

@@ -13,6 +13,7 @@ class FileSaveKB(Keybind):
         else:
             self.states = [
                 KeyState({"ctrl": 0, "s": 0}),
+                KeyState({"ctrl_r": 0, "s": 0}),
             ]
         self.fire_event = fire_event
         super().__init__()

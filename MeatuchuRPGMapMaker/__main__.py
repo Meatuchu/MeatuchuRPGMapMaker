@@ -31,8 +31,8 @@ app = AppManager(
     WindowManager(),
 )
 
-
 app.open_new_map()
+
 try:
     app.activate_app()
 except Exception as e:

@@ -17,6 +17,7 @@ class FullScreenKB(Keybind):
             self.states = [
                 KeyState({"f11": 0}),
                 KeyState({"alt": 1, "enter": 0}),
+                KeyState({"alt_r": 1, "enter": 0}),
             ]
         self.fire_event = fire_event
         super().__init__()
