@@ -2,6 +2,7 @@ import time
 from datetime import datetime
 from typing import Any, Callable, Dict, List, Optional, Tuple
 
+from MeatuchuRPGMapMaker.constants import NS_PER_S
 from MeatuchuRPGMapMaker.events import (
     AllThreadsDestroyedEvent,
     AppShutDownEvent,
@@ -37,7 +38,7 @@ class AppState:
 
     def set_tickrate(self, tickrate_per_sec: int = 60) -> None:
         self.tickrate = tickrate_per_sec
-        self.tickgap = 1000000000 / tickrate_per_sec
+        self.tickgap = NS_PER_S / tickrate_per_sec
 
     def set_state(self, new_state: Tuple[str, Any]) -> None:
         key, val = new_state

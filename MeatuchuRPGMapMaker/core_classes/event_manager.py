@@ -5,6 +5,7 @@ from uuid import uuid4
 
 from sortedcontainers import SortedDict  # pyright: ignore[reportMissingTypeStubs]
 
+from MeatuchuRPGMapMaker.constants import NS_PER_S
 from MeatuchuRPGMapMaker.events import (
     AppShutDownEvent,
     Event,
@@ -47,7 +48,8 @@ class EventManager(FeatureManager):
     _render_event_queue: List[RenderEvent]
     _misc_event_queue: List[Event]
     _scheduled_events: SortedDict
-    app_shutdown_fired: bool = False
+    __app_shutdown_fired: bool = False
+    __app_shutdown_time: float = 0
 
     def __init__(
         self,
@@ -109,7 +111,7 @@ class EventManager(FeatureManager):
                 self.queue_event(event)
 
     def queue_event(self, event: Event) -> None:
-        if self.app_shutdown_fired:
+        if self.__app_shutdown_fired:
             if isinstance(event, AppShutDownEvent):
                 return
             self.log("ERROR", f"App is shutting down, unable to handle queued event {event.__class__.__name__}")
@@ -118,16 +120,22 @@ class EventManager(FeatureManager):
         self._log_event_handle_info(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
 
         if isinstance(event, AppShutDownEvent):
-            self.app_shutdown_fired = True
-            count = (
-                len(self._input_event_queue)
-                + len(self._update_event_queue)
-                + len(self._render_event_queue)
-                + len(self._misc_event_queue)
-                + len(self._scheduled_events)
+            self.__app_shutdown_fired = True
+            self.__app_shutdown_time = time.time_ns()
+            discarding_events = (
+                self._input_event_queue
+                + self._update_event_queue
+                + self._render_event_queue
+                + self._misc_event_queue
+                + list(self._scheduled_events.values())
             )
-            if count:
-                self.log("ERROR", f"App is shutting down, {count} events will be discarded")
+            if discarding_events:
+                c = len(discarding_events)
+                self.log(
+                    "ERROR",
+                    f"App is shutting down, {len(discarding_events)} event{'s' if c > 1 else ''} will not be processed",
+                )
+                [self.log("WARNING", f"Discarding event {e.__class__.__name__}") for e in discarding_events]
 
         for t in IMMEDIATE_EVENTS:
             if isinstance(event, t):
@@ -166,6 +174,12 @@ class EventManager(FeatureManager):
             subscriber.fn(event)
 
         if isinstance(event, AppShutDownEvent):
+            self.log(
+                "INFO",
+                "App is shutting down - Took "
+                + str((time.time_ns() - self.__app_shutdown_time) / NS_PER_S)
+                + " seconds from AppShutDownEvent to shutdown",
+            )
             sys.exit()
 
     def _process_next_event(self, event_type: Literal["input", "update", "render", None]) -> None:

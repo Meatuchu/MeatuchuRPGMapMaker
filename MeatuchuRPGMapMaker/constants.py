@@ -7,5 +7,5 @@ class DEPLOY_STAGE(Enum):
     DEV = "dev"
 
 
-NS_PER_MS = 1000000
-NS_PER_S = 1000000000
+NS_PER_MS = 1e6
+NS_PER_S = 1e9
