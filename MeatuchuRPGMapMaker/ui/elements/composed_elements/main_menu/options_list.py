@@ -85,7 +85,7 @@ class StartButton(Button):
 class SettingsButton(Button):
     def __init__(self, window: TkWindow, fire_event: Callable[[Event], None], x: int = 0, y: int = 0) -> None:
         def press_handler() -> None:
-            fire_event(LogEvent("DEBUG", "Settings button pressed", "MenuScene_SettingsButton"))
+            fire_event(SceneChangeRequestEvent("SettingsScene"))
 
         super().__init__(
             window,

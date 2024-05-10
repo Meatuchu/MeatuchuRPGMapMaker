@@ -2,6 +2,8 @@ from tkinter import Button as TkButton
 from tkinter import Tk as TkWindow
 from typing import Callable
 
+from MeatuchuRPGMapMaker.events import LogEvent
+
 from .base_element import Element
 
 
@@ -47,7 +49,14 @@ class Button(Element):
         self._press_handler = handler
 
     def press_handler(self) -> None:
-        self._press_handler()
+        try:
+            self._press_handler()
+        except Exception as e:
+            self._fire_event(
+                LogEvent(
+                    "ERROR", f"Uncaught {e.__class__.__name__} in {self.name} Press Handler! \n{str(e)}", self.name
+                )
+            )
 
     def destroy(self) -> None:
         self._tkinter_button.destroy()

@@ -1,17 +1,15 @@
 from tkinter import Tk as TkWindow
 from typing import Callable, Optional, Type
 
-from MeatuchuRPGMapMaker.events import SceneChangeRequestEvent
-from MeatuchuRPGMapMaker.keybinds.common.file_save import FileSaveKB
+from MeatuchuRPGMapMaker.events import LogEvent, SceneChangeRequestEvent
 
 from ...events.Event import Event
 from ..elements.primitive_elements import Button
 from .scene import Scene
 
 
-class MapEditScene(Scene):
-    # Primary scene of this app.
-    # Scene describes the UI when creating and editing a map
+class SettingsScene(Scene):
+    # Scene describes the UI when editing settings
     def __init__(
         self,
         window: TkWindow,
@@ -26,22 +24,22 @@ class MapEditScene(Scene):
                 MainMenuButton(window, fire_event),
             ]
         )
-        self._add_keybind(FileSaveKB(self._fire_event))
 
 
 class MainMenuButton(Button):
     def __init__(self, window: TkWindow, fire_event: Callable[[Event], None]) -> None:
         def press_handler() -> None:
+            fire_event(LogEvent("DEBUG", "Main menu button pressed", "SettingsScene_MainMenuButton"))
             fire_event(SceneChangeRequestEvent("MenuScene"))
 
         super().__init__(
             window,
             fire_event,
             "mainmenubutton",
-            "Return to Main Menu",
+            "Return to Main Menu From Settings",
             x=15,
             y=15,
             height=30,
-            width=160,
+            width=250,
             press_handler=press_handler,
         )
