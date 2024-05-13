@@ -50,6 +50,5 @@ class Frame(Element):
         return super().destroy()
 
     def hide(self) -> None:
-        print("????")
         self._tkinter_frame.pack_forget()
         self._tkinter_frame.grid_remove()
