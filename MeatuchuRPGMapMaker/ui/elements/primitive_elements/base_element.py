@@ -28,6 +28,7 @@ class Element:
             raise (ElementNotNamedError(self.__class__.__name__))
         if not window:
             raise (ElementCreatedWithoutWindowError(self.__class__.__name__))
+        self.window = window
         self.name = name
         self._fire_event = fire_event
 
@@ -35,6 +36,9 @@ class Element:
             self.place()
 
     def place(self) -> None:
+        pass
+
+    def hide(self) -> None:
         pass
 
     def move_to(self, x: int, y: int) -> None:

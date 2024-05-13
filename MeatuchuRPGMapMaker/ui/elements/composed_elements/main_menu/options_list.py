@@ -29,9 +29,9 @@ class MainMenuOptions(ComposedElement):
         y: int = 0,
         name: str = "mainmenuoptions",
     ) -> None:
+        super().__init__(window, name, fire_event)
         self.x = x
         self.y = y
-        self._elements = {}
 
         self.add_option_item(StartButton(window, fire_event))
         self.add_option_item(SettingsButton(window, fire_event))
@@ -45,7 +45,6 @@ class MainMenuOptions(ComposedElement):
                 place_on_creation=False,
             )
         )
-        super().__init__(window, name, fire_event)
 
     def add_option_item(self, element: Button) -> None:
         try:

@@ -4,6 +4,7 @@ from typing import Callable, Optional, Type
 from MeatuchuRPGMapMaker.events import LogEvent, SceneChangeRequestEvent
 
 from ...events.Event import Event
+from ..elements.composed_elements.general.tabbed_frame import TabbedFrame
 from ..elements.primitive_elements import Button
 from .scene import Scene
 
@@ -19,11 +20,15 @@ class SettingsScene(Scene):
     ) -> None:
         super().__init__(window, fire_event, subscribe_to_event, unsubscribe_from_event)
 
+        self._frames = TabbedFrame(window, "SettingsSceneTabbedFrame", fire_event)
+
         self.place_elements(
             [
                 MainMenuButton(window, fire_event),
+                self._frames,
             ]
         )
+        self._frames.add_tab("test", "test")
 
 
 class MainMenuButton(Button):
@@ -38,7 +43,7 @@ class MainMenuButton(Button):
             "mainmenubutton",
             "Return to Main Menu From Settings",
             x=15,
-            y=15,
+            y=400,
             height=30,
             width=250,
             press_handler=press_handler,

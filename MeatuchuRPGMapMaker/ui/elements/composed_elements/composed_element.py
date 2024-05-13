@@ -1,7 +1,7 @@
 from tkinter import Tk as TkWindow
-from typing import Callable, Dict
+from typing import Callable, Dict, Optional
 
-from MeatuchuRPGMapMaker.events import Event
+from MeatuchuRPGMapMaker.events import Event, LogEvent
 
 from ..primitive_elements.base_element import Element
 
@@ -13,12 +13,21 @@ class ComposedElement(Element):
     _elements: Dict[str, Element]
 
     def __init__(self, window: TkWindow, name: str, fire_event: Callable[[Event], None]) -> None:
+        self._elements = {}
         super().__init__(window, fire_event, name)
 
     def add_element(self, element: Element) -> None:
         if self._elements.get(element.name):
             raise ValueError(f"Element with name {element.name} already exists in {self.name}")
         self._elements[element.name] = element
+
+    def get_element(self, name: str) -> Optional[Element]:
+        res = self._elements.get(name)
+        if not res:
+            self._fire_event(
+                LogEvent("WARNING", f"Failed to look up element {name} in ComposedElement {self.name}", self.name)
+            )
+        return res
 
     def tick_update(self) -> None:
         super().tick_update()
