@@ -1,6 +1,6 @@
-from .Event import Event
+from .RenderEvent import RenderEvent
 
 
-class SceneChangeEvent(Event):
+class SceneChangeEvent(RenderEvent):
     # Fired when the active scene is changed.
     pass
