@@ -76,9 +76,13 @@ class EventManager(FeatureManager):
         self.log("INFO", f"registering subscriber to {target}")
         self._subscriptions[target] = self._subscriptions.get(target, list())
         self._subscriptions[target].append(subscriber)
+        self.log(
+            "VERBOSE", f"Subscriber {subscriber.id} registered to {target}, {len(self._subscriptions[target])} total"
+        )
         return subscriber.id
 
     def unregister_subscription(self, subscriber_id: str) -> None:
+        self.log("VERBOSE", f"Unregistering subscriber {subscriber_id} from all events")
         for subscribers in self._subscriptions.values():
             for subscriber in subscribers:
                 if subscriber.id == subscriber_id:
