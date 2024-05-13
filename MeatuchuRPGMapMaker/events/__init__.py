@@ -5,6 +5,7 @@ from .AppShutDownEvent import AppShutDownEvent
 from .CloseWindowEvent import CloseWindowEvent
 from .DestroyThreadEvent import DestroyThreadEvent
 from .DestroyThreadRequestEvent import DestroyThreadRequestEvent
+from .EditSettingRequestEvent import EditSettingRequestEvent
 from .Event import Event
 from .FileSaveRequestEvent import FileSaveRequestEvent
 from .InputEvent import InputEvent
@@ -21,6 +22,7 @@ from .NewThreadRequestEvent import NewThreadRequestEvent
 from .RenderEvent import RenderEvent
 from .SceneChangeEvent import SceneChangeEvent
 from .SceneChangeRequestEvent import SceneChangeRequestEvent
+from .SettingEditedEvent import SettingEditedEvent
 from .ThreadErrorEvent import ThreadErrorEvent
 from .UpdateEvent import UpdateEvent
 from .WindowFullscreenModeEditRequestEvent import WindowFullscreenModeEditRequestEvent

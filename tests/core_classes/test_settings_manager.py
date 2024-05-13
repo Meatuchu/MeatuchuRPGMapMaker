@@ -2,7 +2,9 @@ from unittest.mock import MagicMock, patch
 
 from pytest import raises
 
+from MeatuchuRPGMapMaker.core_classes.event_manager import EventManager
 from MeatuchuRPGMapMaker.core_classes.settings_manager import SettingsManager
+from MeatuchuRPGMapMaker.events import EditSettingRequestEvent
 
 mock_settings = {"any": {"window": {"width": 123, "height": 456}}}
 
@@ -64,3 +66,18 @@ def test_settings_manager_missing_setting_not_allow_none() -> None:
     settings_instance = SettingsManager()
     with raises(AttributeError):
         settings_instance.get_setting("window", "made_up", allow_none=False)
+
+
+def test_handle_settings_edit_request_event() -> None:
+    m = SettingsManager()
+    e = EventManager()
+    m.register_event_manager(e)
+    m.subscribe_to_events()
+    assert not m.get_setting("window", "title")
+    e.queue_event(EditSettingRequestEvent("window", "title", "test_title"))
+    e.queue_event = MagicMock()
+    e.input_step(0)
+    e.update_step(0)
+    e.render_step(0)
+    assert m.get_setting("window", "title") == "test_title"
+    e.queue_event.assert_called()

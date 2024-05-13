@@ -1,6 +1,8 @@
 # Global app settings
 from typing import Any, Dict, Literal
 
+from MeatuchuRPGMapMaker.events import EditSettingRequestEvent, SettingEditedEvent
+
 from . import FeatureManager
 from .event_manager import EventManager
 
@@ -39,9 +41,10 @@ settings_instance = 0
 
 class SettingsManager(FeatureManager):
     event_mgr: EventManager
-    session_settings: GROUP_CONFIG_TYPE = {}
+    session_settings: GROUP_CONFIG_TYPE
 
     def __init__(self) -> None:
+        self.session_settings = {}
         super().__init__()
 
     def get_setting(self, group: str, key: str, default: Any = None, allow_none: bool = True) -> Any:
@@ -77,4 +80,8 @@ class SettingsManager(FeatureManager):
         self.subscribe_to_events()
 
     def subscribe_to_events(self) -> None:
-        pass
+        self.event_mgr.register_subscription(EditSettingRequestEvent, self.handle_edit_setting_request_event)
+
+    def handle_edit_setting_request_event(self, event: EditSettingRequestEvent) -> None:
+        self.set_setting(event.group, event.key, event.value)
+        self.event_mgr.queue_event(SettingEditedEvent(event.group, event.key, event.value))
