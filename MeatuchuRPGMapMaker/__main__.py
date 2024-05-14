@@ -38,4 +38,5 @@ try:
 except Exception as e:
     logger.handle_exception(e)
 finally:
-    app.event_mgr.queue_event(AppShutDownEvent())
+    if not app.event_mgr.get_shutdown_status():
+        app.event_mgr.queue_event(AppShutDownEvent())

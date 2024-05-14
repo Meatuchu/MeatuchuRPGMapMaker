@@ -5,7 +5,7 @@ from uuid import uuid4
 
 from sortedcontainers import SortedDict  # pyright: ignore[reportMissingTypeStubs]
 
-from MeatuchuRPGMapMaker.constants import NS_PER_S
+from MeatuchuRPGMapMaker.constants import NS_PER_MS
 from MeatuchuRPGMapMaker.events import (
     AppShutDownEvent,
     Event,
@@ -116,30 +116,13 @@ class EventManager(FeatureManager):
 
     def queue_event(self, event: Event) -> None:
         if self.__app_shutdown_fired:
-            if isinstance(event, AppShutDownEvent):
-                return
             self.log("ERROR", f"App is shutting down, unable to handle queued event {event.__class__.__name__}")
             return
 
         self._log_event_handle_info(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
 
         if isinstance(event, AppShutDownEvent):
-            self.__app_shutdown_fired = True
-            self.__app_shutdown_time = time.time_ns()
-            discarding_events = (
-                self._input_event_queue
-                + self._update_event_queue
-                + self._render_event_queue
-                + self._misc_event_queue
-                + list(self._scheduled_events.values())
-            )
-            if discarding_events:
-                c = len(discarding_events)
-                self.log(
-                    "ERROR",
-                    f"App is shutting down, {len(discarding_events)} event{'s' if c > 1 else ''} will not be processed",
-                )
-                [self.log("WARNING", f"Discarding event {e.__class__.__name__}") for e in discarding_events]
+            self.__handle_app_shutdown_event()
 
         for t in IMMEDIATE_EVENTS:
             if isinstance(event, t):
@@ -181,8 +164,8 @@ class EventManager(FeatureManager):
             self.log(
                 "INFO",
                 "App is shutting down - Took "
-                + str((time.time_ns() - self.__app_shutdown_time) / NS_PER_S)
-                + " seconds from AppShutDownEvent to shutdown",
+                + str((time.time_ns() - self.__app_shutdown_time) / NS_PER_MS)
+                + " milliseconds from AppShutDownEvent to shutdown",
             )
             sys.exit()
 
@@ -228,3 +211,25 @@ class EventManager(FeatureManager):
             if isinstance(event, t):
                 return
         self.log(level, msg)
+
+    def __handle_app_shutdown_event(self) -> None:
+        if not self.__app_shutdown_fired:
+            self.__app_shutdown_fired = True
+            self.__app_shutdown_time = time.time_ns()
+            discarding_events = (
+                self._input_event_queue
+                + self._update_event_queue
+                + self._render_event_queue
+                + self._misc_event_queue
+                + list(self._scheduled_events.values())
+            )
+            if discarding_events:
+                c = len(discarding_events)
+                self.log(
+                    "ERROR",
+                    f"App is shutting down, {len(discarding_events)} event{'s' if c > 1 else ''} will not be processed",
+                )
+                [self.log("WARNING", f"Discarding event {e.__class__.__name__}") for e in discarding_events]
+
+    def get_shutdown_status(self) -> bool:
+        return self.__app_shutdown_fired

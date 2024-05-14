@@ -6,7 +6,6 @@ from MeatuchuRPGMapMaker.constants import NS_PER_S
 from MeatuchuRPGMapMaker.events import (
     AllThreadsDestroyedEvent,
     AppShutDownEvent,
-    Event,
     SceneChangeRequestEvent,
     WindowFullscreenModeEditRequestEvent,
     WindowResizeRequestEvent,
@@ -107,11 +106,9 @@ class AppManager(FeatureManager):
         self.subscribe_to_events()
 
     def subscribe_to_events(self) -> None:
-        def shutdown(_: Event) -> None:
-            return self.event_mgr.queue_event(AppShutDownEvent())
-
-        self.event_mgr.register_subscription(AllThreadsDestroyedEvent, shutdown)
-        pass
+        self.event_mgr.register_subscription(
+            AllThreadsDestroyedEvent, lambda *_: self.event_mgr.queue_event(AppShutDownEvent())
+        )
 
     def distribute_event_manager(self) -> None:
         self.entity_mgr.register_event_manager(self.event_mgr)
