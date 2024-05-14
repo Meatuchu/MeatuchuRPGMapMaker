@@ -16,7 +16,7 @@ from .logger import logger_factory
 STAGE = DEPLOY_STAGE(STAGE_STR)
 
 logger = logger_factory()
-
+logger.open_log_file()
 logger.log("VERBOSE", f"starting app in stage {STAGE_STR}")
 
 app = AppManager(
@@ -38,5 +38,6 @@ try:
 except Exception as e:
     logger.handle_exception(e)
 finally:
+    logger.close_file()
     if not app.event_mgr.get_shutdown_status():
         app.event_mgr.queue_event(AppShutDownEvent())
