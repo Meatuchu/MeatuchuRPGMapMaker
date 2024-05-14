@@ -1,4 +1,4 @@
-from . import STAGE_STR
+from . import STAGE_STR, get_all_args
 from .constants import DEPLOY_STAGE
 from .core_classes.app_manager import AppManager
 from .core_classes.entity_manager import EntityManager
@@ -17,7 +17,8 @@ STAGE = DEPLOY_STAGE(STAGE_STR)
 
 logger = logger_factory()
 logger.open_log_file()
-logger.log("VERBOSE", f"starting app in stage {STAGE_STR}")
+logger.log("VERBOSE", f"Starting App in Stage {STAGE_STR}")
+logger.log("VERBOSE", f"Arguments: {get_all_args()}")
 
 app = AppManager(
     EntityManager(),
