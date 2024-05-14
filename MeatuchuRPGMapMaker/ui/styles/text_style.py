@@ -1,7 +1,6 @@
 class TextStyle:
     FONT: str
     SIZE: int
-    pass
 
 
 class Normal(TextStyle):

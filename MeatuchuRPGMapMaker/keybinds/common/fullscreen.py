@@ -24,4 +24,3 @@ class FullScreenKB(Keybind):
 
     def execute(self) -> None:
         self.fire_event(WindowToggleFullscreenModeRequestEvent())
-        pass

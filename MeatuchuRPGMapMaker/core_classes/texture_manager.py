@@ -16,7 +16,6 @@ class TextureManager(FeatureManager):
     def __init__(self) -> None:
         self.textures = {}
         super().__init__()
-        pass
 
     def load_texture(self, texture_name: str) -> Image.Image:
         self.log("DEBUG", f"Loading texture {texture_name}")

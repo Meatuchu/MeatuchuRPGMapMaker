@@ -20,4 +20,3 @@ class FileSaveKB(Keybind):
 
     def execute(self) -> None:
         self.fire_event(FileSaveRequestEvent())
-        pass

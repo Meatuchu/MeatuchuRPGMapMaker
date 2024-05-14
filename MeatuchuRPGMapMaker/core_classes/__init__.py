@@ -16,7 +16,6 @@ class FeatureManager:
         self._logger = logger_factory()
         self.stage = self._logger.stage
         self.log("INFO", f"initializing {self.name}")
-        pass
 
     def input_step(self, frame_number: int) -> None:
         pass

@@ -51,7 +51,6 @@ class ThreadManager(FeatureManager):
         self.log("DEBUG", f"Created new thread {thread_name}")
 
         self.event_mgr.queue_event(NewThreadEvent(thread_name))
-        pass
 
     def destroy_thread(self, event: DestroyThreadRequestEvent) -> None:
         thread_name = event.thread_name
@@ -72,7 +71,6 @@ class ThreadManager(FeatureManager):
         self.event_mgr.queue_event(DestroyThreadEvent(thread_name))
         if not self._threads:
             self.event_mgr.queue_event(AllThreadsDestroyedEvent())
-        pass
 
     def log_thread_error(self, event: ThreadErrorEvent) -> None:
         self.log("ERROR", f'{event.exception.__class__.__name__} in thread "{event.thread_name}"!')
