@@ -3,7 +3,7 @@ from typing import Callable, Dict, Optional
 
 from MeatuchuRPGMapMaker.events import Event, LogEvent
 
-from ..primitive_elements.base_element import Element
+from ..primitive_elements.base_element import Element, ElementPlacingMode
 
 
 class ComposedElement(Element):
@@ -12,9 +12,15 @@ class ComposedElement(Element):
 
     _elements: Dict[str, Element]
 
-    def __init__(self, window: TkWindow, name: str, fire_event: Callable[[Event], None]) -> None:
+    def __init__(
+        self,
+        window: TkWindow,
+        name: str,
+        fire_event: Callable[[Event], None],
+        placing_mode: ElementPlacingMode = "absolute",
+    ) -> None:
         self._elements = {}
-        super().__init__(window, fire_event, name)
+        super().__init__(window, fire_event, name, placing_mode=placing_mode)
 
     def add_element(self, element: Element) -> None:
         if self._elements.get(element.name):

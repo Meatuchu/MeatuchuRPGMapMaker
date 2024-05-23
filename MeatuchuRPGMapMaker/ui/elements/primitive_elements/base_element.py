@@ -1,9 +1,11 @@
 from tkinter import Tk as TkWindow
-from typing import Callable
+from typing import Callable, Literal
 
 from MeatuchuRPGMapMaker.events import Event
 
 from ....exceptions import ElementCreatedWithoutWindowError, ElementNotNamedError
+
+ElementPlacingMode = Literal["relative", "absolute"]
 
 
 class Element:
@@ -16,6 +18,7 @@ class Element:
 
     name: str
     _fire_event: Callable[[Event], None]
+    placing_mode: ElementPlacingMode
 
     def __init__(
         self,
@@ -23,6 +26,7 @@ class Element:
         fire_event: Callable[[Event], None],
         name: str,
         place_on_creation: bool = True,
+        placing_mode: ElementPlacingMode = "absolute",
     ) -> None:
         if not name:
             raise (ElementNotNamedError(self.__class__.__name__))
@@ -31,9 +35,13 @@ class Element:
         self.window = window
         self.name = name
         self._fire_event = fire_event
+        self.placing_mode = placing_mode
 
         if place_on_creation:
             self.place()
+
+    def handle_window_resize(self, new_width: int, new_height: int) -> None:
+        pass
 
     def place(self) -> None:
         pass

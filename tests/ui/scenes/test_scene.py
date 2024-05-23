@@ -9,7 +9,7 @@ from MeatuchuRPGMapMaker.ui.scenes.scene import Scene
 
 def test_construction() -> None:
     q: List[Event] = []
-    assert Scene(MagicMock(), q.append)
+    assert Scene(MagicMock(), "test", q.append)
 
 
 def test_scene_subscribe_to_event() -> None:
@@ -26,7 +26,7 @@ def test_scene_subscribe_to_event() -> None:
     def unsubscribe_from_event(id: str) -> None:
         subscriptions.pop(id, None)
 
-    s = Scene(MagicMock(), q.append, subscribe_to_event, unsubscribe_from_event)
+    s = Scene(MagicMock(), "test", q.append, subscribe_to_event, unsubscribe_from_event)
     subscriptions = {}  # clear out default subscriptions
 
     assert s._subscribe_to_event
@@ -51,7 +51,7 @@ def test_scene_unsubscribe_to_event() -> None:
     def unsubscribe_from_event(id: str) -> None:
         subscriptions.pop(id, None)
 
-    s = Scene(MagicMock(), q.append, subscribe_to_event, unsubscribe_from_event)
+    s = Scene(MagicMock(), "test", q.append, subscribe_to_event, unsubscribe_from_event)
     subscriptions = {}  # clear out default subscriptions
 
     assert s._subscribe_to_event

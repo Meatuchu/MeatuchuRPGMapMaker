@@ -14,11 +14,12 @@ class SettingsScene(Scene):
     def __init__(
         self,
         window: TkWindow,
+        window_name: str,
         fire_event: Callable[[Event], None],
         subscribe_to_event: Optional[Callable[[Type[Event], Callable[..., None]], str]] = None,
         unsubscribe_from_event: Optional[Callable[[str], None]] = None,
     ) -> None:
-        super().__init__(window, fire_event, subscribe_to_event, unsubscribe_from_event)
+        super().__init__(window, window_name, fire_event, subscribe_to_event, unsubscribe_from_event)
 
         self._frames = TabbedFrame(window, "SettingsSceneTabbedFrame", fire_event)
 
@@ -29,6 +30,8 @@ class SettingsScene(Scene):
             ]
         )
         self._frames.add_tab("test", "test")
+        self._frames.add_tab("test2", "test2")
+        self._frames.add_tab("test3 with a really dang long name", "test3")
 
 
 class MainMenuButton(Button):

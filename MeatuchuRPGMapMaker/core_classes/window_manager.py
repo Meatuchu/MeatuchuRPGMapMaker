@@ -230,6 +230,7 @@ class WindowManager(FeatureManager):
             # Create new scene
             self._scenes[window_name] = scene(
                 window,
+                window_name,
                 self._outgoing_events.append,
                 self.event_mgr.register_subscription,
                 self.event_mgr.unregister_subscription,

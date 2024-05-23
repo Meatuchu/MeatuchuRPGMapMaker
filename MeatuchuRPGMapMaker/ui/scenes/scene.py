@@ -1,7 +1,7 @@
 from tkinter import Tk as TkWindow
 from typing import Callable, Dict, List, Optional, Type
 
-from MeatuchuRPGMapMaker.events import InputSnapshotEvent
+from MeatuchuRPGMapMaker.events import InputSnapshotEvent, WindowResizedEvent
 from MeatuchuRPGMapMaker.keybinds.common.close_window import CloseWindowKB
 from MeatuchuRPGMapMaker.keybinds.common.fullscreen import FullScreenKB
 from MeatuchuRPGMapMaker.keybinds.Keybind import Keybind
@@ -17,6 +17,7 @@ class Scene:
 
     # Attributes
     _window: TkWindow
+    _window_name: str
     _elements: Dict[str, Element]
     _fire_event: Callable[[Event], None]
     _subscription_ids: List[str]
@@ -28,12 +29,14 @@ class Scene:
     def __init__(
         self,
         window: TkWindow,
+        window_name: str,
         fire_event: Callable[[Event], None],
         subscribe_to_event: Optional[Callable[[Type[Event], Callable[..., None]], str]] = None,
         unsubscribe_from_event: Optional[Callable[[str], None]] = None,
     ) -> None:
         self.name = self.__class__.__name__
         self._window = window
+        self._window_name = window_name
         self._elements = {}
         self._fire_event = fire_event
         self._subscribe_to_event = subscribe_to_event
@@ -44,6 +47,7 @@ class Scene:
         self._add_keybind(CloseWindowKB(self._fire_event))
         self._add_keybind(FullScreenKB(self._fire_event))
         self._subscribe(InputSnapshotEvent, self._input_snapshot_event_handler)
+        self._subscribe(WindowResizedEvent, self._window_resized_event_handler)
 
     def _add_keybind(self, kb: Keybind) -> None:
         self._keybinds.append(kb)
@@ -51,6 +55,11 @@ class Scene:
     def _input_snapshot_event_handler(self, event: InputSnapshotEvent) -> None:
         for kb in self._keybinds:
             kb.check(event.snapshot)
+
+    def _window_resized_event_handler(self, event: WindowResizedEvent) -> None:
+        if event.window_name == self._window_name:
+            for e in self._elements.values():
+                e.handle_window_resize(event.width, event.height)
 
     def _subscribe(self, event_type: Type[Event], handler: Callable[..., None]) -> None:
         if self._subscribe_to_event:

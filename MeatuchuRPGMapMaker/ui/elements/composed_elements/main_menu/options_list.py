@@ -7,6 +7,7 @@ from MeatuchuRPGMapMaker.events.LogEvent import LogEvent
 from MeatuchuRPGMapMaker.events.SceneChangeRequestEvent import SceneChangeRequestEvent
 
 from ...primitive_elements import Button
+from ...primitive_elements.base_element import ElementPlacingMode
 from .. import ComposedElement
 
 
@@ -28,8 +29,9 @@ class MainMenuOptions(ComposedElement):
         x: int = 0,
         y: int = 0,
         name: str = "mainmenuoptions",
+        placing_mode: ElementPlacingMode = "absolute",
     ) -> None:
-        super().__init__(window, name, fire_event)
+        super().__init__(window, name, fire_event, placing_mode=placing_mode)
         self.x = x
         self.y = y
 
