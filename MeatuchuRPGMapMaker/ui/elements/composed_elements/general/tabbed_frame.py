@@ -23,6 +23,7 @@ class TabbedFrameTab:
 class TabbedFrame(ComposedElement):
     tabs: Dict[str, TabbedFrameTab]
     active_tab: str
+    TAB_HEIGHT: int = 25
 
     def __init__(
         self,
@@ -51,8 +52,7 @@ class TabbedFrame(ComposedElement):
             f"{self.name}_{name}frame",
             x=self.x,
             y=self.y,
-            y_offset=25,
-            width=300 + len(self.tabs) * 100,
+            y_offset=self.TAB_HEIGHT,
             place_on_creation=False,
         )
         button_width = 25 + (7 * len(label))
@@ -61,7 +61,7 @@ class TabbedFrame(ComposedElement):
             self._fire_event,
             f"{self.name}_{name}btn",
             label=label,
-            height=25,
+            height=self.TAB_HEIGHT,
             width=button_width,
             x=self.x,
             x_offset=self._next_tab_offset,
@@ -75,15 +75,19 @@ class TabbedFrame(ComposedElement):
         if not self.active_tab:
             self.show_tab(name)
 
-    def add_element_to_tab(self, tab_name: str, element: Element) -> None:
-        element_list = self.tabs[tab_name].frame_contents
-        element_list.append(element)
+    def add_element_to_tab(self, tab_name: str, element: Element, frame_posx: int = 0, frame_posy: int = 0) -> None:
+        self.add_element(element)
+        frame = self.tabs[tab_name].frame
+        frame_element_list = self.tabs[tab_name].frame_contents
+        frame_element_list.append(element)
+        element.move_to(
+            frame_posx + self.x + frame.frame_bordersize, frame_posy + self.y + frame.frame_bordersize + self.TAB_HEIGHT
+        )
 
         if self.tabs[tab_name].visible:
             element.place()
 
     def show_tab(self, tab_name: str) -> None:
-        print(f"Showing tab: {tab_name}")
         self.hide_tab(self.active_tab)
         self.active_tab = tab_name
         for tab in self.tabs.values():
@@ -96,12 +100,10 @@ class TabbedFrame(ComposedElement):
 
         for element in tab.frame_contents:
             element.place()
-        print(f"Active tab: {self.active_tab}")
 
     def hide_tab(self, tab_name: str) -> None:
         if not tab_name:
             return
-        print(f"Hiding tab: {tab_name}")
         tab = self.tabs[tab_name]
         tab.frame.hide()
         tab.visible = False

@@ -68,6 +68,7 @@ class Button(Element):
                 width=self.width,
                 height=self.height,
             )
+        return super().place()
 
     def set_press_handler(self, handler: Callable[..., None]) -> None:
         self._press_handler = handler
@@ -84,6 +85,7 @@ class Button(Element):
 
     def hide(self) -> None:
         self._tkinter_button.place_forget()
+        return super().hide()
 
     def destroy(self) -> None:
         self._tkinter_button.destroy()

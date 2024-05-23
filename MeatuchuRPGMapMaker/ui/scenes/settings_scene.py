@@ -5,7 +5,7 @@ from MeatuchuRPGMapMaker.events import LogEvent, SceneChangeRequestEvent
 
 from ...events.Event import Event
 from ..elements.composed_elements.general.tabbed_frame import TabbedFrame
-from ..elements.primitive_elements import Button
+from ..elements.primitive_elements import Button, FloatingText
 from .scene import Scene
 
 
@@ -29,9 +29,30 @@ class SettingsScene(Scene):
                 self._frames,
             ]
         )
-        self._frames.add_tab("test", "test")
-        self._frames.add_tab("test2", "test2")
-        self._frames.add_tab("test3 with a really dang long name", "test3")
+        self._frames.add_tab("General", "general_tab")
+        self._frames.add_tab("Video", "video_tab")
+        self._frames.add_element_to_tab(
+            "general_tab",
+            FloatingText(
+                window,
+                fire_event,
+                "general_tab_text",
+                "General Settings",
+                placing_mode="absolute",
+                place_on_creation=False,
+            ),
+        )
+        self._frames.add_element_to_tab(
+            "video_tab",
+            FloatingText(
+                window,
+                fire_event,
+                "video_tab_text",
+                "Video Settings",
+                placing_mode="absolute",
+                place_on_creation=False,
+            ),
+        )
 
 
 class MainMenuButton(Button):

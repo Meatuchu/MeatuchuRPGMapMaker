@@ -24,6 +24,7 @@ class FloatingText(Element):
         y_offset: int = 0,
         style: Type[TextStyles.TextStyle] = TextStyles.Normal,
         placing_mode: ElementPlacingMode = "absolute",
+        place_on_creation: bool = True,
     ) -> None:
         self._text = text
         self.x = x
@@ -32,7 +33,7 @@ class FloatingText(Element):
         self.y_offset = y_offset
         self._tktext = TkLabel(window, text=text)
         self._tktext.config(font=(style.FONT, style.SIZE))
-        super().__init__(window, fire_event, name, placing_mode=placing_mode)
+        super().__init__(window, fire_event, name, placing_mode=placing_mode, place_on_creation=place_on_creation)
 
     def place(self) -> None:
         if self.placing_mode == "absolute":
@@ -49,9 +50,11 @@ class FloatingText(Element):
                 x=max(position_x, window_width, 0),
                 y=max(position_y, window_height, 0),
             )
+        return super().place()
 
     def hide(self) -> None:
         self._tktext.place_forget()
+        return super().hide()
 
     def destroy(self) -> None:
         self._tktext.destroy()

@@ -48,6 +48,7 @@ class ComposedElement(Element):
     def hide(self) -> None:
         for e in self._elements.values():
             e.hide()
+        return super().hide()
 
     def destroy(self) -> None:
         for e in self._elements.values():

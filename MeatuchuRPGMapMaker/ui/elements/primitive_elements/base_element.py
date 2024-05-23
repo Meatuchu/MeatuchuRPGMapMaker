@@ -19,6 +19,11 @@ class Element:
     name: str
     _fire_event: Callable[[Event], None]
     placing_mode: ElementPlacingMode
+    visible = False
+    x: int
+    y: int
+    x_offset: int
+    y_offset: int
 
     def __init__(
         self,
@@ -44,13 +49,21 @@ class Element:
         pass
 
     def place(self) -> None:
+        self.visible = True
         pass
 
     def hide(self) -> None:
+        self.visible = False
         pass
 
-    def move_to(self, x: int, y: int) -> None:
+    def move_to(self, x: int, y: int, x_offset: int = 0, y_offset: int = 0) -> None:
         """Move the element to the specified position"""
+        self.x = x
+        self.y = y
+        self.x_offset = x_offset
+        self.y_offset = y_offset
+        if self.visible:
+            self.place()
         pass
 
     def destroy(self) -> None:

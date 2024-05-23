@@ -34,6 +34,7 @@ class Frame(Element):
         self.y_offset = y_offset
         self.width = width
         self.height = height
+        self.frame_bordersize = 2
         self._tkframe = TkFrame(
             master=window,
             borderwidth=2,
@@ -62,6 +63,7 @@ class Frame(Element):
                 width=self.width,
                 height=self.height,
             )
+        return super().place()
 
     def destroy(self) -> None:
         self._tkframe.destroy()
@@ -69,3 +71,4 @@ class Frame(Element):
 
     def hide(self) -> None:
         self._tkframe.place_forget()
+        return super().hide()
