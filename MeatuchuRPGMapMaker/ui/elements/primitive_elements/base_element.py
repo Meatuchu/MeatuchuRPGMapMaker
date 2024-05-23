@@ -24,6 +24,7 @@ class Element:
     y: int
     x_offset: int
     y_offset: int
+    destroyed: bool = False
 
     def __init__(
         self,
@@ -46,33 +47,42 @@ class Element:
             self.place()
 
     def handle_window_resize(self, new_width: int, new_height: int) -> None:
-        pass
+        if self.destroyed:
+            return
 
     def place(self) -> None:
+        if self.destroyed:
+            return
         self.visible = True
-        pass
 
     def hide(self) -> None:
+        if self.destroyed:
+            return
         self.visible = False
-        pass
 
     def move_to(self, x: int, y: int, x_offset: int = 0, y_offset: int = 0) -> None:
         """Move the element to the specified position"""
+        if self.destroyed:
+            return
         self.x = x
         self.y = y
         self.x_offset = x_offset
         self.y_offset = y_offset
         if self.visible:
             self.place()
-        pass
 
     def destroy(self) -> None:
-        pass
+        self.visible = False
+        self.destroyed = True
 
     def frame_update(self) -> None:
         """Called every frame"""
+        if self.destroyed:
+            return
         pass
 
     def tick_update(self) -> None:
         """Called every tick"""
+        if self.destroyed:
+            return
         pass
