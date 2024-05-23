@@ -1,3 +1,4 @@
+# Ignore unused imports in this file, since they are used to expose the classes to the rest of the codebase
 # pyright: reportUnusedImport=false
 
 from .AllThreadsDestroyedEvent import AllThreadsDestroyedEvent
@@ -26,6 +27,7 @@ from .SettingEditedEvent import SettingEditedEvent
 from .ThreadErrorEvent import ThreadErrorEvent
 from .UpdateEvent import UpdateEvent
 from .WindowFullscreenModeEditRequestEvent import WindowFullscreenModeEditRequestEvent
+from .WindowResizedEvent import WindowResizedEvent
 from .WindowResizeRequestEvent import WindowResizeRequestEvent
 from .WindowToggleFullscreenModeRequestEvent import (
     WindowToggleFullscreenModeRequestEvent,
