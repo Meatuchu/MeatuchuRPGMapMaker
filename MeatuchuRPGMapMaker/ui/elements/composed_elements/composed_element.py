@@ -3,7 +3,11 @@ from typing import Callable, Dict, Optional
 
 from MeatuchuRPGMapMaker.events import Event, LogEvent
 
-from ..primitive_elements.base_element import Element, ElementPlacingMode
+from ..primitive_elements.base_element import (
+    Element,
+    ElementPlacingMode,
+    ElementSizingMode,
+)
 
 
 class ComposedElement(Element):
@@ -18,9 +22,10 @@ class ComposedElement(Element):
         name: str,
         fire_event: Callable[[Event], None],
         placing_mode: ElementPlacingMode = "absolute",
+        sizing_mode: ElementSizingMode = "absolute",
     ) -> None:
         self._elements = {}
-        super().__init__(window, fire_event, name, placing_mode=placing_mode)
+        super().__init__(window, fire_event, name, placing_mode=placing_mode, sizing_mode=sizing_mode)
 
     def add_element(self, element: Element) -> None:
         if self._elements.get(element.name):
@@ -54,3 +59,8 @@ class ComposedElement(Element):
         for e in self._elements.values():
             e.destroy()
         return super().destroy()
+
+    def handle_window_resize(self) -> None:
+        for e in self._elements.values():
+            e.handle_window_resize()
+        return super().handle_window_resize()

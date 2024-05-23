@@ -90,14 +90,15 @@ class WindowManager(FeatureManager):
                     WindowStatus.fullscreen_mode = mode
 
                 @classmethod
-                @debounce(0.1)
-                def set_size(cls, width: int, height: int) -> None:
+                @debounce(0.25)
+                def set_size(cls, width: int, height: int, scene: Scene) -> None:
                     if width <= 0 or height <= 0:
                         raise ValueError("Width and height must be greater than 0")
                     if WindowStatus.size_width != width or WindowStatus.size_height != height:
                         WindowStatus.size_width = width
                         WindowStatus.size_height = height
                         self.event_mgr.queue_event(WindowResizedEvent(width, height, window_name))
+                        scene.handle_window_resize()
 
             def handle_event(event: Event) -> None:
                 if isinstance(event, WindowResizeRequestEvent):
@@ -132,12 +133,14 @@ class WindowManager(FeatureManager):
                     if self._scenes.get(window_name):
                         self._scenes[window_name].tick_update()
                         self._scenes[window_name].frame_update()
+                        try:
+                            WindowStatus.set_size(
+                                window_obj.winfo_width(), window_obj.winfo_height(), self._scenes[window_name]
+                            )
+                        except Exception as e:
+                            self.log("WARNING", f"window {window_name} encountered an error: {e}")
                     window_obj.update()
                     window_obj.update_idletasks()
-                    try:
-                        WindowStatus.set_size(window_obj.winfo_width(), window_obj.winfo_height())
-                    except ValueError as e:
-                        self.log("WARNING", f"window {window_name} encountered an error: {e}")
                     fps.inc_frames()
                     fps.get_fps()
                     while len(self._window_events[window_name]):

@@ -1,7 +1,7 @@
 from tkinter import Tk as TkWindow
 from typing import Callable, Dict, List, Optional, Type
 
-from MeatuchuRPGMapMaker.events import InputSnapshotEvent, WindowResizedEvent
+from MeatuchuRPGMapMaker.events import InputSnapshotEvent
 from MeatuchuRPGMapMaker.keybinds.common.close_window import CloseWindowKB
 from MeatuchuRPGMapMaker.keybinds.common.fullscreen import FullScreenKB
 from MeatuchuRPGMapMaker.keybinds.Keybind import Keybind
@@ -47,7 +47,6 @@ class Scene:
         self._add_keybind(CloseWindowKB(self._fire_event))
         self._add_keybind(FullScreenKB(self._fire_event))
         self._subscribe(InputSnapshotEvent, self._input_snapshot_event_handler)
-        self._subscribe(WindowResizedEvent, self._window_resized_event_handler)
 
     def _add_keybind(self, kb: Keybind) -> None:
         self._keybinds.append(kb)
@@ -56,10 +55,9 @@ class Scene:
         for kb in self._keybinds:
             kb.check(event.snapshot)
 
-    def _window_resized_event_handler(self, event: WindowResizedEvent) -> None:
-        if event.window_name == self._window_name:
-            for e in self._elements.values():
-                e.handle_window_resize(event.width, event.height)
+    def handle_window_resize(self) -> None:
+        for e in self._elements.values():
+            e.handle_window_resize()
 
     def _subscribe(self, event_type: Type[Event], handler: Callable[..., None]) -> None:
         if self._subscribe_to_event:

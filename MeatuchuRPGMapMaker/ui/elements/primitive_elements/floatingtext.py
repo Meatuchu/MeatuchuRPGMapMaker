@@ -5,7 +5,7 @@ from typing import Callable, Type
 from MeatuchuRPGMapMaker.events import Event
 
 from ...styles import TextStyles
-from .base_element import Element, ElementPlacingMode
+from .base_element import Element, ElementPlacingMode, ElementSizingMode
 
 
 class FloatingText(Element):
@@ -23,8 +23,9 @@ class FloatingText(Element):
         x_offset: int = 0,
         y_offset: int = 0,
         style: Type[TextStyles.TextStyle] = TextStyles.Normal,
-        placing_mode: ElementPlacingMode = "absolute",
         place_on_creation: bool = True,
+        placing_mode: ElementPlacingMode = "absolute",
+        sizing_mode: ElementSizingMode = "absolute",
     ) -> None:
         self._text = text
         self.x = x
@@ -33,7 +34,14 @@ class FloatingText(Element):
         self.y_offset = y_offset
         self._tktext = TkLabel(window, text=text)
         self._tktext.config(font=(style.FONT, style.SIZE))
-        super().__init__(window, fire_event, name, placing_mode=placing_mode, place_on_creation=place_on_creation)
+        super().__init__(
+            window,
+            fire_event,
+            name,
+            placing_mode=placing_mode,
+            place_on_creation=place_on_creation,
+            sizing_mode=sizing_mode,
+        )
 
     def place(self) -> None:
         if self.placing_mode == "absolute":

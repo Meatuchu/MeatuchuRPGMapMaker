@@ -21,13 +21,17 @@ class SettingsScene(Scene):
     ) -> None:
         super().__init__(window, window_name, fire_event, subscribe_to_event, unsubscribe_from_event)
 
-        self._frames = TabbedFrame(window, "SettingsSceneTabbedFrame", fire_event)
-
-        self.place_elements(
-            [
-                MainMenuButton(window, fire_event),
-                self._frames,
-            ]
+        self._frames = TabbedFrame(
+            window,
+            "SettingsSceneTabbedFrame",
+            fire_event,
+            sizing_mode="relative",
+            placing_mode="absolute",
+            height=100,
+            width=100,
+            x=15,
+            width_offset=-30,
+            height_offset=-35,
         )
         self._frames.add_tab("General", "general_tab")
         self._frames.add_tab("Video", "video_tab")
@@ -41,6 +45,8 @@ class SettingsScene(Scene):
                 placing_mode="absolute",
                 place_on_creation=False,
             ),
+            frame_posx=10,
+            frame_posy=10,
         )
         self._frames.add_element_to_tab(
             "video_tab",
@@ -52,6 +58,15 @@ class SettingsScene(Scene):
                 placing_mode="absolute",
                 place_on_creation=False,
             ),
+            frame_posx=10,
+            frame_posy=10,
+        )
+
+        self.place_elements(
+            [
+                self._frames,
+                MainMenuButton(window, fire_event),
+            ]
         )
 
 
@@ -66,9 +81,13 @@ class MainMenuButton(Button):
             fire_event,
             "mainmenubutton",
             "Return to Main Menu From Settings",
-            x=15,
-            y=400,
+            x=100,
+            y=100,
+            x_offset=-266,
+            y_offset=-32,
             height=30,
             width=250,
             press_handler=press_handler,
+            placing_mode="relative",
+            place_on_creation=True,
         )

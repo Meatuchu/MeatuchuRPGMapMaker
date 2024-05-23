@@ -3,7 +3,11 @@ from typing import Callable, Dict, List
 
 from .....events.Event import Event
 from ...primitive_elements import Button, Frame
-from ...primitive_elements.base_element import Element, ElementPlacingMode
+from ...primitive_elements.base_element import (
+    Element,
+    ElementPlacingMode,
+    ElementSizingMode,
+)
 from .. import ComposedElement
 
 
@@ -34,11 +38,20 @@ class TabbedFrame(ComposedElement):
         y: int = 0,
         x_offset: int = 0,
         y_offset: int = 0,
+        width: int = 100,
+        height: int = 100,
+        height_offset: int = 0,
+        width_offset: int = 0,
+        sizing_mode: ElementSizingMode = "absolute",
         placing_mode: ElementPlacingMode = "absolute",
     ) -> None:
-        super().__init__(window, name, fire_event, placing_mode=placing_mode)
+        super().__init__(window, name, fire_event, sizing_mode=sizing_mode, placing_mode=placing_mode)
         self.x = x
         self.y = y
+        self.width = width
+        self.height = height
+        self.height_offset = height_offset
+        self.width_offset = width_offset
         self.x_offset = x_offset
         self.y_offset = y_offset
         self._next_tab_offset = 0
@@ -50,10 +63,15 @@ class TabbedFrame(ComposedElement):
             self.window,
             self._fire_event,
             f"{self.name}_{name}frame",
-            x=self.x,
-            y=self.y,
+            x=self.x + self.x_offset,
+            y=self.y + self.y_offset,
             y_offset=self.TAB_HEIGHT,
+            width=self.width,
+            height=self.height,
+            height_offset=(-1 * self.TAB_HEIGHT) + self.height_offset,
+            width_offset=self.width_offset,
             place_on_creation=False,
+            sizing_mode=self.sizing_mode,
         )
         button_width = 25 + (7 * len(label))
         frame_btn = Button(
@@ -63,9 +81,9 @@ class TabbedFrame(ComposedElement):
             label=label,
             height=self.TAB_HEIGHT,
             width=button_width,
-            x=self.x,
+            x=self.x + self.x_offset,
             x_offset=self._next_tab_offset,
-            y=self.y,
+            y=self.y + self.y_offset,
             press_handler=lambda: self.show_tab(name),
         )
         self._next_tab_offset += button_width
@@ -88,6 +106,8 @@ class TabbedFrame(ComposedElement):
             element.place()
 
     def show_tab(self, tab_name: str) -> None:
+        if self.active_tab == tab_name:
+            return
         self.hide_tab(self.active_tab)
         self.active_tab = tab_name
         for tab in self.tabs.values():
@@ -113,3 +133,10 @@ class TabbedFrame(ComposedElement):
 
     def tick_update(self) -> None:
         super().tick_update()
+
+    def handle_window_resize(self) -> None:
+        self.tabs[self.active_tab].btn.handle_window_resize()
+        self.tabs[self.active_tab].frame.handle_window_resize()
+        for e in self.tabs[self.active_tab].frame_contents:
+            e.handle_window_resize()
+        return super().handle_window_resize()

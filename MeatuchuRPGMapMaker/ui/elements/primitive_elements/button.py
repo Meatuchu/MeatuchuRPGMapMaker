@@ -4,7 +4,7 @@ from typing import Callable
 
 from MeatuchuRPGMapMaker.events import LogEvent
 
-from .base_element import Element, ElementPlacingMode
+from .base_element import Element, ElementPlacingMode, ElementSizingMode
 
 
 class Button(Element):
@@ -30,9 +30,12 @@ class Button(Element):
         y_offset: int = 0,
         width: int = 300,
         height: int = 50,
+        height_offset: int = 0,
+        width_offset: int = 0,
         press_handler: Callable[..., None] = lambda: None,
         place_on_creation: bool = True,
         placing_mode: ElementPlacingMode = "absolute",
+        sizing_mode: ElementSizingMode = "absolute",
     ) -> None:
         self._label = label
         self.x = x
@@ -47,15 +50,23 @@ class Button(Element):
             text=label,
             command=self.press_handler,
         )
-        super().__init__(window, fire_event, name, place_on_creation=place_on_creation, placing_mode=placing_mode)
+        super().__init__(
+            window,
+            fire_event,
+            name,
+            place_on_creation=place_on_creation,
+            placing_mode=placing_mode,
+            sizing_mode=sizing_mode,
+        )
 
     def place(self) -> None:
+        width, height = self.get_adjusted_wh()
         if self.placing_mode == "absolute":
             self._tkinter_button.place(
                 x=self.x + self.x_offset,
                 y=self.y + self.y_offset,
-                width=self.width,
-                height=self.height,
+                width=width,
+                height=height,
             )
         elif self.placing_mode == "relative":
             window_width = self.window.winfo_width()
@@ -63,10 +74,10 @@ class Button(Element):
             position_x = (self.x * window_width / 100) + self.x_offset
             position_y = (self.y * window_height / 100) + self.y_offset
             self._tkinter_button.place(
-                x=max(position_x, window_width, 0),
-                y=max(position_y, window_height, 0),
-                width=self.width,
-                height=self.height,
+                x=position_x,
+                y=position_y,
+                width=width,
+                height=height,
             )
         return super().place()
 
