@@ -34,3 +34,13 @@ def test_main_menu_options_destroy() -> None:
     main_menu_options.destroy()
     for el in main_menu_options._elements.values():
         el.destroy.assert_called_once()  # pyright: ignore[reportFunctionMemberAccess]
+
+
+def test_main_menu_options_hide() -> None:
+    window = Tk()
+    main_menu_options = MainMenuOptions(window, lambda event: None)
+    for el in main_menu_options._elements.values():
+        el.hide = MagicMock()
+    main_menu_options.hide()
+    for el in main_menu_options._elements.values():
+        el.hide.assert_called_once()  # pyright: ignore[reportFunctionMemberAccess]

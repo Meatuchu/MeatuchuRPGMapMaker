@@ -50,6 +50,9 @@ class FloatingText(Element):
                 y=max(position_y, window_height, 0),
             )
 
+    def hide(self) -> None:
+        self._tktext.place_forget()
+
     def destroy(self) -> None:
         self._tktext.destroy()
         return super().destroy()

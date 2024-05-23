@@ -32,3 +32,11 @@ def test_destroy() -> None:
     button._tkinter_button = MagicMock()
     button.destroy()
     button._tkinter_button.destroy.assert_called_once()
+
+
+def test_hide() -> None:
+    q: List[Event] = []
+    button = Button(MagicMock(), q.append, "testbutton")
+    button._tkinter_button = MagicMock()
+    button.hide()
+    button._tkinter_button.place_forget.assert_called_once()

@@ -82,6 +82,9 @@ class Button(Element):
                 )
             )
 
+    def hide(self) -> None:
+        self._tkinter_button.place_forget()
+
     def destroy(self) -> None:
         self._tkinter_button.destroy()
         return super().destroy()

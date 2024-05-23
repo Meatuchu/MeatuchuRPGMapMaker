@@ -68,5 +68,4 @@ class Frame(Element):
         return super().destroy()
 
     def hide(self) -> None:
-        self._tkframe.pack_forget()
-        self._tkframe.grid_remove()
+        self._tkframe.place_forget()

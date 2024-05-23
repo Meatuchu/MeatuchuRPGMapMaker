@@ -45,6 +45,10 @@ class ComposedElement(Element):
         for e in self._elements.values():
             e.frame_update()
 
+    def hide(self) -> None:
+        for e in self._elements.values():
+            e.hide()
+
     def destroy(self) -> None:
         for e in self._elements.values():
             e.destroy()
