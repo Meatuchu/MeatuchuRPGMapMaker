@@ -1,5 +1,4 @@
 # pyright: reportPrivateUsage=false
-from typing import Set
 from unittest.mock import MagicMock
 
 from pynput import keyboard, mouse
@@ -25,7 +24,7 @@ def test_register_event_manager() -> None:
 def test_handle_keypress_key() -> None:
     m = InputManager()
     e = MagicMock()
-    event_types: Set[str] = set()
+    event_types: set[str] = set()
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types
@@ -41,7 +40,7 @@ def test_handle_keypress_key() -> None:
 def test_handle_keypress_keycode() -> None:
     m = InputManager()
     e = MagicMock()
-    event_types: Set[str] = set()
+    event_types: set[str] = set()
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types
@@ -68,7 +67,7 @@ def test_handle_keypress_no_key() -> None:
 def test_handle_keyrelease_key() -> None:
     m = InputManager()
     e = MagicMock()
-    event_types: Set[str] = set()
+    event_types: set[str] = set()
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types
@@ -86,7 +85,7 @@ def test_handle_keyrelease_key() -> None:
 def test_handle_keyrelease_keycode() -> None:
     m = InputManager()
     e = MagicMock()
-    event_types: Set[str] = set()
+    event_types: set[str] = set()
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types
@@ -104,7 +103,7 @@ def test_handle_keyrelease_keycode() -> None:
 def test_handle_keyrelease_no_key() -> None:
     m = InputManager()
     e = MagicMock()
-    event_types: Set[str] = set()
+    event_types: set[str] = set()
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types
@@ -123,7 +122,7 @@ def test_handle_keyrelease_no_key() -> None:
 def test_handle_mouse_move() -> None:
     m = InputManager()
     e = MagicMock()
-    event_types: Set[str] = set()
+    event_types: set[str] = set()
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types

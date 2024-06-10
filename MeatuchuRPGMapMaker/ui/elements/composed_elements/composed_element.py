@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable, Dict, Optional
+from typing import Callable
 
 from MeatuchuRPGMapMaker.events import Event, LogEvent
 
@@ -14,7 +14,7 @@ class ComposedElement(Element):
     # Composed Elements are elements treated as a single element, but which are comprised of one or more element classes
     # They are defined in their own folder to reduce the possibility of circular dependency.
 
-    _elements: Dict[str, Element]
+    _elements: dict[str, Element]
 
     def __init__(
         self,
@@ -32,7 +32,7 @@ class ComposedElement(Element):
             raise ValueError(f"Element with name {element.name} already exists in {self.name}")
         self._elements[element.name] = element
 
-    def get_element(self, name: str) -> Optional[Element]:
+    def get_element(self, name: str) -> Element | None:
         res = self._elements.get(name)
         if not res:
             self._fire_event(

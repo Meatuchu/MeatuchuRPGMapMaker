@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable, Dict, List
+from typing import Callable
 
 from .....events.Event import Event
 from ...primitive_elements import Button, Frame
@@ -14,7 +14,7 @@ from .. import ComposedElement
 class TabbedFrameTab:
     btn: Button
     frame: Frame
-    frame_contents: List[Element]
+    frame_contents: list[Element]
     visible: bool = False
 
     def __init__(self, btn: Button, frame: Frame) -> None:
@@ -25,7 +25,7 @@ class TabbedFrameTab:
 
 
 class TabbedFrame(ComposedElement):
-    tabs: Dict[str, TabbedFrameTab]
+    tabs: dict[str, TabbedFrameTab]
     active_tab: str
     TAB_HEIGHT: int = 25
 

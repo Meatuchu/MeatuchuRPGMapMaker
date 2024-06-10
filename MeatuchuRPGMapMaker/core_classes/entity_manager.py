@@ -1,4 +1,3 @@
-from typing import Dict
 from uuid import uuid4
 
 from MeatuchuRPGMapMaker.game.entities.base_entity import BaseEntity
@@ -8,7 +7,7 @@ from .event_manager import EventManager
 
 
 class EntityManager(FeatureManager):
-    storage: Dict[str, BaseEntity]
+    storage: dict[str, BaseEntity]
     event_mgr: EventManager
 
     def __init__(self) -> None:

@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Optional
+from typing import Callable
 
 from MeatuchuRPGMapMaker.events import (
     Event,
@@ -10,7 +10,7 @@ from ..KeyState import KeyState
 
 
 class FullScreenKB(Keybind):
-    def __init__(self, fire_event: Callable[[Event], None], binds: Optional[List[Dict[str, int]]] = None) -> None:
+    def __init__(self, fire_event: Callable[[Event], None], binds: list[dict[str, int]] | None = None) -> None:
         if binds:
             self.states = [KeyState(bind) for bind in binds]
         else:

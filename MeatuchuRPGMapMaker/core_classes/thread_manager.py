@@ -1,6 +1,6 @@
 import threading
 import traceback
-from typing import Any, Callable, Dict, Tuple
+from typing import Any, Callable
 
 from MeatuchuRPGMapMaker.events import (
     AllThreadsDestroyedEvent,
@@ -17,7 +17,7 @@ from .event_manager import EventManager
 
 
 class ThreadManager(FeatureManager):
-    _threads: Dict[str, Tuple[str, threading.Thread]]
+    _threads: dict[str, tuple[str, threading.Thread]]
     event_mgr: EventManager
 
     def __init__(self) -> None:

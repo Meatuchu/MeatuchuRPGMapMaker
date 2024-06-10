@@ -1,6 +1,6 @@
 import sys
 import time
-from typing import Callable, Dict, List, Literal, Tuple, Type, cast
+from typing import Callable, Literal, Type, cast
 from uuid import uuid4
 
 from sortedcontainers import SortedDict  # pyright: ignore[reportMissingTypeStubs]
@@ -42,11 +42,11 @@ class EventSubcriber:
 
 
 class EventManager(FeatureManager):
-    _subscriptions: Dict[str, List[EventSubcriber]]
-    _input_event_queue: List[InputEvent]
-    _update_event_queue: List[UpdateEvent]
-    _render_event_queue: List[RenderEvent]
-    _misc_event_queue: List[Event]
+    _subscriptions: dict[str, list[EventSubcriber]]
+    _input_event_queue: list[InputEvent]
+    _update_event_queue: list[UpdateEvent]
+    _render_event_queue: list[RenderEvent]
+    _misc_event_queue: list[Event]
     _scheduled_events: SortedDict
     __app_shutdown_fired: bool = False
     __app_shutdown_time: float = 0
@@ -93,8 +93,8 @@ class EventManager(FeatureManager):
         self.log("DEBUG", f"Scheduling event {event.__class__.__name__} to run in {delay_sec} seconds")
 
         timestamp = time.time() + delay_sec
-        events_at_time: List[Event] = cast(
-            List[Event],
+        events_at_time: list[Event] = cast(
+            list[Event],
             self._scheduled_events.get(timestamp, []),  # pyright: ignore[reportUnknownMemberType]
         )
         events_at_time.append(event)
@@ -102,8 +102,8 @@ class EventManager(FeatureManager):
 
     def queue_scheduled_events(self) -> None:
         # makes pylance happy
-        peekitem = cast(Callable[[int], Tuple[float, List[Event]]], self._scheduled_events.peekitem)
-        popitem = cast(Callable[[int], Tuple[float, List[Event]]], self._scheduled_events.popitem)
+        peekitem = cast(Callable[[int], tuple[float, list[Event]]], self._scheduled_events.peekitem)
+        popitem = cast(Callable[[int], tuple[float, list[Event]]], self._scheduled_events.popitem)
 
         current_time = time.time()
         while self._scheduled_events and peekitem(0)[0] < current_time:

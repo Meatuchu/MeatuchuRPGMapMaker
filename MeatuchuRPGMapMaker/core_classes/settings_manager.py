@@ -1,16 +1,16 @@
 # Global app settings
-from typing import Any, Dict, Literal
+from typing import Any, Literal
 
 from MeatuchuRPGMapMaker.events import EditSettingRequestEvent, SettingEditedEvent
 
 from . import FeatureManager
 from .event_manager import EventManager
 
-STAGE_CONFIG_TYPE = Dict[str, Dict[str, Any]]
-GROUP_CONFIG_TYPE = Dict[str, Any]
+STAGE_CONFIG_TYPE = dict[str, dict[str, Any]]
+GROUP_CONFIG_TYPE = dict[str, Any]
 
 
-__settings_values__: Dict[Literal["any", "prod", "beta", "dev"], STAGE_CONFIG_TYPE] = {
+__settings_values__: dict[Literal["any", "prod", "beta", "dev"], STAGE_CONFIG_TYPE] = {
     "any": {
         "window": {"width": 1920, "height": 1080, "fullscreen_mode": 2, "name": "test"},
         "app": {

@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable, Literal, Tuple
+from typing import Callable, Literal
 
 from MeatuchuRPGMapMaker.events import Event
 
@@ -57,7 +57,7 @@ class Element:
         if self.visible:
             self.place()
 
-    def get_adjusted_wh(self) -> Tuple[int, int]:
+    def get_adjusted_wh(self) -> tuple[int, int]:
         if self.destroyed:
             return 0, 0
         if self.sizing_mode == "absolute":

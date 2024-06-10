@@ -1,5 +1,3 @@
-from typing import List, Optional, Tuple
-
 from .floor_entity import FloorEntity
 from .wall_entity import WallEntity
 
@@ -8,8 +6,8 @@ class RPGMapLayer:
     width = 40
     height = 40
 
-    floor_tiles: List[List[Optional[FloorEntity]]]
-    wall_tiles: List[List[Optional[WallEntity]]]
+    floor_tiles: list[list[FloorEntity | None]]
+    wall_tiles: list[list[WallEntity | None]]
 
     def __init__(self, width: int = 40, height: int = 40) -> None:
         self.width = width
@@ -21,16 +19,16 @@ class RPGMapLayer:
         self,
         x: int,
         y: int,
-    ) -> Tuple[Optional[FloorEntity], Optional[WallEntity]]:
+    ) -> tuple[FloorEntity | None, WallEntity | None]:
         return self.floor_tiles[x][y], self.wall_tiles[x][y]
 
-    def get_tile_at_position_floor(self, x: int, y: int) -> Optional[FloorEntity]:
+    def get_tile_at_position_floor(self, x: int, y: int) -> FloorEntity | None:
         try:
             return self.floor_tiles[x][y]
         except IndexError:
             return None
 
-    def get_tile_at_position_wall(self, x: int, y: int) -> Optional[WallEntity]:
+    def get_tile_at_position_wall(self, x: int, y: int) -> WallEntity | None:
         try:
             return self.wall_tiles[x][y]
         except IndexError:
@@ -44,7 +42,7 @@ class RPGMapLayer:
 
 
 class RPGMapBoard:
-    layers: List[RPGMapLayer]
+    layers: list[RPGMapLayer]
 
     def __init__(self, width: int = 40, height: int = 40) -> None:
         self.width = width
@@ -52,11 +50,11 @@ class RPGMapBoard:
         self.layers = []
         self.layers.append(RPGMapLayer(width, height))
 
-    def get_tiles_at_position(self, x: int, y: int, z: int) -> Tuple[Optional[FloorEntity], Optional[WallEntity]]:
+    def get_tiles_at_position(self, x: int, y: int, z: int) -> tuple[FloorEntity | None, WallEntity | None]:
         return self.layers[z].get_tiles_at_position(x, y)
 
-    def get_all_tiles_at_position(self, x: int, y: int) -> List[Tuple[Optional[FloorEntity], Optional[WallEntity]]]:
-        r: List[Tuple[Optional[FloorEntity], Optional[WallEntity]]] = []
+    def get_all_tiles_at_position(self, x: int, y: int) -> list[tuple[FloorEntity | None, WallEntity | None]]:
+        r: list[tuple[FloorEntity | None, WallEntity | None]] = []
         for layer in self.layers:
             r.append(layer.get_tiles_at_position(x, y))
         return r
@@ -67,7 +65,7 @@ class RPGMapBoard:
     def place_wall_at_position_in_layer(self, x: int, y: int, z: int, tile: WallEntity) -> None:
         self.layers[z].place_wall_at_position(x, y, tile)
 
-    def get_cell_neighbors_floor(self, x: int, y: int, z: int) -> List[Optional[FloorEntity]]:
+    def get_cell_neighbors_floor(self, x: int, y: int, z: int) -> list[FloorEntity | None]:
         return [
             self.layers[z].get_tile_at_position_floor(x - 1, y - 1),
             self.layers[z].get_tile_at_position_floor(x, y - 1),
@@ -79,7 +77,7 @@ class RPGMapBoard:
             self.layers[z].get_tile_at_position_floor(x + 1, y + 1),
         ]
 
-    def get_cell_neighbors_wall(self, x: int, y: int, z: int) -> List[Optional[WallEntity]]:
+    def get_cell_neighbors_wall(self, x: int, y: int, z: int) -> list[WallEntity | None]:
         return [
             self.layers[z].get_tile_at_position_wall(x - 1, y - 1),
             self.layers[z].get_tile_at_position_wall(x, y - 1),

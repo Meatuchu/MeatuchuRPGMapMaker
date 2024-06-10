@@ -2,7 +2,7 @@ import time
 from datetime import datetime
 from tkinter import Canvas as TkCanvas
 from tkinter import Tk as TkWindow
-from typing import Callable, Dict, List, Optional
+from typing import Callable
 
 from MeatuchuRPGMapMaker.events import (
     CloseWindowEvent,
@@ -54,11 +54,11 @@ class FPSMeasure:
 
 class WindowManager(FeatureManager):
     event_mgr: EventManager
-    _windows: Dict[str, Optional[TkWindow]]
-    _canvases: Dict[str, TkCanvas]
-    _scenes: Dict[str, Scene]
-    _window_events: Dict[str, List[RenderEvent]]
-    _outgoing_events: List[Event]
+    _windows: dict[str, TkWindow | None]
+    _canvases: dict[str, TkCanvas]
+    _scenes: dict[str, Scene]
+    _window_events: dict[str, list[RenderEvent]]
+    _outgoing_events: list[Event]
 
     window_create_timeout = 0.1
 

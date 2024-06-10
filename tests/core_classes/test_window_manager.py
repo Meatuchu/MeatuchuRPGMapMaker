@@ -1,4 +1,3 @@
-from typing import Set
 from unittest.mock import MagicMock, call, patch
 
 from pytest import raises
@@ -108,7 +107,7 @@ def test_create_window_thread_target(mock_tk: MagicMock) -> None:
     m._get_window_thread = MagicMock()
 
     mock_event_mgr = MagicMock()
-    event_types: Set[str] = set()
+    event_types: set[str] = set()
 
     def mock_queue_event(event: Event) -> None:
         nonlocal event_types

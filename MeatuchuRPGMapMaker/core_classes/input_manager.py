@@ -1,5 +1,5 @@
 import time
-from typing import Dict, Optional, Tuple, Union, cast
+from typing import cast
 
 from pynput import keyboard, mouse
 
@@ -24,9 +24,9 @@ class InputManager(FeatureManager):
     event_mgr: EventManager
     key_listener: keyboard.Listener
     mouse_listener: mouse.Listener
-    _pressed_keys: Dict[str, int]
-    _pressed_mouse_buttons: Dict[str, Dict[str, Union[Tuple[int, int], int]]]
-    _mouse_position: Tuple[int, int]
+    _pressed_keys: dict[str, int]
+    _pressed_mouse_buttons: dict[str, dict[str, tuple[int, int] | int]]
+    _mouse_position: tuple[int, int]
 
     def __init__(self) -> None:
         super().__init__()
@@ -54,10 +54,7 @@ class InputManager(FeatureManager):
     def subscribe_to_events(self) -> None:
         pass
 
-    def handle_keypress(
-        self,
-        key: Optional[Union[keyboard.KeyCode, keyboard.Key]],
-    ) -> None:
+    def handle_keypress(self, key: keyboard.KeyCode | keyboard.Key | None) -> None:
         if not key:
             return
         c = ""
@@ -76,7 +73,7 @@ class InputManager(FeatureManager):
 
     def handle_keyrelease(
         self,
-        key: Optional[Union[keyboard.KeyCode, keyboard.Key]],
+        key: keyboard.KeyCode | keyboard.Key | None,
     ) -> None:
         if not key:
             return

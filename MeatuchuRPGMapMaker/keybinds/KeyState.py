@@ -1,5 +1,4 @@
 import time
-from typing import Dict
 
 from MeatuchuRPGMapMaker.classes.input_snapshot import InputSnapshot
 from MeatuchuRPGMapMaker.constants import NS_PER_MS
@@ -11,7 +10,7 @@ class KeyState:
     allow_hold_refire: bool
     __is_fired: bool
 
-    def __init__(self, keys: Dict[str, int], allow_hold_refire: bool = False, modifiers_first: bool = True) -> None:
+    def __init__(self, keys: dict[str, int], allow_hold_refire: bool = False, modifiers_first: bool = True) -> None:
         for key in keys:
             if keys[key] < 0:
                 raise ValueError("Keybinds must have a hold requirement of at least 0 ns")

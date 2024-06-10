@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from typing import Any, Callable, Dict, List, Optional, Tuple
+from typing import Any, Callable
 
 from MeatuchuRPGMapMaker.constants import NS_PER_S
 from MeatuchuRPGMapMaker.events import (
@@ -25,11 +25,11 @@ from .window_manager import WindowManager
 
 
 class AppState:
-    state_queue: List[Tuple[str, Any]] = []
+    state_queue: list[tuple[str, Any]] = []
 
     # state
     app_active: bool
-    active_board: Optional[RPGMapBoard]
+    active_board: RPGMapBoard | None
     last_update_time: int = 0
 
     def __init__(self) -> None:
@@ -39,11 +39,11 @@ class AppState:
         self.tickrate = tickrate_per_sec
         self.tickgap = NS_PER_S / tickrate_per_sec
 
-    def set_state(self, new_state: Tuple[str, Any]) -> None:
+    def set_state(self, new_state: tuple[str, Any]) -> None:
         key, val = new_state
         super().__setattr__(key, val)
 
-    def queue_state_change(self, state_change: Tuple[str, Any]) -> None:
+    def queue_state_change(self, state_change: tuple[str, Any]) -> None:
         self.state_queue.append(state_change)
 
     def process_state_queue(self) -> None:
@@ -191,8 +191,8 @@ class AppManager(FeatureManager):
     def open_new_map(self) -> None:
         self.state.set_state(("active_board", RPGMapBoard()))
 
-    def get_all_managers(self) -> Dict[str, FeatureManager]:
-        mgrs: Dict[str, FeatureManager] = {}
+    def get_all_managers(self) -> dict[str, FeatureManager]:
+        mgrs: dict[str, FeatureManager] = {}
         for attribute in dir(self):
             if attribute.endswith("mgr") and isinstance(self.__getattribute__(attribute), Callable):
                 mgrs[attribute] = self.__getattribute__(attribute)

@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable, Optional, Type
+from typing import Callable, Type
 
 from MeatuchuRPGMapMaker.events import LogEvent, SceneChangeRequestEvent
 
@@ -16,8 +16,8 @@ class SettingsScene(Scene):
         window: TkWindow,
         window_name: str,
         fire_event: Callable[[Event], None],
-        subscribe_to_event: Optional[Callable[[Type[Event], Callable[..., None]], str]] = None,
-        unsubscribe_from_event: Optional[Callable[[str], None]] = None,
+        subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str] | None = None,
+        unsubscribe_from_event: Callable[[str], None] | None = None,
     ) -> None:
         super().__init__(window, window_name, fire_event, subscribe_to_event, unsubscribe_from_event)
 

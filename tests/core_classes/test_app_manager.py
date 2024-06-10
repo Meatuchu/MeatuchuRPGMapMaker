@@ -1,4 +1,4 @@
-from typing import Dict, NoReturn, cast
+from typing import NoReturn, cast
 from unittest.mock import MagicMock
 
 from pytest import raises
@@ -146,7 +146,7 @@ def test_input_step() -> None:
         MagicMock(),
         MagicMock(),
     )
-    managers = cast(Dict[str, MagicMock], a.get_all_managers())
+    managers = cast(dict[str, MagicMock], a.get_all_managers())
     managers["event_mgr"].queue_scheduled_events = MagicMock(name="event_mgr.queue_scheduled_events")
     for k in managers:
         managers[k].input_step = MagicMock(name=f"{k}.input_step")
@@ -168,7 +168,7 @@ def test_update_step() -> None:
         MagicMock(),
         MagicMock(),
     )
-    managers = cast(Dict[str, MagicMock], a.get_all_managers())
+    managers = cast(dict[str, MagicMock], a.get_all_managers())
     managers["event_mgr"].queue_scheduled_events = MagicMock(name="event_mgr.queue_scheduled_events")
     for k in managers:
         managers[k].update_step = MagicMock(name=f"{k}.update_step")
@@ -190,7 +190,7 @@ def test_render_step() -> None:
         MagicMock(),
         MagicMock(),
     )
-    managers = cast(Dict[str, MagicMock], a.get_all_managers())
+    managers = cast(dict[str, MagicMock], a.get_all_managers())
     managers["event_mgr"].queue_scheduled_events = MagicMock(name="event_mgr.queue_scheduled_events")
     for k in managers:
         managers[k].render_step = MagicMock(name=f"{k}.render_step")

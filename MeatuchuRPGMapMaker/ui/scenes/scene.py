@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable, Dict, List, Optional, Type
+from typing import Callable, Type
 
 from MeatuchuRPGMapMaker.events import InputSnapshotEvent
 from MeatuchuRPGMapMaker.keybinds.common.close_window import CloseWindowKB
@@ -18,12 +18,12 @@ class Scene:
     # Attributes
     _window: TkWindow
     _window_name: str
-    _elements: Dict[str, Element]
+    _elements: dict[str, Element]
     _fire_event: Callable[[Event], None]
-    _subscription_ids: List[str]
-    _subscribe_to_event: Optional[Callable[[Type[Event], Callable[..., None]], str]]
-    _unsubscribe_from_event: Optional[Callable[[str], None]]
-    _keybinds: List[Keybind]
+    _subscription_ids: list[str]
+    _subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str] | None
+    _unsubscribe_from_event: Callable[[str], None] | None
+    _keybinds: list[Keybind]
     name: str
 
     def __init__(
@@ -31,8 +31,8 @@ class Scene:
         window: TkWindow,
         window_name: str,
         fire_event: Callable[[Event], None],
-        subscribe_to_event: Optional[Callable[[Type[Event], Callable[..., None]], str]] = None,
-        unsubscribe_from_event: Optional[Callable[[str], None]] = None,
+        subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str] | None = None,
+        unsubscribe_from_event: Callable[[str], None] | None = None,
     ) -> None:
         self.name = self.__class__.__name__
         self._window = window
@@ -73,7 +73,7 @@ class Scene:
             raise DuplicateSceneElementError(e.name, self.__class__.__name__)
         self._elements[e.name] = e
 
-    def place_elements(self, es: List[Element]) -> None:
+    def place_elements(self, es: list[Element]) -> None:
         for e in es:
             self.place_element(e)
 

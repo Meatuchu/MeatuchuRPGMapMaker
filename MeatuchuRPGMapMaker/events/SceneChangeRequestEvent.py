@@ -3,7 +3,7 @@
 import importlib
 import inspect
 from types import ModuleType
-from typing import Any, Dict, Optional
+from typing import Any
 
 from .RenderEvent import RenderEvent
 
@@ -13,8 +13,8 @@ class SceneChangeRequestEvent(RenderEvent):
     def __init__(
         self,
         scene_target: str,
-        window_name: Optional[str] = None,
-        scene_kwargs: Dict[str, Any] = {},
+        window_name: str | None = None,
+        scene_kwargs: dict[str, Any] = {},
     ) -> None:
         from MeatuchuRPGMapMaker.ui.scenes import Scene
 

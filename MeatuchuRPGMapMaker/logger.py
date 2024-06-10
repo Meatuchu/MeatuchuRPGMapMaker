@@ -3,7 +3,7 @@ import traceback
 from datetime import datetime
 from enum import Enum
 from shutil import copyfile
-from typing import Callable, Literal, Optional
+from typing import Callable, Literal
 
 from colorama import Fore, Style
 
@@ -42,7 +42,7 @@ class Logger:
 
     def __init__(
         self,
-        stage: Optional[Literal["prod", "beta", "dev"]] = None,
+        stage: Literal["prod", "beta", "dev"] | None = None,
     ) -> None:
         self.stage = DEPLOY_STAGE(stage or STAGE_STR)
         self.verbose = VERBOSE_FLAG

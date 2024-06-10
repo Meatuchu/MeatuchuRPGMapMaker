@@ -1,16 +1,16 @@
 import os
 import sys
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 DEFAULT_STAGE: str = "prod"
 
 
-arguments: List[str] = sys.argv[1:]
-parsed_args: Dict[str, Union[str, bool]] = {}
+arguments: list[str] = sys.argv[1:]
+parsed_args: dict[str, str | bool] = {}
 
 
 def process_args() -> None:
-    key: Optional[str] = None
+    key: str | None = None
     for arg in arguments:
         if not key:
             if arg.startswith("---") or not arg.startswith("-"):
@@ -30,7 +30,7 @@ def process_args() -> None:
             key = None
 
 
-def get_arg_value(key: str) -> Optional[Any]:
+def get_arg_value(key: str) -> Any:
     if key.startswith("-"):
         return parsed_args.get(key, None)
     else:
@@ -45,7 +45,7 @@ def set_arg_value(key: str) -> None:
 process_args()
 
 
-def get_all_args() -> Dict[str, Union[str, bool]]:
+def get_all_args() -> dict[str, str | bool]:
     return parsed_args
 
 
