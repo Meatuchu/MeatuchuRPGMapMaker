@@ -318,7 +318,7 @@ def test_load_new_scene(
     mock_scene_def.return_value = new_scene
     event2.scene_to_load = mock_scene_def  # pyright: ignore[reportAttributeAccessIssue]
     w.load_scene(event2)
-    assert old_scene.unload.called_once()
+    old_scene.unload.assert_called_once()
     assert w._scenes[DEFAULT_WINDOW_NAME] == new_scene
 
 
