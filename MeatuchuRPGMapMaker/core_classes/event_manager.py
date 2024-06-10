@@ -116,7 +116,8 @@ class EventManager(FeatureManager):
 
     def queue_event(self, event: Event) -> None:
         if self.__app_shutdown_fired:
-            self.log("ERROR", f"App is shutting down, unable to handle queued event {event.__class__.__name__}")
+            if event.__class__ not in HIDDEN_EVENTS:
+                self.log("ERROR", f"App is shutting down, unable to handle queued event {event.__class__.__name__}")
             return
 
         self._log_event_handle_info(event, "DEBUG", f"Adding event {event.__class__.__name__} to event queue")
@@ -207,9 +208,8 @@ class EventManager(FeatureManager):
     ) -> None:
         if event.__class__ in [InputEvent, RenderEvent, UpdateEvent]:
             return
-        for t in HIDDEN_EVENTS:
-            if isinstance(event, t):
-                return
+        if event.__class__ in HIDDEN_EVENTS:
+            return
         self.log(level, msg)
 
     def __handle_app_shutdown_event(self) -> None:

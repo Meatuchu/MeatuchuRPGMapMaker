@@ -13,6 +13,19 @@
       "env": {
         "PYTHONPATH": "${workspaceRoot}"
       },
+    },
+    {
+      "name": "Python Debugger: MeatuchuRPGMapMaker",
+      "type": "debugpy",
+      "request": "launch",
+      "module": "MeatuchuRPGMapMaker",
+      "args": [
+        "-s",
+        "dev"
+      ],
+      "env": {
+        "PYTHONPATH": "${workspaceRoot}"
+      },
     }
   ]
 }
