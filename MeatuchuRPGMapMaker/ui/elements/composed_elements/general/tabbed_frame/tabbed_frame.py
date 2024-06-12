@@ -1,27 +1,16 @@
 from tkinter import Tk as TkWindow
 from typing import Callable
 
-from .....events.Event import Event
-from ...primitive_elements import Button, Frame
-from ...primitive_elements.base_element import (
+from MeatuchuRPGMapMaker.events.Event import Event
+from MeatuchuRPGMapMaker.ui.elements.primitive_elements import Button, Frame
+from MeatuchuRPGMapMaker.ui.elements.primitive_elements.base_element import (
     Element,
     ElementPlacingMode,
     ElementSizingMode,
 )
-from .. import ComposedElement
 
-
-class TabbedFrameTab:
-    btn: Button
-    frame: Frame
-    frame_contents: list[Element]
-    visible: bool = False
-
-    def __init__(self, btn: Button, frame: Frame) -> None:
-        self.btn = btn
-        self.frame = frame
-        self.frame_contents = []
-        self.visible = False
+from ... import ComposedElement
+from .tabbed_frame_tab import TabbedFrameTab
 
 
 class TabbedFrame(ComposedElement):
