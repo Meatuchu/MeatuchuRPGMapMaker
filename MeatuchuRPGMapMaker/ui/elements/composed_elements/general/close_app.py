@@ -1,8 +1,8 @@
 from tkinter import Tk as TkWindow
 from typing import Callable
 
-from .....events.AppShutDownEvent import AppShutDownEvent
-from .....events.Event import Event
+from MeatuchuRPGMapMaker.events import AppShutDownEvent, Event
+
 from ...primitive_elements import Button
 from ...primitive_elements.base_element import ElementPlacingMode
 from .. import ComposedElement

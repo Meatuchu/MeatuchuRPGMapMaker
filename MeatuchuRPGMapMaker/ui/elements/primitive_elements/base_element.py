@@ -2,8 +2,10 @@ from tkinter import Tk as TkWindow
 from typing import Callable, Literal
 
 from MeatuchuRPGMapMaker.events import Event
-
-from ....exceptions import ElementCreatedWithoutWindowError, ElementNotNamedError
+from MeatuchuRPGMapMaker.exceptions import (
+    ElementCreatedWithoutWindowError,
+    ElementNotNamedError,
+)
 
 ElementPlacingMode = Literal["relative", "absolute"]
 ElementSizingMode = Literal["relative", "absolute"]

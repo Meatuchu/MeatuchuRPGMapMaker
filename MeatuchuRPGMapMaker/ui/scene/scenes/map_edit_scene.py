@@ -1,10 +1,9 @@
 from tkinter import Tk as TkWindow
 from typing import Callable, Type
 
-from MeatuchuRPGMapMaker.events import SceneChangeRequestEvent
+from MeatuchuRPGMapMaker.events import Event, SceneChangeRequestEvent
 from MeatuchuRPGMapMaker.keybinds.common.file_save import FileSaveKB
 
-from ....events.Event import Event
 from ...elements.primitive_elements import Button
 from ..scene import Scene
 

@@ -1,9 +1,8 @@
 from tkinter import Tk as TkWindow
 from typing import Callable, Type
 
-from MeatuchuRPGMapMaker.events import LogEvent, SceneChangeRequestEvent
+from MeatuchuRPGMapMaker.events import Event, LogEvent, SceneChangeRequestEvent
 
-from ....events.Event import Event
 from ...elements.composed_elements.general import TabbedFrame
 from ...elements.primitive_elements import Button, FloatingText
 from ..scene import Scene
