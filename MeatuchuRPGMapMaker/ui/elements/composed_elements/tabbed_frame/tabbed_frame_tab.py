@@ -12,3 +12,11 @@ class TabbedFrameTab:
         self.frame = frame
         self.frame_contents = []
         self.visible = False
+
+    def disable_button(self) -> None:
+        self.btn.disable()
+        self.btn.set_relief("sunken")
+
+    def enable_button(self) -> None:
+        self.btn.enable()
+        self.btn.set_relief("raised")

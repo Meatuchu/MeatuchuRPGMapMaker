@@ -1,6 +1,6 @@
 from tkinter import Button as TkButton
 from tkinter import Tk as TkWindow
-from typing import Callable
+from typing import Callable, Literal
 
 from MeatuchuRPGMapMaker.events import LogEvent
 
@@ -101,3 +101,12 @@ class Button(Element):
     def destroy(self) -> None:
         self._tkinter_button.destroy()
         return super().destroy()
+
+    def disable(self) -> None:
+        self._tkinter_button.config(state="disabled")
+
+    def enable(self) -> None:
+        self._tkinter_button.config(state="normal")
+
+    def set_relief(self, relief: Literal["raised", "sunken", "flat", "ridge", "solid", "groove"]) -> None:
+        self._tkinter_button.config(relief=relief)

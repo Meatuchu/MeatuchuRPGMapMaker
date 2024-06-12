@@ -98,12 +98,15 @@ class TabbedFrame(ComposedElement):
         if self.active_tab == tab_name:
             return
         self.hide_tab(self.active_tab)
+
         self.active_tab = tab_name
+
         for tab in self.tabs.values():
             tab.frame.hide()
             tab.visible = False
 
         tab = self.tabs[tab_name]
+        tab.disable_button()
         tab.frame.place()
         tab.visible = True
 
@@ -114,6 +117,7 @@ class TabbedFrame(ComposedElement):
         if not tab_name:
             return
         tab = self.tabs[tab_name]
+        tab.enable_button()
         tab.frame.hide()
         tab.visible = False
 
