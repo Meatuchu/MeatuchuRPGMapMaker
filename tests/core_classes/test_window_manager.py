@@ -7,6 +7,7 @@ from MeatuchuRPGMapMaker.core_classes.window_manager import (
     DEFAULT_WINDOW_NAME,
     WindowManager,
 )
+from MeatuchuRPGMapMaker.events import SettingEditedEvent
 from MeatuchuRPGMapMaker.events.Event import Event
 from MeatuchuRPGMapMaker.events.NewThreadRequestEvent import NewThreadRequestEvent
 from MeatuchuRPGMapMaker.events.RenderEvent import RenderEvent
@@ -368,3 +369,79 @@ def test_render_step_without_outgoing_events() -> None:
 
     # Assert that the event manager's queue_event method was not called
     event_mgr.queue_event.assert_not_called()
+
+
+def test_handle_setting_edit_event_fullscreen_mode() -> None:
+    # Create a mock event manager
+    event_mgr = MagicMock()
+
+    # Create a mock window manager
+    w = WindowManager()
+    w.register_event_manager(event_mgr)
+    w.pass_event_to_window_queue = MagicMock()
+
+    # Create a mock event
+    event = SettingEditedEvent("window", "fullscreen_mode", 1)
+
+    # Call the handle_setting_edit_event method
+    w.handle_settings_change(event)
+
+    # Assert that the window event queue method was called
+    assert w.pass_event_to_window_queue.call_count == 1
+
+
+def test_handle_setting_edit_event_window_height() -> None:
+    # Create a mock event manager
+    event_mgr = MagicMock()
+
+    # Create a mock window manager
+    w = WindowManager()
+    w.register_event_manager(event_mgr)
+    w.pass_event_to_window_queue = MagicMock()
+
+    # Create a mock event
+    event = SettingEditedEvent("window", "height", 1000)
+
+    # Call the handle_setting_edit_event method
+    w.handle_settings_change(event)
+
+    # Assert that the window event queue method was called
+    assert w.pass_event_to_window_queue.call_count == 1
+
+
+def test_handle_setting_edit_event_window_width() -> None:
+    # Create a mock event manager
+    event_mgr = MagicMock()
+
+    # Create a mock window manager
+    w = WindowManager()
+    w.register_event_manager(event_mgr)
+    w.pass_event_to_window_queue = MagicMock()
+
+    # Create a mock event
+    event = SettingEditedEvent("window", "width", 1000)
+
+    # Call the handle_setting_edit_event method
+    w.handle_settings_change(event)
+
+    # Assert that the window event queue method was called
+    assert w.pass_event_to_window_queue.call_count == 1
+
+
+def test_handle_setting_edit_event_irrelevant() -> None:
+    # Create a mock event manager
+    event_mgr = MagicMock()
+
+    # Create a mock window manager
+    w = WindowManager()
+    w.register_event_manager(event_mgr)
+    w.pass_event_to_window_queue = MagicMock()
+
+    # Create a mock event
+    event = SettingEditedEvent("test", "non-setting", "who cares")
+
+    # Call the handle_setting_edit_event method
+    w.handle_settings_change(event)
+
+    # Assert that the window event queue method was not called
+    assert w.pass_event_to_window_queue.call_count == 0

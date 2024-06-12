@@ -1,7 +1,12 @@
 from tkinter import Tk as TkWindow
 from typing import Callable, Type
 
-from MeatuchuRPGMapMaker.events import Event, LogEvent, SceneChangeRequestEvent
+from MeatuchuRPGMapMaker.events import (
+    EditSettingRequestEvent,
+    Event,
+    LogEvent,
+    SceneChangeRequestEvent,
+)
 
 from ...elements.composed_elements import TabbedFrame
 from ...elements.primitive_elements import Button, FloatingText
@@ -59,6 +64,20 @@ class SettingsScene(Scene):
             ),
             frame_posx=10,
             frame_posy=10,
+        )
+        self._frames.add_element_to_tab(
+            "video_tab",
+            Button(
+                window,
+                fire_event,
+                "set_fullscreen_mode_button",
+                "Fullscreen Mode",
+                place_on_creation=False,
+                placing_mode="absolute",
+                press_handler=lambda: fire_event(EditSettingRequestEvent("window", "fullscreen_mode", 2)),
+            ),
+            frame_posx=10,
+            frame_posy=60,
         )
 
         self.place_elements(

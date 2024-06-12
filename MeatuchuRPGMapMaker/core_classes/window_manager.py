@@ -12,6 +12,7 @@ from MeatuchuRPGMapMaker.events import (
     RenderEvent,
     SceneChangeEvent,
     SceneChangeRequestEvent,
+    SettingEditedEvent,
     WindowFullscreenModeEditRequestEvent,
     WindowResizedEvent,
     WindowResizeRequestEvent,
@@ -174,12 +175,12 @@ class WindowManager(FeatureManager):
         self.log("DEBUG", f"Requested thread for {window_name} window")
 
     def set_window_size(self, event: WindowResizeRequestEvent) -> None:
-        width = event.width or 800
-        height = event.height or 600
         window_name = event.window_name or DEFAULT_WINDOW_NAME
         self._wait_for_window(window_name)
         window = self._windows[window_name]
         assert window
+        width = event.width or window.winfo_width()
+        height = event.height or window.winfo_height()
         window.geometry(f"{width}x{height}")
         self._canvases[window_name].config(width=width, height=height)
         self._canvases[window_name].pack()
@@ -209,6 +210,7 @@ class WindowManager(FeatureManager):
         self.event_mgr.register_subscription(WindowToggleFullscreenModeRequestEvent, self.pass_event_to_window_queue)
         self.event_mgr.register_subscription(WindowFullscreenModeEditRequestEvent, self.pass_event_to_window_queue)
         self.event_mgr.register_subscription(SceneChangeRequestEvent, self.pass_event_to_window_queue)
+        self.event_mgr.register_subscription(SettingEditedEvent, self.handle_settings_change)
         pass
 
     def pass_event_to_window_queue(self, event: RenderEvent) -> None:
@@ -264,6 +266,15 @@ class WindowManager(FeatureManager):
                     raise WindowNotFoundError(window_name)
         except KeyError:
             raise WindowNotExistError(window_name)
+
+    def handle_settings_change(self, event: SettingEditedEvent) -> None:
+        if event.group == "window":
+            if event.key == "width":
+                self.pass_event_to_window_queue(WindowResizeRequestEvent(event.value, None))
+            elif event.key == "height":
+                self.pass_event_to_window_queue(WindowResizeRequestEvent(None, event.value))
+            elif event.key == "fullscreen_mode":
+                self.pass_event_to_window_queue(WindowFullscreenModeEditRequestEvent(event.value))
 
     def input_step(self, frame_number: int) -> None:
         return super().input_step(frame_number)
