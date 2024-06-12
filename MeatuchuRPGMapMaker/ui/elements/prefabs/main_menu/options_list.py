@@ -6,9 +6,9 @@ from MeatuchuRPGMapMaker.events.Event import Event
 from MeatuchuRPGMapMaker.events.LogEvent import LogEvent
 from MeatuchuRPGMapMaker.events.SceneChangeRequestEvent import SceneChangeRequestEvent
 
+from ...composed_elements import ComposedElement
 from ...primitive_elements import Button
 from ...primitive_elements.base_element import ElementPlacingMode
-from .. import ComposedElement
 
 
 class MainMenuOptions(ComposedElement):

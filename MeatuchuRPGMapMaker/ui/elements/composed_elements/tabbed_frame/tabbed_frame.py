@@ -9,7 +9,7 @@ from MeatuchuRPGMapMaker.ui.elements.primitive_elements.base_element import (
     ElementSizingMode,
 )
 
-from ... import ComposedElement
+from ..composed_element import ComposedElement
 from .tabbed_frame_tab import TabbedFrameTab
 
 

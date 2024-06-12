@@ -3,9 +3,9 @@ from typing import Callable
 
 from MeatuchuRPGMapMaker.events import AppShutDownEvent, Event
 
-from ...primitive_elements import Button
-from ...primitive_elements.base_element import ElementPlacingMode
-from .. import ComposedElement
+from ..composed_elements import ComposedElement
+from ..primitive_elements import Button
+from ..primitive_elements.base_element import ElementPlacingMode
 
 
 class CloseAppButton(ComposedElement):
