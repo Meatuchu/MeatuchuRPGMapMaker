@@ -16,10 +16,10 @@ class SceneChangeRequestEvent(RenderEvent):
         window_name: str | None = None,
         scene_kwargs: dict[str, Any] = {},
     ) -> None:
-        from MeatuchuRPGMapMaker.ui.scenes import Scene
+        from MeatuchuRPGMapMaker.ui.scene import Scene
 
         # Need to import at construction time due to circular import.
-        scene_module = importlib.import_module("MeatuchuRPGMapMaker.ui.scenes")
+        scene_module = importlib.import_module("MeatuchuRPGMapMaker.ui.scene")
 
         try:
             scene_class = getattr(scene_module, scene_target)
@@ -40,7 +40,7 @@ class SceneChangeRequestEvent(RenderEvent):
 
 
 def get_available_scenes_from_module(mod: ModuleType) -> str:
-    from MeatuchuRPGMapMaker.ui.scenes import Scene
+    from MeatuchuRPGMapMaker.ui.scene import Scene
 
     scenes = "\n    ".join(
         [

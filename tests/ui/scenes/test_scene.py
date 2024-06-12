@@ -4,7 +4,7 @@ from unittest.mock import MagicMock
 from uuid import uuid4
 
 from MeatuchuRPGMapMaker.events import Event
-from MeatuchuRPGMapMaker.ui.scenes.scene import Scene
+from MeatuchuRPGMapMaker.ui.scene.scene import Scene
 
 
 def test_construction() -> None:

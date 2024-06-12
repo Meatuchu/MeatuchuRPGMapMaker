@@ -4,9 +4,9 @@ from typing import Callable, Type
 from MeatuchuRPGMapMaker.events import SceneChangeRequestEvent
 from MeatuchuRPGMapMaker.keybinds.common.file_save import FileSaveKB
 
-from ...events.Event import Event
-from ..elements.primitive_elements import Button
-from .scene import Scene
+from ....events.Event import Event
+from ...elements.primitive_elements import Button
+from ..scene import Scene
 
 
 class MapEditScene(Scene):

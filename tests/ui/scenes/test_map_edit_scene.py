@@ -2,7 +2,7 @@
 from unittest.mock import MagicMock
 
 from MeatuchuRPGMapMaker.events import Event
-from MeatuchuRPGMapMaker.ui.scenes.map_edit_scene import MapEditScene
+from MeatuchuRPGMapMaker.ui.scene.scenes.map_edit_scene import MapEditScene
 
 
 def test_construction() -> None:

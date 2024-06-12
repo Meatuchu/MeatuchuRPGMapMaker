@@ -23,7 +23,7 @@ from MeatuchuRPGMapMaker.exceptions import (
     WindowNotFoundError,
 )
 from MeatuchuRPGMapMaker.helpers import debounce
-from MeatuchuRPGMapMaker.ui.scenes.scene import Scene
+from MeatuchuRPGMapMaker.ui.scene.scene import Scene
 
 from . import FeatureManager
 from .event_manager import EventManager

@@ -20,7 +20,7 @@ from MeatuchuRPGMapMaker.exceptions import (
     WindowNotExistError,
     WindowNotFoundError,
 )
-from MeatuchuRPGMapMaker.ui.scenes.scene import Scene
+from MeatuchuRPGMapMaker.ui.scene.scene import Scene
 
 # pyright: reportPrivateUsage=false
 

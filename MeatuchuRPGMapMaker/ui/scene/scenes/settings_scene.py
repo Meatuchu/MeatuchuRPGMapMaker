@@ -3,10 +3,10 @@ from typing import Callable, Type
 
 from MeatuchuRPGMapMaker.events import LogEvent, SceneChangeRequestEvent
 
-from ...events.Event import Event
-from ..elements.composed_elements.general.tabbed_frame import TabbedFrame
-from ..elements.primitive_elements import Button, FloatingText
-from .scene import Scene
+from ....events.Event import Event
+from ...elements.composed_elements.general.tabbed_frame import TabbedFrame
+from ...elements.primitive_elements import Button, FloatingText
+from ..scene import Scene
 
 
 class SettingsScene(Scene):
