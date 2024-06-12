@@ -108,7 +108,7 @@ class WindowManager(FeatureManager):
                     WindowStatus.set_fullscreen(event.mode)
                     self.set_fullscreen_mode(event)
                 elif isinstance(event, WindowToggleFullscreenModeRequestEvent):
-                    mode = 1 if WindowStatus.fullscreen_mode == 0 else 0
+                    mode = 0 if WindowStatus.fullscreen_mode != 0 else 2
                     WindowStatus.set_fullscreen(mode)
                     self.set_fullscreen_mode(WindowFullscreenModeEditRequestEvent(mode, event.window_name))
                 elif isinstance(event, SceneChangeRequestEvent):
@@ -195,7 +195,17 @@ class WindowManager(FeatureManager):
         self._wait_for_window(window_name)
         window = self._windows[window_name]
         assert window
-        window.attributes("-fullscreen", mode >= 1)  # pyright: ignore[reportUnknownMemberType]
+
+        if mode not in [0, 1, 2]:
+            raise ValueError("Invalid fullscreen mode")
+
+        if mode == 0:  # Windowed
+            window.attributes("-fullscreen", False)  # pyright: ignore[reportUnknownMemberType]
+        elif mode == 1:  # Borderless Window (Not supported yet)
+            window.attributes("-fullscreen", True)  # pyright: ignore[reportUnknownMemberType]
+        elif mode == 2:  # Fullscreen
+            window.attributes("-fullscreen", True)  # pyright: ignore[reportUnknownMemberType]
+
         self.log(
             "DEBUG",
             f"set {window_name} fullscreen mode to {mode}",
