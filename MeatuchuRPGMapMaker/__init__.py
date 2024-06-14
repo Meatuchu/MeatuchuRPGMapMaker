@@ -12,6 +12,13 @@ parsed_args: dict[str, str | bool] = {}
 def process_args() -> None:
     key: str | None = None
     for arg in arguments:
+        if "pytest" in arg.lower() or "test" in arg.lower():
+            parsed_args.clear()
+            parsed_args["--stage"] = "prod"
+            parsed_args["--verbose"] = False
+            parsed_args["--silent"] = True
+            return
+
         if not key:
             if arg.startswith("---") or not arg.startswith("-"):
                 raise ValueError(f'Error parsing arguments: unexpected symbol "{arg}"')

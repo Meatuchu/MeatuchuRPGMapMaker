@@ -98,9 +98,10 @@ def test_logger_handle_error_prod() -> None:
     "MeatuchuRPGMapMaker.logger.get_cur_time",
     MagicMock(return_value=datetime(2077, 1, 1, 1, 1, 1, 1)),
 )
-@patch("MeatuchuRPGMapMaker.logger.print")
-def test_logger_logs(mock_print: MagicMock) -> None:
+def test_logger_logs() -> None:
     a = Logger("prod")
+    mock_print = MagicMock()
+    a.print = mock_print
     a.should_print_color = False
     a.log("ERROR", "test")
     mock_print.assert_has_calls([call("[2077-01-01 01:01:01.000001] ERROR: test")])

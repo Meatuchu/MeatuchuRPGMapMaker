@@ -2,12 +2,13 @@ import os
 import traceback
 from datetime import datetime
 from enum import Enum
+from io import TextIOWrapper
 from shutil import copyfile
 from typing import Callable, Literal
 
 from colorama import Fore, Style
 
-from . import STAGE_STR, VERBOSE_FLAG
+from . import STAGE_STR, VERBOSE_FLAG, get_arg_value
 from .constants import DEPLOY_STAGE
 
 
@@ -31,6 +32,8 @@ class Logger:
     verbose: bool
     should_print_color: bool
     should_write_to_file: bool
+    silent: bool
+    file: TextIOWrapper | None
     __log_file_name: str
     _colors = {
         "WARNING": Fore.YELLOW,
@@ -46,7 +49,9 @@ class Logger:
     ) -> None:
         self.stage = DEPLOY_STAGE(stage or STAGE_STR)
         self.verbose = VERBOSE_FLAG
+        self.silent = get_arg_value("--silent") or False
         self.should_print_color = True
+        self.file = None
         self.should_write_to_file = False
 
     def open_log_file(self) -> None:
@@ -73,7 +78,11 @@ class Logger:
             self.file.write(f"{tlabel}: {msg}\n")
         if self._should_log(t):
             clabel = self._color_msg(t, tlabel)
-            print(f"{clabel}: {msg}")
+            self.print(f"{clabel}: {msg}")
+
+    def print(self, msg: str) -> None:
+        if not self.silent:
+            print(msg)
 
     def _should_log(self, msg_level: _MSG_LEVEL) -> bool:
         if self.verbose:
