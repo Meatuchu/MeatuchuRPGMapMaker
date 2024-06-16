@@ -1,6 +1,6 @@
 import time
 from datetime import datetime
-from typing import Any, Callable
+from typing import Any
 
 from MeatuchuRPGMapMaker.constants import NS_PER_S
 from MeatuchuRPGMapMaker.events import (
@@ -68,21 +68,10 @@ class AppManager(FeatureManager):
     frame_counter: int
     start_time: float
 
-    def __init__(
-        self,
-        entity_mgr: EntityManager,
-        event_mgr: EventManager,
-        export_mgr: ExportManager,
-        input_mgr: InputManager,
-        render_mgr: RenderingManager,
-        settings_mgr: SettingsManager,
-        texture_mgr: TextureManager,
-        thread_mgr: ThreadManager,
-        window_mgr: WindowManager,
-    ) -> None:
+    def __init__(self) -> None:
         super().__init__()
         # Prepare app state
-        self.register_event_manager(event_mgr)
+        self.register_event_manager(EventManager())
         self.state = AppState()
 
         # Initialize metrics
@@ -90,14 +79,14 @@ class AppManager(FeatureManager):
         self.start_time = int(datetime.now().timestamp())
 
         # Register Features
-        self.export_mgr = export_mgr
-        self.entity_mgr = entity_mgr
-        self.input_mgr = input_mgr
-        self.render_mgr = render_mgr
-        self.settings_mgr = settings_mgr
-        self.texture_mgr = texture_mgr
-        self.thread_mgr = thread_mgr
-        self.window_mgr = window_mgr
+        self.export_mgr = ExportManager()
+        self.entity_mgr = EntityManager()
+        self.input_mgr = InputManager()
+        self.render_mgr = RenderingManager()
+        self.settings_mgr = SettingsManager()
+        self.texture_mgr = TextureManager()
+        self.thread_mgr = ThreadManager()
+        self.window_mgr = WindowManager()
         self.distribute_event_manager()
         self.state.set_tickrate(self.settings_mgr.get_setting("app", "tickrate"))
 
@@ -194,6 +183,6 @@ class AppManager(FeatureManager):
     def get_all_managers(self) -> dict[str, FeatureManager]:
         mgrs: dict[str, FeatureManager] = {}
         for attribute in dir(self):
-            if attribute.endswith("mgr") and isinstance(self.__getattribute__(attribute), Callable):
+            if attribute.endswith("mgr") and isinstance(self.__getattribute__(attribute), FeatureManager):
                 mgrs[attribute] = self.__getattribute__(attribute)
         return mgrs

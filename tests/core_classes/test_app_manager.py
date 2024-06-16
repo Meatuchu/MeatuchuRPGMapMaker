@@ -7,32 +7,18 @@ from MeatuchuRPGMapMaker.core_classes.app_manager import AppManager
 
 
 def test_app_manager_creation() -> None:
-    AppManager(
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-    )
+    AppManager()
+
+
+def test_app_manager_singleton() -> None:
+    a = AppManager()
+    b = AppManager()
+    assert a is b
 
 
 def test_app_manager_does_update_on_should_tick() -> None:
     # setup
-    a = AppManager(
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-    )
+    a = AppManager()
     a.should_do_game_tick = lambda cur_time: True
     a.input_step = MagicMock()
     a.update_step = MagicMock()
@@ -47,17 +33,7 @@ def test_app_manager_does_update_on_should_tick() -> None:
 
 def test_app_manager_does_update_on_should_tick_neg() -> None:
     # setup
-    a = AppManager(
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-    )
+    a = AppManager()
     a.should_do_game_tick = lambda cur_time: False
     a.input_step = MagicMock()
     a.update_step = MagicMock()
@@ -71,17 +47,8 @@ def test_app_manager_does_update_on_should_tick_neg() -> None:
 
 
 def test_activate_app() -> None:
-    a = AppManager(
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-    )
+    a = AppManager()
+    a.window_mgr = MagicMock()
     original = a.app_frame_process
     a.state.tickgap = 0
 
@@ -99,17 +66,7 @@ def test_activate_app() -> None:
 
 
 def test_should_do_game_tick_negative() -> None:
-    a = AppManager(
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-    )
+    a = AppManager()
 
     a.state.last_update_time = 0
     a.state.tickgap = 12
@@ -117,17 +74,7 @@ def test_should_do_game_tick_negative() -> None:
 
 
 def test_should_do_game_tick_positive() -> None:
-    a = AppManager(
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-    )
+    a = AppManager()
 
     a.state.last_update_time = 0
     a.state.tickgap = 12
@@ -135,17 +82,7 @@ def test_should_do_game_tick_positive() -> None:
 
 
 def test_input_step() -> None:
-    a = AppManager(
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-    )
+    a = AppManager()
     managers = cast(dict[str, MagicMock], a.get_all_managers())
     managers["event_mgr"].queue_scheduled_events = MagicMock(name="event_mgr.queue_scheduled_events")
     for k in managers:
@@ -157,17 +94,7 @@ def test_input_step() -> None:
 
 
 def test_update_step() -> None:
-    a = AppManager(
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-    )
+    a = AppManager()
     managers = cast(dict[str, MagicMock], a.get_all_managers())
     managers["event_mgr"].queue_scheduled_events = MagicMock(name="event_mgr.queue_scheduled_events")
     for k in managers:
@@ -179,17 +106,7 @@ def test_update_step() -> None:
 
 
 def test_render_step() -> None:
-    a = AppManager(
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-    )
+    a = AppManager()
     managers = cast(dict[str, MagicMock], a.get_all_managers())
     managers["event_mgr"].queue_scheduled_events = MagicMock(name="event_mgr.queue_scheduled_events")
     for k in managers:
@@ -201,15 +118,5 @@ def test_render_step() -> None:
 
 
 def test_init_board() -> None:
-    a = AppManager(
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-        MagicMock(),
-    )
+    a = AppManager()
     a.open_new_map()

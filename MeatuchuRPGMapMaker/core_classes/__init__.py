@@ -1,4 +1,4 @@
-from typing import Literal
+from typing import Any, Literal, Self
 from uuid import uuid4
 
 from MeatuchuRPGMapMaker.constants import DEPLOY_STAGE
@@ -9,6 +9,12 @@ class FeatureManager:
     stage: DEPLOY_STAGE
     id: str
     event_mgr = None
+    instance: Self | None = None
+
+    def __new__(cls, *args: Any, **kwargs: Any) -> Self:
+        if not cls.instance:
+            cls.instance = super().__new__(cls)
+        return cls.instance
 
     def __init__(self) -> None:
         self.id = str(uuid4())
