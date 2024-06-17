@@ -68,8 +68,7 @@ class AppManager(FeatureManager):
     frame_counter: int
     start_time: float
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __build__(self) -> None:
         # Prepare app state
         self.register_event_manager(EventManager())
         self.state = AppState()

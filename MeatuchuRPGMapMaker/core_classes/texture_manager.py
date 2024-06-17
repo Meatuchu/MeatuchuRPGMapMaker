@@ -12,9 +12,8 @@ class TextureManager(FeatureManager):
     event_mgr: EventManager
     textures: dict[str, Image.Image]
 
-    def __init__(self) -> None:
+    def __build__(self) -> None:
         self.textures = {}
-        super().__init__()
 
     def load_texture(self, texture_name: str) -> Image.Image:
         self.log("DEBUG", f"Loading texture {texture_name}")

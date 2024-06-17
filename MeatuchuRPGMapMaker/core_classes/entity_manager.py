@@ -10,9 +10,8 @@ class EntityManager(FeatureManager):
     storage: dict[str, BaseEntity]
     event_mgr: EventManager
 
-    def __init__(self) -> None:
+    def __build__(self) -> None:
         self.storage = {}
-        super().__init__()
 
     def register_event_manager(self, event_mgr: EventManager) -> None:
         self.event_mgr = event_mgr

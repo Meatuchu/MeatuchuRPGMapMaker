@@ -28,8 +28,7 @@ class InputManager(FeatureManager):
     _pressed_mouse_buttons: dict[str, dict[str, tuple[int, int] | int]]
     _mouse_position: tuple[int, int]
 
-    def __init__(self) -> None:
-        super().__init__()
+    def __build__(self) -> None:
         self.key_listener = keyboard.Listener(
             on_press=self.handle_keypress,
             on_release=self.handle_keyrelease,

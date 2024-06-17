@@ -63,13 +63,12 @@ class WindowManager(FeatureManager):
 
     window_create_timeout = 0.1
 
-    def __init__(self) -> None:
+    def __build__(self) -> None:
         self._windows = {}
         self._canvases = {}
         self._scenes = {}
         self._window_events = {}
         self._outgoing_events = []
-        super().__init__()
 
     def _get_window_thread(
         self,

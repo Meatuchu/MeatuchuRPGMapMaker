@@ -43,9 +43,8 @@ class SettingsManager(FeatureManager):
     event_mgr: EventManager
     session_settings: GROUP_CONFIG_TYPE
 
-    def __init__(self) -> None:
+    def __build__(self) -> None:
         self.session_settings = {}
-        super().__init__()
 
     def get_setting(self, group: str, key: str, default: Any = None, allow_none: bool = True) -> Any:
         session_value = self.session_settings.get(group, {}).get(key)

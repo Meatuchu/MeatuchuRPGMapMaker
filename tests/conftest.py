@@ -1,3 +1,4 @@
+# pyright: reportPrivateUsage=false
 from typing import Any, Generator
 
 import pytest
@@ -17,28 +18,28 @@ from MeatuchuRPGMapMaker.core_classes.window_manager import WindowManager
 @pytest.fixture(autouse=True)
 def before_after_each_test() -> Generator[None, Any, None]:
     # Before each test
-    AppManager.instance = None
-    EntityManager.instance = None
-    EventManager.instance = None
-    ExportManager.instance = None
-    InputManager.instance = None
-    RenderingManager.instance = None
-    SettingsManager.instance = None
-    TextureManager.instance = None
-    ThreadManager.instance = None
-    WindowManager.instance = None
+    AppManager._instance = None
+    EntityManager._instance = None
+    EventManager._instance = None
+    ExportManager._instance = None
+    InputManager._instance = None
+    RenderingManager._instance = None
+    SettingsManager._instance = None
+    TextureManager._instance = None
+    ThreadManager._instance = None
+    WindowManager._instance = None
 
     # Run the test
     yield
 
     # After each test
-    AppManager.instance = None
-    EntityManager.instance = None
-    EventManager.instance = None
-    ExportManager.instance = None
-    InputManager.instance = None
-    RenderingManager.instance = None
-    SettingsManager.instance = None
-    TextureManager.instance = None
-    ThreadManager.instance = None
-    WindowManager.instance = None
+    AppManager._instance = None
+    EntityManager._instance = None
+    EventManager._instance = None
+    ExportManager._instance = None
+    InputManager._instance = None
+    RenderingManager._instance = None
+    SettingsManager._instance = None
+    TextureManager._instance = None
+    ThreadManager._instance = None
+    WindowManager._instance = None

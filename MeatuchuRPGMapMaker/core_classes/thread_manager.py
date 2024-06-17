@@ -20,9 +20,8 @@ class ThreadManager(FeatureManager):
     _threads: dict[str, tuple[str, threading.Thread]]
     event_mgr: EventManager
 
-    def __init__(self) -> None:
+    def __build__(self) -> None:
         self._threads = {}
-        super().__init__()
 
     def register_event_manager(self, event_mgr: EventManager) -> None:
         self.event_mgr = event_mgr

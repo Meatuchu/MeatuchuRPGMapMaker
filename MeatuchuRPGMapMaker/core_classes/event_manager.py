@@ -51,10 +51,7 @@ class EventManager(FeatureManager):
     __app_shutdown_fired: bool = False
     __app_shutdown_time: float = 0
 
-    def __init__(
-        self,
-    ) -> None:
-        super().__init__()
+    def __build__(self) -> None:
         self._event_defs = {}
         self._subscriptions = {}
         self._misc_event_queue = []
