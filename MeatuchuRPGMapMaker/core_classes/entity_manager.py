@@ -14,6 +14,10 @@ class EntityManager(FeatureManager):
         self.storage = {}
         super().__init__()
 
+    def register_event_manager(self, event_mgr: EventManager) -> None:
+        self.event_mgr = event_mgr
+        self.subscribe_to_events()
+
     def subscribe_to_events(self) -> None:
         pass
 

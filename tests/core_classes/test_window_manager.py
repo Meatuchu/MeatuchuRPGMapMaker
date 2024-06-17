@@ -45,7 +45,8 @@ def test_window_already_exists(mock_Tk: MagicMock) -> None:
         w._canvases[window_name] = mock_Tk()
 
     w.create_window = _new_window_thread_mock
-
+    event_mgr = EventManager()
+    w.register_event_manager(event_mgr)
     w.create_window()
     with raises(DuplicateWindowError) as e:
         w.create_window()
@@ -57,6 +58,7 @@ def test_window_activate(thread_request_event_def: MagicMock) -> None:
     w = WindowManager()
     event_mgr = EventManager()
     event_mgr.queue_event = MagicMock()
+    w.register_event_manager(event_mgr)
     w.create_window()
     w.create_window("side")
     event_mgr.queue_event.assert_has_calls(calls=[call(thread_request_event_def()), call(thread_request_event_def())])
@@ -74,11 +76,23 @@ def test_window_set_size(mock_Tk: MagicMock) -> None:
     set_size_event_1 = WindowResizeRequestEvent(200, 200)
     set_size_event_2 = WindowResizeRequestEvent(300, 300, "side")
     w.create_window = _new_window_thread_mock
+    event_mgr = EventManager()
+    w.register_event_manager(event_mgr)
     w.create_window("side")
     w.create_window()
     w.set_window_size(set_size_event_1)
     w.set_window_size(set_size_event_2)
     mock_Tk.return_value.geometry.assert_has_calls([call("200x200"), call("300x300")])
+
+
+def test_register_event_manager() -> None:
+    m = WindowManager()
+    event_mgr = MagicMock()
+    o = m.subscribe_to_events
+    m.subscribe_to_events = MagicMock(side_effect=o)
+    m.register_event_manager(event_mgr)
+    m.event_mgr = event_mgr
+    m.subscribe_to_events.assert_called_once()
 
 
 def test_set_window_size_not_exist() -> None:
@@ -93,6 +107,7 @@ def test_create_window_thread_target(mock_tk: MagicMock) -> None:
     m = WindowManager()
     m._get_window_thread = MagicMock()
 
+    mock_event_mgr = MagicMock()
     event_types: set[str] = set()
 
     def mock_queue_event(event: Event) -> None:
@@ -101,11 +116,12 @@ def test_create_window_thread_target(mock_tk: MagicMock) -> None:
         if isinstance(event, NewThreadRequestEvent):
             event.thread_target()
 
-    m.event_mgr.queue_event = MagicMock(side_effect=mock_queue_event)
+    mock_event_mgr.queue_event = MagicMock(side_effect=mock_queue_event)
 
+    m.register_event_manager(mock_event_mgr)
     m.create_window("test")
 
-    m.event_mgr.queue_event.assert_called()
+    mock_event_mgr.queue_event.assert_called()
     assert NewThreadRequestEvent.__name__ in event_types
 
 
@@ -119,6 +135,8 @@ def test_set_fullscreen_mode_0(mock_Tk: MagicMock) -> None:
         w._canvases[window_name] = mock_Tk()
 
     w.create_window = _new_window_thread_mock
+    event_mgr = EventManager()
+    w.register_event_manager(event_mgr)
     w.create_window("side")
     w.create_window()
     mode = 0
@@ -137,6 +155,8 @@ def test_set_fullscreen_mode_1(mock_Tk: MagicMock) -> None:
         w._canvases[window_name] = mock_Tk()
 
     w.create_window = _new_window_thread_mock
+    event_mgr = EventManager()
+    w.register_event_manager(event_mgr)
     w.create_window("side")
     w.create_window()
     mode = 1
@@ -155,6 +175,8 @@ def test_set_fullscreen_mode_2(mock_Tk: MagicMock) -> None:
         w._canvases[window_name] = mock_Tk()
 
     w.create_window = _new_window_thread_mock
+    event_mgr = EventManager()
+    w.register_event_manager(event_mgr)
     w.create_window("side")
     w.create_window()
     mode = 2
@@ -229,6 +251,8 @@ def test_load_scene(
 
     # Create window manager
     w = WindowManager()
+    event_mgr = EventManager()
+    w.register_event_manager(event_mgr)
 
     # Mock create_window
     o = w.create_window
@@ -242,11 +266,11 @@ def test_load_scene(
 
     # Prepare window
     w.create_window()
-    w.event_mgr.queue_event = MagicMock()
+    event_mgr.queue_event = MagicMock()
 
     # Test
     w.load_scene(SceneChangeRequestEvent("MapEditScene"))
-    w.event_mgr.queue_event.assert_called_once_with(mock_scene_change_event.return_value)
+    event_mgr.queue_event.assert_called_once_with(mock_scene_change_event.return_value)
 
 
 @patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
@@ -266,6 +290,8 @@ def test_load_new_scene(
 
     # Create window manager
     w = WindowManager()
+    event_mgr = EventManager()
+    w.register_event_manager(event_mgr)
 
     # Mock create_window
     o = w.create_window
@@ -279,7 +305,7 @@ def test_load_new_scene(
 
     # Prepare window
     w.create_window()
-    w.event_mgr.queue_event = MagicMock()
+    event_mgr.queue_event = MagicMock()
 
     # Test
     event1 = SceneChangeRequestEvent("MapEditScene")
@@ -346,9 +372,12 @@ def test_render_step_without_outgoing_events() -> None:
 
 
 def test_handle_setting_edit_event_fullscreen_mode() -> None:
+    # Create a mock event manager
+    event_mgr = MagicMock()
+
     # Create a mock window manager
     w = WindowManager()
-
+    w.register_event_manager(event_mgr)
     w.pass_event_to_window_queue = MagicMock()
 
     # Create a mock event
@@ -362,8 +391,12 @@ def test_handle_setting_edit_event_fullscreen_mode() -> None:
 
 
 def test_handle_setting_edit_event_window_height() -> None:
+    # Create a mock event manager
+    event_mgr = MagicMock()
+
     # Create a mock window manager
     w = WindowManager()
+    w.register_event_manager(event_mgr)
     w.pass_event_to_window_queue = MagicMock()
 
     # Create a mock event
@@ -377,8 +410,12 @@ def test_handle_setting_edit_event_window_height() -> None:
 
 
 def test_handle_setting_edit_event_window_width() -> None:
+    # Create a mock event manager
+    event_mgr = MagicMock()
+
     # Create a mock window manager
     w = WindowManager()
+    w.register_event_manager(event_mgr)
     w.pass_event_to_window_queue = MagicMock()
 
     # Create a mock event
@@ -392,8 +429,12 @@ def test_handle_setting_edit_event_window_width() -> None:
 
 
 def test_handle_setting_edit_event_irrelevant() -> None:
+    # Create a mock event manager
+    event_mgr = MagicMock()
+
     # Create a mock window manager
     w = WindowManager()
+    w.register_event_manager(event_mgr)
     w.pass_event_to_window_queue = MagicMock()
 
     # Create a mock event

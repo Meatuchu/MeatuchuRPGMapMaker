@@ -24,6 +24,10 @@ class ThreadManager(FeatureManager):
         self._threads = {}
         super().__init__()
 
+    def register_event_manager(self, event_mgr: EventManager) -> None:
+        self.event_mgr = event_mgr
+        self.subscribe_to_events()
+
     def subscribe_to_events(self) -> None:
         self.event_mgr.register_subscription(NewThreadRequestEvent, self.create_thread)
         self.event_mgr.register_subscription(DestroyThreadRequestEvent, self.destroy_thread)

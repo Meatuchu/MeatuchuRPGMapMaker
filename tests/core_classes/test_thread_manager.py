@@ -1,4 +1,5 @@
 # pyright: reportPrivateUsage=false
+from typing import cast
 from unittest.mock import MagicMock, patch
 
 from pytest import raises
@@ -15,10 +16,22 @@ def test_construction() -> None:
     assert ThreadManager()
 
 
+def test_register_entity_manager() -> None:
+    m = ThreadManager()
+    event_mgr = MagicMock()
+    o = m.subscribe_to_events
+    m.subscribe_to_events = MagicMock(side_effect=o)
+    m.register_event_manager(event_mgr)
+    m.event_mgr = event_mgr
+    m.subscribe_to_events.assert_called_once()
+
+
 @patch("MeatuchuRPGMapMaker.core_classes.thread_manager.threading.Thread")
 def test_create_thread(mock_Thread_def: MagicMock) -> None:
     m = ThreadManager()
-    m.event_mgr.queue_event = MagicMock()
+    m.register_event_manager(MagicMock())
+    m.event_mgr = cast(MagicMock, m.event_mgr)
+
     thread_instance = MagicMock()
     thread_instance.start = MagicMock()
     mock_Thread_def.return_value = thread_instance
@@ -35,7 +48,8 @@ def test_create_thread(mock_Thread_def: MagicMock) -> None:
 @patch("MeatuchuRPGMapMaker.core_classes.thread_manager.threading.Thread")
 def test_create_thread_already_exists(mock_Thread_def: MagicMock) -> None:
     m = ThreadManager()
-    m.event_mgr.queue_event = MagicMock()
+    m.register_event_manager(MagicMock())
+    m.event_mgr = cast(MagicMock, m.event_mgr)
 
     thread_instance = MagicMock()
     thread_instance.start = MagicMock()
@@ -51,7 +65,8 @@ def test_create_thread_already_exists(mock_Thread_def: MagicMock) -> None:
 @patch("MeatuchuRPGMapMaker.core_classes.thread_manager.threading.Thread")
 def test_destroy_thread(mock_Thread_def: MagicMock) -> None:
     m = ThreadManager()
-    m.event_mgr.queue_event = MagicMock()
+    m.register_event_manager(MagicMock())
+    m.event_mgr = cast(MagicMock, m.event_mgr)
 
     thread_instance = MagicMock()
     thread_instance.start = MagicMock()
@@ -66,7 +81,8 @@ def test_destroy_thread(mock_Thread_def: MagicMock) -> None:
 @patch("MeatuchuRPGMapMaker.core_classes.thread_manager.threading.Thread")
 def test_destroy_thread_not_owner(mock_Thread_def: MagicMock) -> None:
     m = ThreadManager()
-    m.event_mgr.queue_event = MagicMock()
+    m.register_event_manager(MagicMock())
+    m.event_mgr = cast(MagicMock, m.event_mgr)
 
     thread_instance = MagicMock()
     thread_instance.start = MagicMock()
@@ -80,6 +96,7 @@ def test_destroy_thread_not_owner(mock_Thread_def: MagicMock) -> None:
 
 def test_destroy_thread_not_exist() -> None:
     m = ThreadManager()
-    m.event_mgr.queue_event = MagicMock()
+    m.register_event_manager(MagicMock())
+    m.event_mgr = cast(MagicMock, m.event_mgr)
 
     m.destroy_thread(DestroyThreadRequestEvent("test_thread", "someone else"))
