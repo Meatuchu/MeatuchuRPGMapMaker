@@ -1,5 +1,6 @@
 from abc import abstractmethod, ABC
 from typing import Any, Literal, Self, final
+import importlib
 from uuid import uuid4
 
 from MeatuchuRPGMapMaker.constants import DEPLOY_STAGE
@@ -24,8 +25,19 @@ class FeatureManager(ABC):
             return
 
         self.id = str(uuid4())
-        self.name = self.__class__.__name__
+        self.__init_logger()
+        self.log("INFO", f"initializing {self.__class__.__name__}")
+
+        if self.__class__.__name__ != "EventManager":
+            event_mgr_mod = importlib.import_module("MeatuchuRPGMapMaker.core_classes.event_manager")
+            self.event_mgr = event_mgr_mod.EventManager()
+
+        self.subscribe_to_events()
+        self.init_finished = True
+
+    def __init_logger(self) -> None:
         self._logger = logger_factory()
+        self.name = self.__class__.__name__
         self.stage = self._logger.stage
         self.log("INFO", f"initializing {self.name}")
         self.__build__()
@@ -34,6 +46,9 @@ class FeatureManager(ABC):
 
     @abstractmethod
     def __build__(self) -> None:
+        pass
+
+    def subscribe_to_events(self) -> None:
         pass
 
     def input_step(self, frame_number: int) -> None:

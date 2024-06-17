@@ -70,7 +70,6 @@ class AppManager(FeatureManager):
 
     def __build__(self) -> None:
         # Prepare app state
-        self.register_event_manager(EventManager())
         self.state = AppState()
 
         # Initialize metrics
@@ -86,27 +85,12 @@ class AppManager(FeatureManager):
         self.texture_mgr = TextureManager()
         self.thread_mgr = ThreadManager()
         self.window_mgr = WindowManager()
-        self.distribute_event_manager()
         self.state.set_tickrate(self.settings_mgr.get_setting("app", "tickrate"))
-
-    def register_event_manager(self, event_mgr: EventManager) -> None:
-        self.event_mgr = event_mgr
-        self.subscribe_to_events()
 
     def subscribe_to_events(self) -> None:
         self.event_mgr.register_subscription(
             AllThreadsDestroyedEvent, lambda *_: self.event_mgr.queue_event(AppShutDownEvent())
         )
-
-    def distribute_event_manager(self) -> None:
-        self.entity_mgr.register_event_manager(self.event_mgr)
-        self.export_mgr.register_event_manager(self.event_mgr)
-        self.input_mgr.register_event_manager(self.event_mgr)
-        self.render_mgr.register_event_manager(self.event_mgr)
-        self.settings_mgr.register_event_manager(self.event_mgr)
-        self.texture_mgr.register_event_manager(self.event_mgr)
-        self.thread_mgr.register_event_manager(self.event_mgr)
-        self.window_mgr.register_event_manager(self.event_mgr)
 
     def activate_app(self) -> None:
         self.state.app_active = True
