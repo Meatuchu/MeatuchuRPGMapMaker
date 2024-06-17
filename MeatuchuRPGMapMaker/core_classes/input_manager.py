@@ -29,7 +29,6 @@ class InputManager(FeatureManager):
     _mouse_position: tuple[int, int]
 
     def __init__(self) -> None:
-        super().__init__()
         self.key_listener = keyboard.Listener(
             on_press=self.handle_keypress,
             on_release=self.handle_keyrelease,
@@ -46,10 +45,7 @@ class InputManager(FeatureManager):
         self._pressed_keys = {}
         self._pressed_mouse_buttons = {}
         self._mouse_position = (0, 0)
-
-    def register_event_manager(self, event_mgr: EventManager) -> None:
-        self.event_mgr = event_mgr
-        self.subscribe_to_events()
+        super().__init__()
 
     def subscribe_to_events(self) -> None:
         pass

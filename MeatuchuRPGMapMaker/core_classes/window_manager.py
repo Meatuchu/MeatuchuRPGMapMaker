@@ -211,10 +211,6 @@ class WindowManager(FeatureManager):
             f"set {window_name} fullscreen mode to {mode}",
         )
 
-    def register_event_manager(self, event_mgr: EventManager) -> None:
-        self.event_mgr = event_mgr
-        self.subscribe_to_events()
-
     def subscribe_to_events(self) -> None:
         self.event_mgr.register_subscription(WindowResizeRequestEvent, self.pass_event_to_window_queue)
         self.event_mgr.register_subscription(WindowToggleFullscreenModeRequestEvent, self.pass_event_to_window_queue)
