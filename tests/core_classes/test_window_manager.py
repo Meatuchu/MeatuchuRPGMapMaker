@@ -284,13 +284,13 @@ def test_load_new_scene(
     # Test
     event1 = SceneChangeRequestEvent("MapEditScene")
     mock_scene_def.return_value = old_scene
-    event1.scene_to_load = mock_scene_def  # pyright: ignore[reportAttributeAccessIssue]
+    event1.scene_to_load = mock_scene_def
     w.load_scene(event1)
     assert w._scenes[DEFAULT_WINDOW_NAME] == old_scene
 
     event2 = SceneChangeRequestEvent("MapEditScene")
     mock_scene_def.return_value = new_scene
-    event2.scene_to_load = mock_scene_def  # pyright: ignore[reportAttributeAccessIssue]
+    event2.scene_to_load = mock_scene_def
     w.load_scene(event2)
     old_scene.unload.assert_called_once()
     assert w._scenes[DEFAULT_WINDOW_NAME] == new_scene

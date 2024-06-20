@@ -1,5 +1,3 @@
-# Disable pyright reportImportCycles because imports are at runtime
-# pyright: reportImportCycles=false
 import importlib
 import inspect
 from types import ModuleType
@@ -16,11 +14,9 @@ class SceneChangeRequestEvent(RenderEvent):
         window_name: str | None = None,
         scene_kwargs: dict[str, Any] = {},
     ) -> None:
-        from MeatuchuRPGMapMaker.ui.scene import Scene
-
         # Need to import at construction time due to circular import.
         scene_module = importlib.import_module("MeatuchuRPGMapMaker.ui.scene")
-
+        Scene = getattr(scene_module, "Scene")
         try:
             scene_class = getattr(scene_module, scene_target)
         except AttributeError:
@@ -40,7 +36,7 @@ class SceneChangeRequestEvent(RenderEvent):
 
 
 def get_available_scenes_from_module(mod: ModuleType) -> str:
-    from MeatuchuRPGMapMaker.ui.scene import Scene
+    Scene = getattr(mod, "Scene")
 
     scenes = "\n    ".join(
         [
