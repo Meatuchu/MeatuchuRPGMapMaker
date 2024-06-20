@@ -1,7 +1,7 @@
 import importlib
 import sys
 import time
-from typing import Callable, Literal, Type, cast
+from typing import Any, Callable, Literal, Type, cast
 from uuid import uuid4
 
 from sortedcontainers import SortedDict  # pyright: ignore[reportMissingTypeStubs]
@@ -69,13 +69,16 @@ class EventManager(FeatureManager):
 
     def register_subscription(self, event_class: Type[Event] | str, function: Callable[..., None]) -> str:
         if isinstance(event_class, str):
-            event_mod = importlib.import_module("MeatuchuRPGMapMaker.events")
-            loaded_event_class = getattr(event_mod, event_class, None)
-            if (
-                not loaded_event_class
-                or not isinstance(loaded_event_class, type)
-                or not issubclass(loaded_event_class, Event)
-            ):
+            try:
+                event_mod = importlib.import_module("MeatuchuRPGMapMaker.events")
+                loaded_event_class = getattr(event_mod, event_class, None)
+                if (
+                    not loaded_event_class
+                    or not isinstance(loaded_event_class, type)
+                    or not issubclass(loaded_event_class, Event)
+                ):
+                    raise ValueError(f'Attempted to register subscriber for invalid event "{event_class}"!')
+            except AttributeError:
                 raise ValueError(f'Attempted to register subscriber for invalid event "{event_class}"!')
 
             target = event_class
@@ -124,7 +127,28 @@ class EventManager(FeatureManager):
                 )
                 self.queue_event(event)
 
-    def queue_event(self, event: Event) -> None:
+    def queue_event(self, event: Event | dict[str, Any]) -> None:
+        if isinstance(event, dict):
+            event_classname = event.pop("name")
+            try:
+                assert isinstance(event_classname, str)
+            except AssertionError:
+                errmsg = f"Unable to queue event, invalid event name: {event_classname} is not a string"
+                self.log("ERROR", errmsg)
+                raise TypeError(errmsg)
+
+            try:
+                event_mod = importlib.import_module("MeatuchuRPGMapMaker.events")
+                loaded_event_class = getattr(event_mod, event_classname)
+                if not issubclass(loaded_event_class, Event):
+                    raise AttributeError()
+            except AttributeError:
+                errmsg = f"Unable to queue event, event {event_classname} is not a valid event class"
+                self.log("ERROR", errmsg)
+                raise ValueError(errmsg)
+
+            event = loaded_event_class.from_dict(event)
+
         if self.__app_shutdown_fired:
             if event.__class__ not in HIDDEN_EVENTS:
                 self.log("ERROR", f"App is shutting down, unable to handle queued event {event.__class__.__name__}")

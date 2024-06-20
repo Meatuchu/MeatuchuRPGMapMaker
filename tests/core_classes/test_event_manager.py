@@ -49,6 +49,11 @@ def test_queue_event() -> None:
     e.queue_event(Event())
 
 
+def test_queue_event_from_dict() -> None:
+    e = EventManager()
+    e.queue_event({"name": "Event"})
+
+
 def test_queue_immediate_event() -> None:
     e = EventManager()
     e._logger.log = MagicMock()
@@ -68,11 +73,29 @@ def test_process_next_event() -> None:
     trigger_func.assert_called_once()
 
 
-def test_process_next_event_str_event() -> None:
+def test_process_next_event_from_dict() -> None:
+    e = EventManager()
+    trigger_func = MagicMock()
+    e.register_subscription(Event, trigger_func)
+    e.queue_event({"name": "Event"})
+    e._process_next_event(None)
+    trigger_func.assert_called_once()
+
+
+def test_process_next_event_str_subscription() -> None:
     e = EventManager()
     trigger_func = MagicMock()
     e.register_subscription("Event", trigger_func)
     e.queue_event(Event())
+    e._process_next_event(None)
+    trigger_func.assert_called_once()
+
+
+def test_process_next_event_from_dict_str_subscription() -> None:
+    e = EventManager()
+    trigger_func = MagicMock()
+    e.register_subscription("Event", trigger_func)
+    e.queue_event({"name": "Event"})
     e._process_next_event(None)
     trigger_func.assert_called_once()
 
