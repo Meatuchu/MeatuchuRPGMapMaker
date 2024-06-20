@@ -1,34 +1,43 @@
 # Ignore unused imports in this file, since they are used to expose the classes to the rest of the codebase
 # pyright: reportUnusedImport=false
 
-from .AllThreadsDestroyedEvent import AllThreadsDestroyedEvent
-from .AppShutDownEvent import AppShutDownEvent
-from .CloseWindowEvent import CloseWindowEvent
-from .DestroyThreadEvent import DestroyThreadEvent
-from .DestroyThreadRequestEvent import DestroyThreadRequestEvent
-from .EditSettingRequestEvent import EditSettingRequestEvent
-from .Event import Event
-from .FileSaveRequestEvent import FileSaveRequestEvent
-from .InputEvent import InputEvent
-from .InputSnapshotEvent import InputSnapshotEvent
-from .KeyPressEvent import KeyPressEvent
-from .KeyReleaseEvent import KeyReleaseEvent
-from .LogEvent import LogEvent
-from .MouseClickEvent import MouseClickEvent
-from .MouseClickReleaseEvent import MouseClickReleaseEvent
-from .MouseMoveEvent import MouseMoveEvent
-from .MouseScrollEvent import MouseScrollEvent
-from .NewThreadEvent import NewThreadEvent
-from .NewThreadRequestEvent import NewThreadRequestEvent
-from .RenderEvent import RenderEvent
-from .SceneChangeEvent import SceneChangeEvent
-from .SceneChangeRequestEvent import SceneChangeRequestEvent
-from .SettingEditedEvent import SettingEditedEvent
-from .ThreadErrorEvent import ThreadErrorEvent
-from .UpdateEvent import UpdateEvent
-from .WindowFullscreenModeEditRequestEvent import WindowFullscreenModeEditRequestEvent
-from .WindowResizedEvent import WindowResizedEvent
-from .WindowResizeRequestEvent import WindowResizeRequestEvent
-from .WindowToggleFullscreenModeRequestEvent import (
+from typing import Any
+
+from .AllThreadsDestroyedEventClass import AllThreadsDestroyedEvent
+from .AppShutDownEventClass import AppShutDownEvent
+from .CloseWindowEventClass import CloseWindowEvent
+from .DestroyThreadEventClass import DestroyThreadEvent
+from .DestroyThreadRequestEventClass import DestroyThreadRequestEvent
+from .EditSettingRequestEventClass import EditSettingRequestEvent
+from .EventClass import Event
+from .FileSaveRequestEventClass import FileSaveRequestEvent
+from .InputEventClass import InputEvent
+from .InputSnapshotEventClass import InputSnapshotEvent
+from .KeyPressEventClass import KeyPressEvent
+from .KeyReleaseEventClass import KeyReleaseEvent
+from .LogEventClass import LogEvent
+from .MouseClickEventClass import MouseClickEvent
+from .MouseClickReleaseEventClass import MouseClickReleaseEvent
+from .MouseMoveEventClass import MouseMoveEvent
+from .MouseScrollEventClass import MouseScrollEvent
+from .NewThreadEventClass import NewThreadEvent
+from .NewThreadRequestEventClass import NewThreadRequestEvent
+from .RenderEventClass import RenderEvent
+from .SceneChangeEventClass import SceneChangeEvent
+from .SceneChangeRequestEventClass import SceneChangeRequestEvent
+from .SettingEditedEventClass import SettingEditedEvent
+from .ThreadErrorEventClass import ThreadErrorEvent
+from .UpdateEventClass import UpdateEvent
+from .WindowFullscreenModeEditRequestEventClass import (
+    WindowFullscreenModeEditRequestEvent,
+)
+from .WindowResizedEventClass import WindowResizedEvent
+from .WindowResizeRequestEventClass import WindowResizeRequestEvent
+from .WindowToggleFullscreenModeRequestEventClass import (
     WindowToggleFullscreenModeRequestEvent,
 )
+
+type EventQueueItemType = Event | dict[str, Any]
+type EventQueueType = list[EventQueueItemType]
+
+EventSubscriptionArgType = type[Event] | str

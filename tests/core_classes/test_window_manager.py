@@ -8,14 +8,18 @@ from MeatuchuRPGMapMaker.core_classes.window_manager import (
     WindowManager,
 )
 from MeatuchuRPGMapMaker.events import SettingEditedEvent
-from MeatuchuRPGMapMaker.events.Event import Event
-from MeatuchuRPGMapMaker.events.NewThreadRequestEvent import NewThreadRequestEvent
-from MeatuchuRPGMapMaker.events.RenderEvent import RenderEvent
-from MeatuchuRPGMapMaker.events.SceneChangeRequestEvent import SceneChangeRequestEvent
-from MeatuchuRPGMapMaker.events.WindowFullscreenModeEditRequestEvent import (
+from MeatuchuRPGMapMaker.events.EventClass import Event
+from MeatuchuRPGMapMaker.events.NewThreadRequestEventClass import NewThreadRequestEvent
+from MeatuchuRPGMapMaker.events.RenderEventClass import RenderEvent
+from MeatuchuRPGMapMaker.events.SceneChangeRequestEventClass import (
+    SceneChangeRequestEvent,
+)
+from MeatuchuRPGMapMaker.events.WindowFullscreenModeEditRequestEventClass import (
     WindowFullscreenModeEditRequestEvent,
 )
-from MeatuchuRPGMapMaker.events.WindowResizeRequestEvent import WindowResizeRequestEvent
+from MeatuchuRPGMapMaker.events.WindowResizeRequestEventClass import (
+    WindowResizeRequestEvent,
+)
 from MeatuchuRPGMapMaker.exceptions import (
     DuplicateWindowError,
     WindowNotExistError,

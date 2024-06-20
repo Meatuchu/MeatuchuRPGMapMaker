@@ -1,7 +1,7 @@
 from tkinter import Tk as TkWindow
-from typing import Any, Callable
+from typing import Callable
 
-from MeatuchuRPGMapMaker.events import Event, LogEvent
+from MeatuchuRPGMapMaker.events import EventQueueItemType, LogEvent
 
 from ..primitive_elements.base_element import (
     Element,
@@ -20,7 +20,7 @@ class ComposedElement(Element):
         self,
         window: TkWindow,
         name: str,
-        fire_event: Callable[[Event | dict[str, Any]], None],
+        fire_event: Callable[[EventQueueItemType], None],
         placing_mode: ElementPlacingMode = "absolute",
         sizing_mode: ElementSizingMode = "absolute",
     ) -> None:

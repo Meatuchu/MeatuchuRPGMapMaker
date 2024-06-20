@@ -1,14 +1,14 @@
-from typing import Any, Callable
+from typing import Callable
 
 from MeatuchuRPGMapMaker.classes.input_snapshot import InputSnapshot
-from MeatuchuRPGMapMaker.events import Event, LogEvent
+from MeatuchuRPGMapMaker.events import EventQueueItemType, LogEvent
 
 from .KeyState import KeyState
 
 
 class Keybind:
     states: list[KeyState]
-    fire_event: Callable[[Event | dict[str, Any]], None]
+    fire_event: Callable[[EventQueueItemType], None]
     __ready: bool
 
     def __init__(self) -> None:

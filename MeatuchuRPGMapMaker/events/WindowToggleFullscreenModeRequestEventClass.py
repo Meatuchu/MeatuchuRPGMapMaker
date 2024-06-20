@@ -1,4 +1,4 @@
-from .RenderEvent import RenderEvent
+from .RenderEventClass import RenderEvent
 
 
 class WindowToggleFullscreenModeRequestEvent(RenderEvent):

@@ -1,7 +1,7 @@
 import importlib
 import sys
 import time
-from typing import Any, Callable, Literal, Type, cast
+from typing import Callable, Literal, Type, cast
 from uuid import uuid4
 
 from sortedcontainers import SortedDict  # pyright: ignore[reportMissingTypeStubs]
@@ -10,6 +10,7 @@ from MeatuchuRPGMapMaker.constants import NS_PER_MS
 from MeatuchuRPGMapMaker.events import (
     AppShutDownEvent,
     Event,
+    EventQueueItemType,
     InputEvent,
     InputSnapshotEvent,
     KeyPressEvent,
@@ -127,7 +128,7 @@ class EventManager(FeatureManager):
                 )
                 self.queue_event(event)
 
-    def queue_event(self, event: Event | dict[str, Any]) -> None:
+    def queue_event(self, event: EventQueueItemType) -> None:
         if isinstance(event, dict):
             event_classname = event.pop("name")
             try:

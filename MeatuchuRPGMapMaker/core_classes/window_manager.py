@@ -2,12 +2,13 @@ import time
 from datetime import datetime
 from tkinter import Canvas as TkCanvas
 from tkinter import Tk as TkWindow
-from typing import Any, Callable
+from typing import Callable
 
 from MeatuchuRPGMapMaker.events import (
     CloseWindowEvent,
     DestroyThreadRequestEvent,
     Event,
+    EventQueueItemType,
     NewThreadRequestEvent,
     RenderEvent,
     SceneChangeEvent,
@@ -59,7 +60,7 @@ class WindowManager(FeatureManager):
     _canvases: dict[str, TkCanvas]
     _scenes: dict[str, Scene]
     _window_events: dict[str, list[RenderEvent]]
-    _outgoing_events: list[Event | dict[str, Any]]
+    _outgoing_events: list[EventQueueItemType]
 
     window_create_timeout = 0.1
 

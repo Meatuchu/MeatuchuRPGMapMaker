@@ -1,5 +1,5 @@
 ### EXCEPTION EVENTS ###
-from .Event import Event
+from .EventClass import Event
 
 
 class ThreadErrorEvent(Event):

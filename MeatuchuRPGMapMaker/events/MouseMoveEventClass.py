@@ -1,4 +1,4 @@
-from .InputEvent import InputEvent
+from .InputEventClass import InputEvent
 
 
 class MouseMoveEvent(InputEvent):

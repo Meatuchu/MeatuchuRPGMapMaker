@@ -1,5 +1,5 @@
 from ..classes.input_snapshot import InputSnapshot
-from .InputEvent import InputEvent
+from .InputEventClass import InputEvent
 
 
 class InputSnapshotEvent(InputEvent):

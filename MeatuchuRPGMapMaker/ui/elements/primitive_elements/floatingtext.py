@@ -1,8 +1,8 @@
 from tkinter import Label as TkLabel
 from tkinter import Tk as TkWindow
-from typing import Any, Callable, Type
+from typing import Callable, Type
 
-from MeatuchuRPGMapMaker.events import Event
+from MeatuchuRPGMapMaker.events import EventQueueItemType
 
 from ...styles import TextStyles
 from .base_element import Element, ElementPlacingMode, ElementSizingMode
@@ -15,7 +15,7 @@ class FloatingText(Element):
     def __init__(
         self,
         window: TkWindow,
-        fire_event: Callable[[Event | dict[str, Any]], None],
+        fire_event: Callable[[EventQueueItemType], None],
         name: str,
         text: str,
         x: int = 0,

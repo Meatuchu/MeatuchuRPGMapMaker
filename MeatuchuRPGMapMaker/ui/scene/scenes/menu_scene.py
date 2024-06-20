@@ -1,7 +1,7 @@
 from tkinter import Tk as TkWindow
-from typing import Any, Callable, Type
+from typing import Callable, Type
 
-from MeatuchuRPGMapMaker.events import Event
+from MeatuchuRPGMapMaker.events import Event, EventQueueItemType
 
 from ...elements.prefabs.main_menu.options_list import MainMenuOptions
 from ...elements.primitive_elements import FloatingText
@@ -16,7 +16,7 @@ class MenuScene(Scene):
         self,
         window: TkWindow,
         window_name: str,
-        fire_event: Callable[[Event | dict[str, Any]], None],
+        fire_event: Callable[[EventQueueItemType], None],
         subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str] | None = None,
         unsubscribe_from_event: Callable[[str], None] | None = None,
     ) -> None:

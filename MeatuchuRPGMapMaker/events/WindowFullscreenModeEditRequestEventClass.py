@@ -1,6 +1,6 @@
 from typing import Literal
 
-from .RenderEvent import RenderEvent
+from .RenderEventClass import RenderEvent
 
 
 class WindowFullscreenModeEditRequestEvent(RenderEvent):

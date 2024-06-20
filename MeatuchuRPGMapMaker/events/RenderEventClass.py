@@ -1,4 +1,4 @@
-from .Event import Event
+from .EventClass import Event
 
 
 class RenderEvent(Event):

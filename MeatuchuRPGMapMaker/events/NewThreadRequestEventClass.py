@@ -3,7 +3,7 @@
 
 from typing import Callable
 
-from .UpdateEvent import UpdateEvent
+from .UpdateEventClass import UpdateEvent
 
 
 class NewThreadRequestEvent(UpdateEvent):

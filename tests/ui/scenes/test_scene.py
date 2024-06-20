@@ -1,19 +1,19 @@
 # pyright: reportPrivateUsage=false
-from typing import Any, Callable, Type
+from typing import Callable, Type
 from unittest.mock import MagicMock
 from uuid import uuid4
 
-from MeatuchuRPGMapMaker.events import Event
+from MeatuchuRPGMapMaker.events import Event, EventQueueItemType
 from MeatuchuRPGMapMaker.ui.scene.scene import Scene
 
 
 def test_construction() -> None:
-    q: list[Event | dict[str, Any]] = []
+    q: list[EventQueueItemType] = []
     assert Scene(MagicMock(), "test", q.append)
 
 
 def test_scene_subscribe_to_event() -> None:
-    q: list[Event | dict[str, Any]] = []
+    q: list[EventQueueItemType] = []
     subscriptions: dict[str, Callable[[Event], None]] = {}
 
     mock_event_subfn = MagicMock()
@@ -38,7 +38,7 @@ def test_scene_subscribe_to_event() -> None:
 
 
 def test_scene_unsubscribe_to_event() -> None:
-    q: list[Event | dict[str, Any]] = []
+    q: list[EventQueueItemType] = []
     subscriptions: dict[str, Callable[[Event], None]] = {}
 
     mock_event_subfn = MagicMock()

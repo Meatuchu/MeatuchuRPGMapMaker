@@ -3,7 +3,7 @@ import inspect
 from types import ModuleType
 from typing import Any
 
-from .RenderEvent import RenderEvent
+from .RenderEventClass import RenderEvent
 
 
 class SceneChangeRequestEvent(RenderEvent):

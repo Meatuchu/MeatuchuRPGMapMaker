@@ -1,10 +1,11 @@
 from tkinter import Tk as TkWindow
-from typing import Any, Callable
+from typing import Callable
 
-from MeatuchuRPGMapMaker.events import AppShutDownEvent
-from MeatuchuRPGMapMaker.events.Event import Event
-from MeatuchuRPGMapMaker.events.LogEvent import LogEvent
-from MeatuchuRPGMapMaker.events.SceneChangeRequestEvent import SceneChangeRequestEvent
+from MeatuchuRPGMapMaker.events import AppShutDownEvent, EventQueueItemType
+from MeatuchuRPGMapMaker.events.LogEventClass import LogEvent
+from MeatuchuRPGMapMaker.events.SceneChangeRequestEventClass import (
+    SceneChangeRequestEvent,
+)
 
 from ...composed_elements import ComposedElement
 from ...primitive_elements import Button
@@ -20,12 +21,12 @@ class MainMenuOptions(ComposedElement):
     button_space: int = 1
     button_width: int = 100
     button_height: int = 30
-    _fire_event: Callable[[Event], None]
+    _fire_event: Callable[[EventQueueItemType], None]
 
     def __init__(
         self,
         window: TkWindow,
-        fire_event: Callable[[Event | dict[str, Any]], None],
+        fire_event: Callable[[EventQueueItemType], None],
         x: int = 0,
         y: int = 0,
         name: str = "mainmenuoptions",
@@ -66,7 +67,7 @@ class MainMenuOptions(ComposedElement):
 
 class StartButton(Button):
     def __init__(
-        self, window: TkWindow, fire_event: Callable[[Event | dict[str, Any]], None], x: int = 0, y: int = 0
+        self, window: TkWindow, fire_event: Callable[[EventQueueItemType], None], x: int = 0, y: int = 0
     ) -> None:
         def press_handler() -> None:
             fire_event(SceneChangeRequestEvent("MapEditScene"))
@@ -87,7 +88,7 @@ class StartButton(Button):
 
 class SettingsButton(Button):
     def __init__(
-        self, window: TkWindow, fire_event: Callable[[Event | dict[str, Any]], None], x: int = 0, y: int = 0
+        self, window: TkWindow, fire_event: Callable[[EventQueueItemType], None], x: int = 0, y: int = 0
     ) -> None:
         def press_handler() -> None:
             fire_event(SceneChangeRequestEvent("SettingsScene"))

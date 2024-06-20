@@ -1,4 +1,4 @@
-from .UpdateEvent import UpdateEvent
+from .UpdateEventClass import UpdateEvent
 
 
 class NewThreadEvent(UpdateEvent):

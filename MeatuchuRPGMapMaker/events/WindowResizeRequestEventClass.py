@@ -1,6 +1,6 @@
 ### RENDER EVENTS ###
 
-from .RenderEvent import RenderEvent
+from .RenderEventClass import RenderEvent
 
 
 class WindowResizeRequestEvent(RenderEvent):

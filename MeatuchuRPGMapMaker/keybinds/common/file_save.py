@@ -1,6 +1,6 @@
-from typing import Any, Callable
+from typing import Callable
 
-from MeatuchuRPGMapMaker.events import Event, FileSaveRequestEvent
+from MeatuchuRPGMapMaker.events import EventQueueItemType, FileSaveRequestEvent
 
 from ..Keybind import Keybind
 from ..KeyState import KeyState
@@ -8,7 +8,7 @@ from ..KeyState import KeyState
 
 class FileSaveKB(Keybind):
     def __init__(
-        self, fire_event: Callable[[Event | dict[str, Any]], None], binds: list[dict[str, int]] | None = None
+        self, fire_event: Callable[[EventQueueItemType], None], binds: list[dict[str, int]] | None = None
     ) -> None:
         if binds:
             self.states = [KeyState(bind) for bind in binds]

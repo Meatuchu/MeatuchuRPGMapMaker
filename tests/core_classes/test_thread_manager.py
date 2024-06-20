@@ -4,10 +4,10 @@ from unittest.mock import MagicMock, patch
 from pytest import raises
 
 from MeatuchuRPGMapMaker.core_classes.thread_manager import ThreadManager
-from MeatuchuRPGMapMaker.events.DestroyThreadRequestEvent import (
+from MeatuchuRPGMapMaker.events.DestroyThreadRequestEventClass import (
     DestroyThreadRequestEvent,
 )
-from MeatuchuRPGMapMaker.events.NewThreadRequestEvent import NewThreadRequestEvent
+from MeatuchuRPGMapMaker.events.NewThreadRequestEventClass import NewThreadRequestEvent
 from MeatuchuRPGMapMaker.exceptions import DuplicateThreadError
 
 

@@ -1,6 +1,6 @@
 from typing import Any
 
-from .UpdateEvent import UpdateEvent
+from .UpdateEventClass import UpdateEvent
 
 
 class SettingEditedEvent(UpdateEvent):

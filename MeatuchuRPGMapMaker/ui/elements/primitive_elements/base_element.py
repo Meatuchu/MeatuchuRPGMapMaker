@@ -1,7 +1,7 @@
 from tkinter import Tk as TkWindow
-from typing import Any, Callable, Literal
+from typing import Callable, Literal
 
-from MeatuchuRPGMapMaker.events import Event
+from MeatuchuRPGMapMaker.events import EventQueueItemType
 from MeatuchuRPGMapMaker.exceptions import (
     ElementCreatedWithoutWindowError,
     ElementNotNamedError,
@@ -20,7 +20,7 @@ class Element:
     # Subclasses can inherit from this class and override or add additional functionality as needed.
 
     name: str
-    _fire_event: Callable[[Event], None]
+    _fire_event: Callable[[EventQueueItemType], None]
     placing_mode: ElementPlacingMode
     sizing_mode: ElementSizingMode
     visible = False
@@ -37,7 +37,7 @@ class Element:
     def __init__(
         self,
         window: TkWindow,
-        fire_event: Callable[[Event | dict[str, Any]], None],
+        fire_event: Callable[[EventQueueItemType], None],
         name: str,
         place_on_creation: bool = True,
         placing_mode: ElementPlacingMode = "absolute",

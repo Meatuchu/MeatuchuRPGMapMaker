@@ -1,12 +1,12 @@
 from tkinter import Tk as TkWindow
-from typing import Any, Callable, Type
+from typing import Callable, Type
 
-from MeatuchuRPGMapMaker.events import InputSnapshotEvent
+from MeatuchuRPGMapMaker.events import EventQueueItemType, InputSnapshotEvent
 from MeatuchuRPGMapMaker.keybinds.common.close_window import CloseWindowKB
 from MeatuchuRPGMapMaker.keybinds.common.fullscreen import FullScreenKB
 from MeatuchuRPGMapMaker.keybinds.Keybind import Keybind
 
-from ...events.Event import Event
+from ...events.EventClass import Event
 from ...exceptions import DuplicateSceneElementError
 from ..elements.primitive_elements.base_element import Element
 
@@ -19,7 +19,7 @@ class Scene:
     _window: TkWindow
     _window_name: str
     _elements: dict[str, Element]
-    _fire_event: Callable[[Event | dict[str, Any]], None]
+    _fire_event: Callable[[EventQueueItemType], None]
     _subscription_ids: list[str]
     _subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str] | None
     _unsubscribe_from_event: Callable[[str], None] | None
@@ -30,7 +30,7 @@ class Scene:
         self,
         window: TkWindow,
         window_name: str,
-        fire_event: Callable[[Event | dict[str, Any]], None],
+        fire_event: Callable[[EventQueueItemType], None],
         subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str] | None = None,
         unsubscribe_from_event: Callable[[str], None] | None = None,
     ) -> None:
