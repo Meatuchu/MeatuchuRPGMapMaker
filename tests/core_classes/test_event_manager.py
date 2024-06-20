@@ -21,6 +21,12 @@ def test_register_subscription() -> None:
     e.register_subscription(Event, trigger_func)
 
 
+def test_register_subscription_str() -> None:
+    e = EventManager()
+    trigger_func = MagicMock()
+    e.register_subscription("Event", trigger_func)
+
+
 def test_unregister_subscription() -> None:
     e = EventManager()
     trigger_func = MagicMock()
@@ -57,6 +63,15 @@ def test_process_next_event() -> None:
     e = EventManager()
     trigger_func = MagicMock()
     e.register_subscription(Event, trigger_func)
+    e.queue_event(Event())
+    e._process_next_event(None)
+    trigger_func.assert_called_once()
+
+
+def test_process_next_event_str_event() -> None:
+    e = EventManager()
+    trigger_func = MagicMock()
+    e.register_subscription("Event", trigger_func)
     e.queue_event(Event())
     e._process_next_event(None)
     trigger_func.assert_called_once()

@@ -1,3 +1,4 @@
+import importlib
 import sys
 import time
 from typing import Callable, Literal, Type, cast
@@ -66,9 +67,22 @@ class EventManager(FeatureManager):
 
         self.register_subscription(LogEvent, handle_log_event)
 
-    def register_subscription(self, event_class: Type[Event], function: Callable[..., None]) -> str:
+    def register_subscription(self, event_class: Type[Event] | str, function: Callable[..., None]) -> str:
+        if isinstance(event_class, str):
+            event_mod = importlib.import_module("MeatuchuRPGMapMaker.events")
+            loaded_event_class = getattr(event_mod, event_class, None)
+            if (
+                not loaded_event_class
+                or not isinstance(loaded_event_class, type)
+                or not issubclass(loaded_event_class, Event)
+            ):
+                raise ValueError(f'Attempted to register subscriber for invalid event "{event_class}"!')
+
+            target = event_class
+        else:
+            target = event_class.__name__
+
         subscriber = EventSubcriber(function)
-        target = event_class.__name__
         self.log("INFO", f"registering subscriber to {target}")
         self._subscriptions[target] = self._subscriptions.get(target, list())
         self._subscriptions[target].append(subscriber)
