@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable
+from typing import Any, Callable
 
 from MeatuchuRPGMapMaker.events.Event import Event
 from MeatuchuRPGMapMaker.ui.elements.primitive_elements import Button, Frame
@@ -22,7 +22,7 @@ class TabbedFrame(ComposedElement):
         self,
         window: TkWindow,
         name: str,
-        fire_event: Callable[[Event], None],
+        fire_event: Callable[[Event | dict[str, Any]], None],
         x: int = 0,
         y: int = 0,
         x_offset: int = 0,

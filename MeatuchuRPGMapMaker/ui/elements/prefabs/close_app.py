@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable
+from typing import Any, Callable
 
 from MeatuchuRPGMapMaker.events import AppShutDownEvent, Event
 
@@ -12,7 +12,7 @@ class CloseAppButton(ComposedElement):
     def __init__(
         self,
         window: TkWindow,
-        fire_event: Callable[[Event], None],
+        fire_event: Callable[[Event | dict[str, Any]], None],
         x: int = 0,
         y: int = 0,
         name: str = "closeapp",

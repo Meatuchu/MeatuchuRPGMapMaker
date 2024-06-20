@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable, Type
+from typing import Any, Callable, Type
 
 from MeatuchuRPGMapMaker.events import Event
 
@@ -16,7 +16,7 @@ class MenuScene(Scene):
         self,
         window: TkWindow,
         window_name: str,
-        fire_event: Callable[[Event], None],
+        fire_event: Callable[[Event | dict[str, Any]], None],
         subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str] | None = None,
         unsubscribe_from_event: Callable[[str], None] | None = None,
     ) -> None:

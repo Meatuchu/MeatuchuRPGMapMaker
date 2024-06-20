@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable, Literal
+from typing import Any, Callable, Literal
 
 from MeatuchuRPGMapMaker.events import Event
 from MeatuchuRPGMapMaker.exceptions import (
@@ -37,7 +37,7 @@ class Element:
     def __init__(
         self,
         window: TkWindow,
-        fire_event: Callable[[Event], None],
+        fire_event: Callable[[Event | dict[str, Any]], None],
         name: str,
         place_on_creation: bool = True,
         placing_mode: ElementPlacingMode = "absolute",

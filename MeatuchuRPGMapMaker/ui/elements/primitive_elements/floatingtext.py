@@ -1,6 +1,6 @@
 from tkinter import Label as TkLabel
 from tkinter import Tk as TkWindow
-from typing import Callable, Type
+from typing import Any, Callable, Type
 
 from MeatuchuRPGMapMaker.events import Event
 
@@ -15,7 +15,7 @@ class FloatingText(Element):
     def __init__(
         self,
         window: TkWindow,
-        fire_event: Callable[[Event], None],
+        fire_event: Callable[[Event | dict[str, Any]], None],
         name: str,
         text: str,
         x: int = 0,

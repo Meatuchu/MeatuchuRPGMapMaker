@@ -1,4 +1,4 @@
-from typing import Callable
+from typing import Any, Callable
 
 from MeatuchuRPGMapMaker.classes.input_snapshot import InputSnapshot
 from MeatuchuRPGMapMaker.events import Event, LogEvent
@@ -8,7 +8,7 @@ from .KeyState import KeyState
 
 class Keybind:
     states: list[KeyState]
-    fire_event: Callable[[Event], None]
+    fire_event: Callable[[Event | dict[str, Any]], None]
     __ready: bool
 
     def __init__(self) -> None:

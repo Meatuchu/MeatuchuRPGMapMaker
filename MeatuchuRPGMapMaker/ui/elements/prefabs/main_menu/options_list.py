@@ -1,5 +1,5 @@
 from tkinter import Tk as TkWindow
-from typing import Callable
+from typing import Any, Callable
 
 from MeatuchuRPGMapMaker.events import AppShutDownEvent
 from MeatuchuRPGMapMaker.events.Event import Event
@@ -25,7 +25,7 @@ class MainMenuOptions(ComposedElement):
     def __init__(
         self,
         window: TkWindow,
-        fire_event: Callable[[Event], None],
+        fire_event: Callable[[Event | dict[str, Any]], None],
         x: int = 0,
         y: int = 0,
         name: str = "mainmenuoptions",
@@ -65,7 +65,9 @@ class MainMenuOptions(ComposedElement):
 
 
 class StartButton(Button):
-    def __init__(self, window: TkWindow, fire_event: Callable[[Event], None], x: int = 0, y: int = 0) -> None:
+    def __init__(
+        self, window: TkWindow, fire_event: Callable[[Event | dict[str, Any]], None], x: int = 0, y: int = 0
+    ) -> None:
         def press_handler() -> None:
             fire_event(SceneChangeRequestEvent("MapEditScene"))
 
@@ -84,7 +86,9 @@ class StartButton(Button):
 
 
 class SettingsButton(Button):
-    def __init__(self, window: TkWindow, fire_event: Callable[[Event], None], x: int = 0, y: int = 0) -> None:
+    def __init__(
+        self, window: TkWindow, fire_event: Callable[[Event | dict[str, Any]], None], x: int = 0, y: int = 0
+    ) -> None:
         def press_handler() -> None:
             fire_event(SceneChangeRequestEvent("SettingsScene"))
 
