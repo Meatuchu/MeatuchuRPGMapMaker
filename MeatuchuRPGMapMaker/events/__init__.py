@@ -1,7 +1,7 @@
 # Ignore unused imports in this file, since they are used to expose the classes to the rest of the codebase
 # pyright: reportUnusedImport=false
 
-from typing import Any
+from typing import Any, Callable
 
 from .AllThreadsDestroyedEventClass import AllThreadsDestroyedEvent
 from .AppShutDownEventClass import AppShutDownEvent
@@ -9,7 +9,13 @@ from .CloseWindowEventClass import CloseWindowEvent
 from .DestroyThreadEventClass import DestroyThreadEvent
 from .DestroyThreadRequestEventClass import DestroyThreadRequestEvent
 from .EditSettingRequestEventClass import EditSettingRequestEvent
-from .EventClass import Event
+from .EventClass import (
+    AddToEventQueueFuncType,
+    Event,
+    EventQueueItemType,
+    EventQueueType,
+    EventSubscriptionArgType,
+)
 from .FileSaveRequestEventClass import FileSaveRequestEvent
 from .InputEventClass import InputEvent
 from .InputSnapshotEventClass import InputSnapshotEvent
@@ -36,8 +42,3 @@ from .WindowResizeRequestEventClass import WindowResizeRequestEvent
 from .WindowToggleFullscreenModeRequestEventClass import (
     WindowToggleFullscreenModeRequestEvent,
 )
-
-type EventQueueItemType = Event | dict[str, Any]
-type EventQueueType = list[EventQueueItemType]
-
-EventSubscriptionArgType = type[Event] | str

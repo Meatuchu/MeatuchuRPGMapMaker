@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Any, Self
+from typing import Any, Callable, Self
 
 
 class Event:
@@ -12,3 +12,9 @@ class Event:
 
     def __init__(self) -> None:
         self.created_at = datetime.now().timestamp()
+
+
+type EventQueueItemType = Event | dict[str, Any]
+type EventQueueType = list[EventQueueItemType]
+type AddToEventQueueFuncType = Callable[[EventQueueItemType], None]
+type EventSubscriptionArgType = type[Event] | str
