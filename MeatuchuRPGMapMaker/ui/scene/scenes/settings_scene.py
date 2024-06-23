@@ -1,10 +1,9 @@
 from tkinter import Tk as TkWindow
-from typing import Callable, Type
+from typing import Callable
 
 from MeatuchuRPGMapMaker.events import (
     EditSettingRequestEvent,
     Event,
-    EventQueueItemType,
     LogEvent,
     SceneChangeRequestEvent,
 )
@@ -20,16 +19,13 @@ class SettingsScene(Scene):
         self,
         window: TkWindow,
         window_name: str,
-        fire_event: Callable[[EventQueueItemType], None],
-        subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str] | None = None,
-        unsubscribe_from_event: Callable[[str], None] | None = None,
     ) -> None:
-        super().__init__(window, window_name, fire_event, subscribe_to_event, unsubscribe_from_event)
+        super().__init__(window, window_name)
 
         self._frames = TabbedFrame(
             window,
             "SettingsSceneTabbedFrame",
-            fire_event,
+            self.fire_event,
             sizing_mode="relative",
             placing_mode="absolute",
             height=100,
@@ -44,7 +40,7 @@ class SettingsScene(Scene):
             "general_tab",
             FloatingText(
                 window,
-                fire_event,
+                self.fire_event,
                 "general_tab_text",
                 "General Settings",
                 placing_mode="absolute",
@@ -57,7 +53,7 @@ class SettingsScene(Scene):
             "video_tab",
             FloatingText(
                 window,
-                fire_event,
+                self.fire_event,
                 "video_tab_text",
                 "Video Settings",
                 placing_mode="absolute",
@@ -70,12 +66,12 @@ class SettingsScene(Scene):
             "video_tab",
             Button(
                 window,
-                fire_event,
+                self.fire_event,
                 "set_fullscreen_mode_button",
                 "Fullscreen Mode",
                 place_on_creation=False,
                 placing_mode="absolute",
-                press_handler=lambda: fire_event(EditSettingRequestEvent("window", "fullscreen_mode", 2)),
+                press_handler=lambda: self.fire_event(EditSettingRequestEvent("window", "fullscreen_mode", 2)),
             ),
             frame_posx=10,
             frame_posy=60,
@@ -84,7 +80,7 @@ class SettingsScene(Scene):
         self.place_elements(
             [
                 self._frames,
-                MainMenuButton(window, fire_event),
+                MainMenuButton(window, self.fire_event),
             ]
         )
 

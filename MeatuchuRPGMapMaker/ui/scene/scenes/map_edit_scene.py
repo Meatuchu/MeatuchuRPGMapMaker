@@ -1,9 +1,8 @@
 from tkinter import Tk as TkWindow
-from typing import Callable, Type
+from typing import Callable
 
 from MeatuchuRPGMapMaker.events import (
     Event,
-    EventQueueItemType,
     SceneChangeRequestEvent,
 )
 from MeatuchuRPGMapMaker.keybinds.common.file_save import FileSaveKB
@@ -19,18 +18,15 @@ class MapEditScene(Scene):
         self,
         window: TkWindow,
         window_name: str,
-        fire_event: Callable[[EventQueueItemType], None],
-        subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str] | None = None,
-        unsubscribe_from_event: Callable[[str], None] | None = None,
     ) -> None:
-        super().__init__(window, window_name, fire_event, subscribe_to_event, unsubscribe_from_event)
+        super().__init__(window, window_name)
 
         self.place_elements(
             [
-                MainMenuButton(window, fire_event),
+                MainMenuButton(window, self.fire_event),
             ]
         )
-        self._add_keybind(FileSaveKB(self._fire_event))
+        self.add_keybind(FileSaveKB(self.fire_event))
 
 
 class MainMenuButton(Button):

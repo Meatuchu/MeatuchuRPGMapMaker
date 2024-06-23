@@ -1,3 +1,4 @@
+import importlib
 import time
 from datetime import datetime
 from tkinter import Canvas as TkCanvas
@@ -55,7 +56,7 @@ class FPSMeasure:
 
 
 class WindowManager(FeatureManager):
-    event_mgr: EventManager
+    event_mgr: EventManager = EventManager()
     _windows: dict[str, TkWindow | None]
     _canvases: dict[str, TkCanvas]
     _scenes: dict[str, Scene]
@@ -70,6 +71,12 @@ class WindowManager(FeatureManager):
         self._scenes = {}
         self._window_events = {}
         self._outgoing_events = []
+
+        scene_module = importlib.import_module("MeatuchuRPGMapMaker.ui.scene")
+        Scene = getattr(scene_module, "Scene")
+        Scene.inject_queue_event(self._outgoing_events.append)
+        Scene.inject_subscribe_to_event(self.event_mgr.register_subscription)
+        Scene.inject_unsubscribe_from_event(self.event_mgr.unregister_subscription)
 
     def _get_window_thread(
         self,
@@ -242,9 +249,6 @@ class WindowManager(FeatureManager):
             self._scenes[window_name] = scene(
                 window,
                 window_name,
-                self._outgoing_events.append,
-                self.event_mgr.register_subscription,
-                self.event_mgr.unregister_subscription,
                 **event.scene_kwargs,
             )
 

@@ -7,12 +7,14 @@ from MeatuchuRPGMapMaker.ui.scene.scenes.map_edit_scene import MapEditScene
 
 def test_construction() -> None:
     q: list[EventQueueItemType] = []
-    assert MapEditScene(MagicMock(), "test", q.append)
+    MapEditScene.inject_queue_event(q.append)
+    assert MapEditScene(MagicMock(), "test")
 
 
 def test_unload() -> None:
     q: list[EventQueueItemType] = []
-    s = MapEditScene(MagicMock(), "test", q.append)
+    MapEditScene.inject_queue_event(q.append)
+    s = MapEditScene(MagicMock(), "test")
     s.unload()
     assert not s._subscription_ids
     assert not s._elements

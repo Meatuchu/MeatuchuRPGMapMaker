@@ -19,10 +19,10 @@ class Scene:
     _window: TkWindow
     _window_name: str
     _elements: dict[str, Element]
-    _fire_event: Callable[[EventQueueItemType], None]
+    fire_event: Callable[[EventQueueItemType], None]
     _subscription_ids: list[str]
-    _subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str] | None
-    _unsubscribe_from_event: Callable[[str], None] | None
+    _subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str]
+    _unsubscribe_from_event: Callable[[str], None]
     _keybinds: list[Keybind]
     name: str
 
@@ -30,28 +30,37 @@ class Scene:
         self,
         window: TkWindow,
         window_name: str,
-        fire_event: Callable[[EventQueueItemType], None],
-        subscribe_to_event: Callable[[Type[Event], Callable[..., None]], str] | None = None,
-        unsubscribe_from_event: Callable[[str], None] | None = None,
     ) -> None:
         self.name = self.__class__.__name__
         self._window = window
         self._window_name = window_name
         self._elements = {}
-        self._fire_event = fire_event
-        self._subscribe_to_event = subscribe_to_event
-        self._unsubscribe_from_event = unsubscribe_from_event
         self._subscription_ids = []
         self._keybinds = []
+        self.fire_event = self.__class__.fire_event
+        self._subscribe_to_event = self.__class__._subscribe_to_event
+        self._unsubscribe_from_event = self.__class__._unsubscribe_from_event
 
-        self._add_keybind(CloseWindowKB(self._fire_event))
-        self._add_keybind(FullScreenKB(self._fire_event))
-        self._subscribe(InputSnapshotEvent, self._input_snapshot_event_handler)
+        self.add_keybind(CloseWindowKB(self.fire_event))
+        self.add_keybind(FullScreenKB(self.fire_event))
+        self.subscribe(InputSnapshotEvent, self.__input_snapshot_event_handler)
 
-    def _add_keybind(self, kb: Keybind) -> None:
+    @classmethod
+    def inject_queue_event(cls, fn: Callable[[EventQueueItemType], None]) -> None:
+        cls.fire_event = fn
+
+    @classmethod
+    def inject_subscribe_to_event(cls, fn: Callable[[Type[Event], Callable[..., None]], str]) -> None:
+        cls._subscribe_to_event = fn
+
+    @classmethod
+    def inject_unsubscribe_from_event(cls, fn: Callable[[str], None]) -> None:
+        cls._unsubscribe_from_event = fn
+
+    def add_keybind(self, kb: Keybind) -> None:
         self._keybinds.append(kb)
 
-    def _input_snapshot_event_handler(self, event: InputSnapshotEvent) -> None:
+    def __input_snapshot_event_handler(self, event: InputSnapshotEvent) -> None:
         for kb in self._keybinds:
             kb.check(event.snapshot)
 
@@ -59,14 +68,12 @@ class Scene:
         for e in self._elements.values():
             e.handle_window_resize()
 
-    def _subscribe(self, event_type: Type[Event], handler: Callable[..., None]) -> None:
-        if self._subscribe_to_event:
-            self._subscription_ids.append(self._subscribe_to_event(event_type, handler))
+    def subscribe(self, event_type: Type[Event], handler: Callable[..., None]) -> None:
+        self._subscription_ids.append(self._subscribe_to_event(event_type, handler))
 
-    def _unsubscribe(self, sid: str) -> None:
-        if self._unsubscribe_from_event:
-            self._unsubscribe_from_event(sid)
-        self._subscription_ids.remove(sid)
+    def unsubscribe(self, subscription_id: str) -> None:
+        self._unsubscribe_from_event(subscription_id)
+        self._subscription_ids.remove(subscription_id)
 
     def place_element(self, e: Element) -> None:
         if self._elements.get(e.name):
@@ -83,7 +90,7 @@ class Scene:
             e.destroy()
         self._elements = {}
         while self._subscription_ids:
-            self._unsubscribe(self._subscription_ids[0])
+            self.unsubscribe(self._subscription_ids[0])
 
     def frame_update(self) -> None:
         for e in self._elements.values():
