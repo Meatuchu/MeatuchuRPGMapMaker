@@ -7,8 +7,9 @@ from MeatuchuRPGMapMaker.events import (
 )
 from MeatuchuRPGMapMaker.keybinds.common.file_save import FileSaveKB
 
-from ...elements.primitive_elements import Button
-from ..scene import Scene
+from ....elements.primitive_elements import Button
+from ...scene import Scene
+from .mapcanvas import MapCanvas
 
 
 class MapEditScene(Scene):
@@ -21,11 +22,7 @@ class MapEditScene(Scene):
     ) -> None:
         super().__init__(window, window_name)
 
-        self.place_elements(
-            [
-                MainMenuButton(window, self.fire_event),
-            ]
-        )
+        self.place_elements([MainMenuButton(window, self.fire_event), MapCanvas(window, self.fire_event)])
         self.add_keybind(FileSaveKB(self.fire_event))
 
 

@@ -37,6 +37,7 @@ class Scene:
         self._elements = {}
         self._subscription_ids = []
         self._keybinds = []
+
         self.fire_event = self.__class__.fire_event
         self._subscribe_to_event = self.__class__._subscribe_to_event
         self._unsubscribe_from_event = self.__class__._unsubscribe_from_event
@@ -80,8 +81,8 @@ class Scene:
             raise DuplicateSceneElementError(e.name, self.__class__.__name__)
         self._elements[e.name] = e
 
-    def place_elements(self, es: list[Element]) -> None:
-        for e in es:
+    def place_elements(self, elements: list[Element]) -> None:
+        for e in elements:
             self.place_element(e)
 
     def unload(self) -> None:
