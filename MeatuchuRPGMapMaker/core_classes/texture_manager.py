@@ -32,4 +32,4 @@ class TextureManager(FeatureManager):
 
 
 def open_image(image_path: str) -> Image.Image:
-    return Image.open(image_path)  # pyright: ignore[reportUnknownMemberType]
+    return Image.open(image_path)

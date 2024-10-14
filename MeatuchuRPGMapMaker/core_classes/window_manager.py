@@ -207,12 +207,11 @@ class WindowManager(FeatureManager):
             raise ValueError("Invalid fullscreen mode")
 
         if mode == 0:  # Windowed
-            window.attributes("-fullscreen", False)  # pyright: ignore[reportUnknownMemberType]
+            window.attributes("-fullscreen", False)
         elif mode == 1:  # Borderless Window (Not supported yet)
-            window.attributes("-fullscreen", True)  # pyright: ignore[reportUnknownMemberType]
+            window.attributes("-fullscreen", True)
         elif mode == 2:  # Fullscreen
-            window.attributes("-fullscreen", True)  # pyright: ignore[reportUnknownMemberType]
-
+            window.attributes("-fullscreen", True)
         self.log(
             "DEBUG",
             f"set {window_name} fullscreen mode to {mode}",

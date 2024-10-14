@@ -109,7 +109,7 @@ class EventManager(FeatureManager):
         timestamp = time.time() + delay_sec
         events_at_time: list[Event] = cast(
             list[Event],
-            self._scheduled_events.get(timestamp, []),  # pyright: ignore[reportUnknownMemberType]
+            self._scheduled_events.get(timestamp, []),
         )
         events_at_time.append(event)
         self._scheduled_events[timestamp] = events_at_time
