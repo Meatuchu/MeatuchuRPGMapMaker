@@ -1,4 +1,4 @@
-import importlib
+# import importlib
 import time
 from datetime import datetime
 from tkinter import Canvas as TkCanvas
@@ -26,8 +26,8 @@ from MeatuchuRPGMapMaker.exceptions import (
     WindowNotFoundError,
 )
 from MeatuchuRPGMapMaker.helpers import debounce
-from MeatuchuRPGMapMaker.ui.scene.scene import Scene
 
+# from MeatuchuRPGMapMaker.ui.scene.scene import Scene
 from . import FeatureManager
 from .event_manager import EventManager
 
@@ -59,7 +59,7 @@ class WindowManager(FeatureManager):
     event_mgr: EventManager = EventManager()
     _windows: dict[str, TkWindow | None]
     _canvases: dict[str, TkCanvas]
-    _scenes: dict[str, Scene]
+    # _scenes: dict[str, Scene]
     _window_events: dict[str, list[RenderEvent]]
     _outgoing_events: list[EventQueueItemType]
 
@@ -72,11 +72,11 @@ class WindowManager(FeatureManager):
         self._window_events = {}
         self._outgoing_events = []
 
-        scene_module = importlib.import_module("MeatuchuRPGMapMaker.ui.scene")
-        Scene = getattr(scene_module, "Scene")
-        Scene.inject_queue_event(self._outgoing_events.append)
-        Scene.inject_subscribe_to_event(self.event_mgr.register_subscription)
-        Scene.inject_unsubscribe_from_event(self.event_mgr.unregister_subscription)
+        # scene_module = importlib.import_module("MeatuchuRPGMapMaker.ui.scene")
+        # Scene = getattr(scene_module, "Scene")
+        # Scene.inject_queue_event(self._outgoing_events.append)
+        # Scene.inject_subscribe_to_event(self.event_mgr.register_subscription)
+        # Scene.inject_unsubscribe_from_event(self.event_mgr.unregister_subscription)
 
     def _get_window_thread(
         self,
@@ -99,14 +99,19 @@ class WindowManager(FeatureManager):
 
                 @classmethod
                 @debounce(0.25)
-                def set_size(cls, width: int, height: int, scene: Scene) -> None:
+                def set_size(
+                    cls,
+                    width: int,
+                    height: int,
+                    # scene: Scene,
+                ) -> None:
                     if width <= 0 or height <= 0:
                         raise ValueError("Width and height must be greater than 0")
                     if WindowStatus.size_width != width or WindowStatus.size_height != height:
                         WindowStatus.size_width = width
                         WindowStatus.size_height = height
                         self.event_mgr.queue_event(WindowResizedEvent(width, height, window_name))
-                        scene.handle_window_resize()
+                        # scene.handle_window_resize()
 
             def handle_event(event: Event) -> None:
                 if isinstance(event, WindowResizeRequestEvent):

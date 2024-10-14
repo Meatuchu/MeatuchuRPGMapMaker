@@ -6,7 +6,7 @@ from MeatuchuRPGMapMaker.constants import NS_PER_S
 from MeatuchuRPGMapMaker.events import (
     AllThreadsDestroyedEvent,
     AppShutDownEvent,
-    SceneChangeRequestEvent,
+    # SceneChangeRequestEvent,
     WindowFullscreenModeEditRequestEvent,
     WindowResizeRequestEvent,
 )
@@ -104,7 +104,7 @@ class AppManager(FeatureManager):
         self.event_mgr.queue_event(
             WindowFullscreenModeEditRequestEvent(self.settings_mgr.get_setting("window", "fullscreen_mode"))
         )
-        self.event_mgr.queue_event(SceneChangeRequestEvent("MenuScene"))
+        # self.event_mgr.queue_event(SceneChangeRequestEvent("MenuScene"))
         while True:
             while self.state.app_active:
                 self.app_frame_process()

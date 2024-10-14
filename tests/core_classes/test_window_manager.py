@@ -11,9 +11,10 @@ from MeatuchuRPGMapMaker.events import SettingEditedEvent
 from MeatuchuRPGMapMaker.events.EventClass import Event
 from MeatuchuRPGMapMaker.events.NewThreadRequestEventClass import NewThreadRequestEvent
 from MeatuchuRPGMapMaker.events.RenderEventClass import RenderEvent
-from MeatuchuRPGMapMaker.events.SceneChangeRequestEventClass import (
-    SceneChangeRequestEvent,
-)
+
+# from MeatuchuRPGMapMaker.events.SceneChangeRequestEventClass import (
+#     SceneChangeRequestEvent,
+# )
 from MeatuchuRPGMapMaker.events.WindowFullscreenModeEditRequestEventClass import (
     WindowFullscreenModeEditRequestEvent,
 )
@@ -25,7 +26,8 @@ from MeatuchuRPGMapMaker.exceptions import (
     WindowNotExistError,
     WindowNotFoundError,
 )
-from MeatuchuRPGMapMaker.ui.scene.scene import Scene
+
+# from MeatuchuRPGMapMaker.ui.scene.scene import Scene
 
 # pyright: reportPrivateUsage=false
 
@@ -222,82 +224,82 @@ def test_pass_event_to_window_queue_named(mock_tk: MagicMock) -> None:
     assert w._window_events[window_name][1] == event2
 
 
-@patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
-@patch("MeatuchuRPGMapMaker.core_classes.window_manager.SceneChangeEvent")
-def test_load_scene(
-    mock_scene_change_event: MagicMock,
-    mock_tk: MagicMock,
-) -> None:
-    # Mock SceneChangeEvent
-    mock_scene_change_event.return_value = MagicMock()
+# @patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
+# @patch("MeatuchuRPGMapMaker.core_classes.window_manager.SceneChangeEvent")
+# def test_load_scene(
+#     mock_scene_change_event: MagicMock,
+#     mock_tk: MagicMock,
+# ) -> None:
+#     # Mock SceneChangeEvent
+#     mock_scene_change_event.return_value = MagicMock()
 
-    # Create window manager
-    w = WindowManager()
+#     # Create window manager
+#     w = WindowManager()
 
-    # Mock create_window
-    o = w.create_window
+#     # Mock create_window
+#     o = w.create_window
 
-    def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
-        o()
-        w._windows[window_name] = mock_tk()
-        w._canvases[window_name] = mock_tk()
+#     def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
+#         o()
+#         w._windows[window_name] = mock_tk()
+#         w._canvases[window_name] = mock_tk()
 
-    w.create_window = _new_window_thread_mock
+#     w.create_window = _new_window_thread_mock
 
-    # Prepare window
-    w.create_window()
-    w.event_mgr.queue_event = MagicMock()
+#     # Prepare window
+#     w.create_window()
+#     w.event_mgr.queue_event = MagicMock()
 
-    # Test
-    w.load_scene(SceneChangeRequestEvent("MapEditScene"))
-    w.event_mgr.queue_event.assert_called_once_with(mock_scene_change_event.return_value)
+#     # Test
+#     w.load_scene(SceneChangeRequestEvent("MapEditScene"))
+#     w.event_mgr.queue_event.assert_called_once_with(mock_scene_change_event.return_value)
 
 
-@patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
-@patch("MeatuchuRPGMapMaker.core_classes.window_manager.SceneChangeEvent")
-def test_load_new_scene(
-    mock_scene_change_event: MagicMock,
-    mock_tk: MagicMock,
-) -> None:
-    mock_scene_def = MagicMock(spec=Scene, __name__="Scene")
-    # Mock SceneChangeEvent
-    old_scene = MagicMock(spec=Scene, unload=MagicMock())
-    old_scene.name = "OldScene"
-    new_scene = MagicMock(spec=Scene, unload=MagicMock())
-    new_scene.name = "NewScene"
+# @patch("MeatuchuRPGMapMaker.core_classes.window_manager.TkWindow")
+# @patch("MeatuchuRPGMapMaker.core_classes.window_manager.SceneChangeEvent")
+# def test_load_new_scene(
+#     mock_scene_change_event: MagicMock,
+#     mock_tk: MagicMock,
+# ) -> None:
+#     mock_scene_def = MagicMock(spec=Scene, __name__="Scene")
+#     # Mock SceneChangeEvent
+#     old_scene = MagicMock(spec=Scene, unload=MagicMock())
+#     old_scene.name = "OldScene"
+#     new_scene = MagicMock(spec=Scene, unload=MagicMock())
+#     new_scene.name = "NewScene"
 
-    mock_scene_change_event.return_value = MagicMock()
+#     mock_scene_change_event.return_value = MagicMock()
 
-    # Create window manager
-    w = WindowManager()
+#     # Create window manager
+#     w = WindowManager()
 
-    # Mock create_window
-    o = w.create_window
+#     # Mock create_window
+#     o = w.create_window
 
-    def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
-        o()
-        w._windows[window_name] = mock_tk()
-        w._canvases[window_name] = mock_tk()
+#     def _new_window_thread_mock(window_name: str = DEFAULT_WINDOW_NAME) -> None:
+#         o()
+#         w._windows[window_name] = mock_tk()
+#         w._canvases[window_name] = mock_tk()
 
-    w.create_window = _new_window_thread_mock
+#     w.create_window = _new_window_thread_mock
 
-    # Prepare window
-    w.create_window()
-    w.event_mgr.queue_event = MagicMock()
+#     # Prepare window
+#     w.create_window()
+#     w.event_mgr.queue_event = MagicMock()
 
-    # Test
-    event1 = SceneChangeRequestEvent("MapEditScene")
-    mock_scene_def.return_value = old_scene
-    event1.scene_to_load = mock_scene_def
-    w.load_scene(event1)
-    assert w._scenes[DEFAULT_WINDOW_NAME] == old_scene
+#     # Test
+#     event1 = SceneChangeRequestEvent("MapEditScene")
+#     mock_scene_def.return_value = old_scene
+#     event1.scene_to_load = mock_scene_def
+#     w.load_scene(event1)
+#     assert w._scenes[DEFAULT_WINDOW_NAME] == old_scene
 
-    event2 = SceneChangeRequestEvent("MapEditScene")
-    mock_scene_def.return_value = new_scene
-    event2.scene_to_load = mock_scene_def
-    w.load_scene(event2)
-    old_scene.unload.assert_called_once()
-    assert w._scenes[DEFAULT_WINDOW_NAME] == new_scene
+#     event2 = SceneChangeRequestEvent("MapEditScene")
+#     mock_scene_def.return_value = new_scene
+#     event2.scene_to_load = mock_scene_def
+#     w.load_scene(event2)
+#     old_scene.unload.assert_called_once()
+#     assert w._scenes[DEFAULT_WINDOW_NAME] == new_scene
 
 
 def test_wait_for_window_fail() -> None:

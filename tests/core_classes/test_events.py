@@ -17,7 +17,7 @@ from MeatuchuRPGMapMaker.events import (
     NewThreadRequestEvent,
     RenderEvent,
     SceneChangeEvent,
-    SceneChangeRequestEvent,
+    # SceneChangeRequestEvent,
     ThreadErrorEvent,
     UpdateEvent,
 )
@@ -127,19 +127,19 @@ def test_thread_error_event() -> None:
     )
 
 
-def test_scene_change_request_event() -> None:
-    assert SceneChangeRequestEvent
-    assert SceneChangeRequestEvent("MapEditScene")
-    assert SceneChangeRequestEvent("MenuScene")
-    assert SceneChangeRequestEvent("MapEditScene", "test_window", {"test": "value"})
-    assert SceneChangeRequestEvent.from_dict(
-        {
-            "name": "SceneChangeRequestEvent",
-            "scene_target": "MapEditScene",
-            "window_name": "test_window",
-            "scene_kwargs": {"test": "value"},
-        }
-    )
+# def test_scene_change_request_event() -> None:
+#     assert SceneChangeRequestEvent
+#     assert SceneChangeRequestEvent("MapEditScene")
+#     assert SceneChangeRequestEvent("MenuScene")
+#     assert SceneChangeRequestEvent("MapEditScene", "test_window", {"test": "value"})
+#     assert SceneChangeRequestEvent.from_dict(
+#         {
+#             "name": "SceneChangeRequestEvent",
+#             "scene_target": "MapEditScene",
+#             "window_name": "test_window",
+#             "scene_kwargs": {"test": "value"},
+#         }
+#     )
 
 
 def test_scene_change_event() -> None:
