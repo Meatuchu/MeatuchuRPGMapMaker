@@ -4,4 +4,5 @@
 ignore = [
   "F401", # Unused imports
   "F841", # Unused imports and variables
+  "E741", # Ambiguous variable name
 ]

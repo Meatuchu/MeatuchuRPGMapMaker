@@ -1,0 +1,4 @@
+scene = {
+    "type": "root",
+    "children": [],
+}

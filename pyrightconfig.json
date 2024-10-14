@@ -1,8 +1,11 @@
 {
-  "reportMissingTypeStubs": "information",
-  "reportUnusedImport": "warning",
-  "reportUnnecessaryTypeIgnoreComment": "error",
-  "reportImportCycles": "error",
-  "useLibraryCodeForTypes": true,
-  "enableTypeIgnoreComments": false, // Require using Pyright type ignore comments instead
+    "reportMissingTypeStubs": "information",
+    "reportUnusedImport": "warning",
+    "reportUnnecessaryTypeIgnoreComment": "error",
+    "reportImportCycles": "error",
+    "useLibraryCodeForTypes": true,
+    "enableTypeIgnoreComments": false, // Require using Pyright type ignore comments instead
+    "ignore": [
+        "typings"
+    ]
 }
